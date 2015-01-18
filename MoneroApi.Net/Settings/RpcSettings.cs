@@ -15,5 +15,19 @@ namespace Jojatekok.MoneroAPI.Settings
             UrlPortDaemon = urlPortDaemon;
             UrlPortAccountManager = urlPortAccountManager;
         }
+
+        public RpcSettings(ushort urlPortDaemon, ushort urlPortAccountManager)
+        {
+            UrlHost = Utilities.DefaultRpcUrlHost;
+            UrlPortDaemon = urlPortDaemon;
+            UrlPortAccountManager = urlPortAccountManager;
+        }
+
+        public RpcSettings()
+        {
+            UrlHost = Utilities.DefaultRpcUrlHost;
+            UrlPortDaemon = Utilities.DefaultRpcUrlPortDaemon;
+            UrlPortAccountManager = Utilities.DefaultRpcUrlPortAccountManager;
+        }
     }
 }

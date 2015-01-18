@@ -22,6 +22,11 @@ namespace Jojatekok.MoneroAPI
             AccountManager = new AccountManager(RpcWebClient, Paths, Daemon);
         }
 
+        public MoneroClient() : this(new PathSettings(), new RpcSettings())
+        {
+
+        }
+
         public void Dispose()
         {
             Dispose(true);

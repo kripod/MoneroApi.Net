@@ -102,7 +102,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
                 // Load existing account
                 ProcessArgumentsExtra.Add("--wallet-file \"" + PathSettings.FileAccountData + "\"");
 
-                if (rpcSettings.UrlHost != StaticObjects.RpcUrlDefaultLocalhost) {
+                if (rpcSettings.UrlHost != Utilities.DefaultRpcUrlHost) {
                     ProcessArgumentsExtra.Add("--rpc-bind-ip " + rpcSettings.UrlHost);
                 }
                 ProcessArgumentsExtra.Add("--rpc-bind-port " + rpcSettings.UrlPortAccountManager);
@@ -160,7 +160,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
         {
             // TODO: Allow selection of the deterministic seed's language
             if (e.StartsWith("0")) {
-                Send("0");
+                SendConsoleCommand("0");
 
             } else if (e.StartsWith("*")) {
                 OnLogMessage -= AccountManager_OnLogMessage;

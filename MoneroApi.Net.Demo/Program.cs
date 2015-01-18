@@ -14,7 +14,7 @@ namespace MoneroApi.Net.Demo
 
         static void Main(string[] args)
         {
-
+            MoneroClient = new MoneroClient();
         }
     }
 }

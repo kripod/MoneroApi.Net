@@ -54,7 +54,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
                 "--rpc-bind-port " + rpcSettings.UrlPortDaemon
             };
 
-            if (rpcSettings.UrlHost != StaticObjects.RpcUrlDefaultLocalhost) {
+            if (rpcSettings.UrlHost != Utilities.DefaultRpcUrlHost) {
                 ProcessArgumentsExtra.Add("--rpc-bind-ip " + rpcSettings.UrlHost);
             }
 
@@ -139,7 +139,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
                 TimerQueryNetworkInformation = null;
 
                 // Safe shutdown
-                Send("exit");
+                SendConsoleCommand("exit");
 
                 base.Dispose(false);
             }

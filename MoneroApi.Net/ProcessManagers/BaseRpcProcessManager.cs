@@ -68,7 +68,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             Process.Exited += Process_Exited;
 
             Process.Start();
-            StaticObjects.JobManager.AddProcess(Process);
+            Utilities.JobManager.AddProcess(Process);
             Process.BeginOutputReadLine();
 
             // Constantly check for the RPC port's activeness
@@ -80,7 +80,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             IsRpcAvailable = Helper.IsPortInUse(RpcPort);
         }
 
-        public void Send(string input)
+        public void SendConsoleCommand(string input)
         {
             if (IsProcessAlive) {
                 if (OnLogMessage != null) OnLogMessage(this, "> " + input);

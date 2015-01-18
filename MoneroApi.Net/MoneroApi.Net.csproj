@@ -7,7 +7,7 @@
     <ProjectGuid>{2348DE2F-CECC-45C8-9436-2B4ECDCF2D1E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MoneroApi.Net</RootNamespace>
+    <RootNamespace>Jojatekok.MoneroAPI</RootNamespace>
     <AssemblyName>MoneroApi.Net</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -93,7 +93,7 @@
     <Compile Include="RpcManagers\RpcWebClient.cs" />
     <Compile Include="Settings\PathSettings.cs" />
     <Compile Include="Settings\RpcSettings.cs" />
-    <Compile Include="StaticObjects.cs" />
+    <Compile Include="Utilities.cs" />
     <Compile Include="TimerSettings.cs" />
   </ItemGroup>
   <ItemGroup>

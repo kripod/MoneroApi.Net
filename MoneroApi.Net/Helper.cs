@@ -77,7 +77,7 @@ namespace Jojatekok.MoneroAPI
 
         public static string GetAbsolutePath(string input)
         {
-            return input.Contains(":") ? input : Path.GetFullPath(Path.Combine(StaticObjects.ApplicationDirectory, input));
+            return input.Contains(":") ? input : Path.GetFullPath(Path.Combine(Utilities.ApplicationDirectory, input));
         }
 
         public static bool IsPortInUse(int port)
