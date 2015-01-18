@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Jojatekok.MoneroAPI;
 using Jojatekok.MoneroAPI.RpcManagers.AccountManager.Json.Responses;
 
@@ -31,6 +32,13 @@ namespace MoneroApi.Net.Demo
             accountManager.TransactionReceived += AccountManager_TransactionReceived;
             accountManager.BalanceChanging += AccountManager_BalanceChanging;
             accountManager.Start();
+
+            // Wait infinitely in order to keep the application running
+            while (true) {
+                using (var manualResetEvent = new ManualResetEvent(false)) {
+                    manualResetEvent.WaitOne();
+                }
+            }
         }
 
         static void Daemon_NetworkInformationChanging(object sender, NetworkInformationChangingEventArgs e)
