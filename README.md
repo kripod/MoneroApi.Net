@@ -2,7 +2,7 @@
 This project makes your Microsoft .NET applications able to interact with the Application Programming Interface (API) of [Monero][] core assemblies.
 The class library is written in [C#][]. A [NuGet package of the project][] is also available.
 
-[Poloniex]: https://www.poloniex.com
+[Monero]: http://monero.cc
 [C#]: http://wikipedia.org/wiki/C_Sharp_%28programming_language%29
 [NuGet package of the project]: https://www.nuget.org/packages/MoneroApi.Net
 

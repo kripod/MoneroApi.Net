@@ -159,10 +159,10 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
         private void AccountManager_OnLogMessage(object sender, string e)
         {
             // TODO: Allow selection of the deterministic seed's language
-            if (e.StartsWith("0")) {
+            if (e.StartsWith("0", StringComparison.Ordinal)) {
                 SendConsoleCommand("0");
 
-            } else if (e.StartsWith("*")) {
+            } else if (e.StartsWith("*", StringComparison.Ordinal)) {
                 OnLogMessage -= AccountManager_OnLogMessage;
                 Restart();
             }

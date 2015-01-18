@@ -37,6 +37,7 @@ namespace Jojatekok.MoneroAPI.RpcManagers
             var request = WebRequest.CreateHttp(GetBaseUrl(port) + relativeUrl);
             request.Method = "POST";
             request.Timeout = Timeout.Infinite;
+            request.Proxy = RpcSettings.Proxy;
 
             if (postData != null) {
                 request.ContentType = "application/json";
