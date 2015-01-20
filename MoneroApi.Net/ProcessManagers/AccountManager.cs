@@ -75,7 +75,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             }
         }
 
-        internal AccountManager(RpcWebClient rpcWebClient, PathSettings pathSettings, DaemonManager daemon) : base(pathSettings.SoftwareAccountManager, rpcWebClient, rpcWebClient.RpcSettings.UrlPortAccountManager)
+        internal AccountManager(RpcWebClient rpcWebClient, PathSettings pathSettings, DaemonManager daemon) : base(pathSettings.SoftwareAccountManager, rpcWebClient, false)
         {
             Exited += Process_Exited;
             RpcAvailabilityChanged += Process_RpcAvailabilityChanged;
@@ -94,7 +94,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             var rpcSettings = RpcWebClient.RpcSettings;
 
             ProcessArgumentsExtra = new List<string>(5) {
-                "--daemon-address " + rpcSettings.UrlHost + ":" + rpcSettings.UrlPortDaemon,
+                "--daemon-address " + rpcSettings.UrlHostDaemon + ":" + rpcSettings.UrlPortDaemon,
                 "--password \"" + Passphrase + "\""
             };
 
@@ -102,8 +102,8 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
                 // Load existing account
                 ProcessArgumentsExtra.Add("--wallet-file \"" + PathSettings.FileAccountData + "\"");
 
-                if (rpcSettings.UrlHost != Utilities.DefaultRpcUrlHost) {
-                    ProcessArgumentsExtra.Add("--rpc-bind-ip " + rpcSettings.UrlHost);
+                if (rpcSettings.UrlHostDaemon != Utilities.DefaultRpcUrlHostDaemon) {
+                    ProcessArgumentsExtra.Add("--rpc-bind-ip " + rpcSettings.UrlHostDaemon);
                 }
                 ProcessArgumentsExtra.Add("--rpc-bind-port " + rpcSettings.UrlPortAccountManager);
 

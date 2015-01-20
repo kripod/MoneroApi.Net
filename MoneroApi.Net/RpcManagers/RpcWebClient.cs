@@ -18,23 +18,23 @@ namespace Jojatekok.MoneroAPI.RpcManagers
             RpcSettings = rpcSettings;
         }
 
-        public T HttpPostData<T>(ushort port, string command)
+        public T HttpPostData<T>(string host, ushort port, string command)
         {
-            var jsonString = PostString(port, command);
+            var jsonString = PostString(host, port, command);
             var output = JsonSerializer.DeserializeObject<T>(jsonString);
 
             return output;
         }
 
-        public JsonRpcResponse<T> JsonPostData<T>(ushort port, JsonRpcRequest jsonRpcRequest)
+        public JsonRpcResponse<T> JsonPostData<T>(string host, ushort port, JsonRpcRequest jsonRpcRequest)
         {
-            var jsonString = PostString(port, "json_rpc", JsonSerializer.SerializeObject(jsonRpcRequest));
+            var jsonString = PostString(host, port, "json_rpc", JsonSerializer.SerializeObject(jsonRpcRequest));
             return JsonSerializer.DeserializeObject<JsonRpcResponse<T>>(jsonString);
         }
 
-        private string PostString(ushort port, string relativeUrl, string postData = null)
+        private string PostString(string host, ushort port, string relativeUrl, string postData = null)
         {
-            var request = WebRequest.CreateHttp(GetBaseUrl(port) + relativeUrl);
+            var request = WebRequest.CreateHttp(host + ":" + port + "/" + relativeUrl);
             request.Method = "POST";
             request.Timeout = Timeout.Infinite;
             request.Proxy = RpcSettings.Proxy;
@@ -50,11 +50,6 @@ namespace Jojatekok.MoneroAPI.RpcManagers
             }
 
             return request.GetResponseString();
-        }
-
-        private string GetBaseUrl(ushort port)
-        {
-            return "http://" + RpcSettings.UrlHost + ":" + port + "/";
         }
     }
 }

@@ -42,36 +42,44 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             }
         }
 
-        internal DaemonManager(RpcWebClient rpcWebClient, PathSettings paths) : base(paths.SoftwareDaemon, rpcWebClient, rpcWebClient.RpcSettings.UrlPortDaemon)
+        internal DaemonManager(RpcWebClient rpcWebClient, PathSettings paths) : base(paths.SoftwareDaemon, rpcWebClient, true)
         {
             RpcAvailabilityChanged += Process_RpcAvailabilityChanged;
 
+            TimerQueryNetworkInformation = new Timer(delegate { QueryNetworkInformation(); });
+
             RpcWebClient = rpcWebClient;
             var rpcSettings = RpcWebClient.RpcSettings;
+            if (rpcSettings.IsDaemonRemote) {
+                IsRpcAvailable = true;
+                return;
+            }
 
             ProcessArgumentsExtra = new List<string>(3) {
                 //"--data-dir \"" + paths.DirectoryDaemonData + "\"",
                 "--rpc-bind-port " + rpcSettings.UrlPortDaemon
             };
 
-            if (rpcSettings.UrlHost != Utilities.DefaultRpcUrlHost) {
-                ProcessArgumentsExtra.Add("--rpc-bind-ip " + rpcSettings.UrlHost);
+            if (rpcSettings.UrlHostDaemon != Utilities.DefaultRpcUrlHostDaemon) {
+                ProcessArgumentsExtra.Add("--rpc-bind-ip " + rpcSettings.UrlHostDaemon);
             }
 
             // TODO: Remove this temporary fix
             ProcessArgumentsExtra.Add("--data-dir \"" + paths.DirectoryDaemonData);
-
-            TimerQueryNetworkInformation = new Timer(delegate { QueryNetworkInformation(); });
         }
 
         public void Start()
         {
-            StartProcess(ProcessArgumentsDefault.Concat(ProcessArgumentsExtra).ToArray());
+            if (!RpcWebClient.RpcSettings.IsDaemonRemote) {
+                StartProcess(ProcessArgumentsDefault.Concat(ProcessArgumentsExtra).ToArray());
+            }
         }
 
         public void Stop()
         {
-            KillBaseProcess();
+            if (!RpcWebClient.RpcSettings.IsDaemonRemote) {
+                KillBaseProcess();
+            }
         }
 
         public void Restart()
@@ -111,11 +119,6 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             return null;
         }
 
-        private void RequestSaveBlockchain()
-        {
-            HttpPostData<HttpRpcResponse>(HttpRpcCommands.DaemonSaveBlockchain);
-        }
-
         private void Process_RpcAvailabilityChanged(object sender, EventArgs e)
         {
             if (IsRpcAvailable) {
@@ -138,8 +141,10 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
                 TimerQueryNetworkInformation.Dispose();
                 TimerQueryNetworkInformation = null;
 
-                // Safe shutdown
-                SendConsoleCommand("exit");
+                if (!RpcWebClient.RpcSettings.IsDaemonRemote) {
+                    // Safe shutdown
+                    SendConsoleCommand("exit");
+                }
 
                 base.Dispose(false);
             }

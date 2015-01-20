@@ -2,6 +2,7 @@
 using System.Threading;
 using Jojatekok.MoneroAPI;
 using Jojatekok.MoneroAPI.RpcManagers.AccountManager.Json.Responses;
+using Jojatekok.MoneroAPI.Settings;
 
 namespace MoneroApi.Net.Demo
 {
@@ -17,7 +18,14 @@ namespace MoneroApi.Net.Demo
         static void Main()
         {
             // Assign a new instance of the client to a variable
-            MoneroClient = new MoneroClient();
+            MoneroClient = new MoneroClient(
+                new PathSettings(),
+                new RpcSettings {
+                    IsDaemonRemote = true,
+                    UrlHostDaemon = "http://xmr1.coolmining.club",
+                    UrlPortDaemon = 5012
+                }
+            );
 
             // First, declare event handlers for the daemon, and then start it
             var daemon = MoneroClient.Daemon;

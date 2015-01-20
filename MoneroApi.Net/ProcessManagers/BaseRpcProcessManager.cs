@@ -15,6 +15,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
         private string Path { get; set; }
         private Process Process { get; set; }
         private RpcWebClient RpcWebClient { get; set; }
+        private string RpcHost { get; set; }
         private ushort RpcPort { get; set; }
 
         private Timer TimerCheckRpcAvailability { get; set; }
@@ -23,7 +24,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
         public bool IsRpcAvailable {
             get { return _isRpcAvailable; }
 
-            private set {
+            protected set {
                 if (value == _isRpcAvailable) return;
 
                 _isRpcAvailable = value;
@@ -37,12 +38,22 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             get { return Process != null && !Process.HasExited; }
         }
 
-        protected BaseRpcProcessManager(string path, RpcWebClient rpcWebClient, ushort rpcPort) {
+        protected BaseRpcProcessManager(string path, RpcWebClient rpcWebClient, bool isDaemon) {
             Path = path;
             RpcWebClient = rpcWebClient;
-            RpcPort = rpcPort;
 
             TimerCheckRpcAvailability = new Timer(delegate { CheckRpcAvailability(); });
+
+            var rpcSettings = rpcWebClient.RpcSettings;
+
+            if (isDaemon) {
+                RpcHost = rpcSettings.UrlHostDaemon;
+                RpcPort = rpcSettings.UrlPortDaemon;
+
+            } else {
+                RpcHost = rpcSettings.UrlHostAccountManager;
+                RpcPort = rpcSettings.UrlPortAccountManager;
+            }
         }
 
         protected void StartProcess(params string[] arguments)
@@ -99,7 +110,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
         {
             if (!IsRpcAvailable) return null;
 
-            var output = RpcWebClient.HttpPostData<T>(RpcPort, command);
+            var output = RpcWebClient.HttpPostData<T>(RpcHost, RpcPort, command);
             if (output != null && output.Status == RpcResponseStatus.Ok) {
                 return output;
             }
@@ -110,7 +121,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
         protected JsonRpcResponse<T> JsonPostData<T>(JsonRpcRequest jsonRpcRequest) where T : class
         {
             if (!IsRpcAvailable) return new JsonRpcResponse<T>(new JsonError());
-            return RpcWebClient.JsonPostData<T>(RpcPort, jsonRpcRequest);
+            return RpcWebClient.JsonPostData<T>(RpcHost, RpcPort, jsonRpcRequest);
         }
 
         protected void JsonPostData(JsonRpcRequest jsonRpcRequest)
@@ -154,19 +165,19 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
                 TimerCheckRpcAvailability.Dispose();
                 TimerCheckRpcAvailability = null;
 
-                if (isProcessKillNecessary) {
-                    if (Process != null) {
-                        if (!Process.HasExited) {
-                            if (Process.Responding) {
-                                if (!Process.WaitForExit(10000)) Process.Kill();
-                            } else {
-                                Process.Kill();
-                            }
-                        }
+                if (Process == null) return;
 
-                        Process.Dispose();
-                        Process = null;
+                if (isProcessKillNecessary) {
+                    if (!Process.HasExited) {
+                        if (Process.Responding) {
+                            if (!Process.WaitForExit(10000)) Process.Kill();
+                        } else {
+                            Process.Kill();
+                        }
                     }
+
+                    Process.Dispose();
+                    Process = null;
 
                 } else {
                     Process.WaitForExit();

@@ -15,7 +15,8 @@ namespace Jojatekok.MoneroAPI
         public const string DefaultPathSoftwareDaemon = DefaultRelativePathDirectorySoftware + "bitmonerod.exe";
         public const string DefaultPathSoftwareAccountManager = DefaultRelativePathDirectorySoftware + "simplewallet.exe";
 
-        public const string DefaultRpcUrlHost = "localhost";
+        public const string DefaultRpcUrlHostDaemon = "http://localhost";
+        public const string DefaultRpcUrlHostAccountManager = "http://localhost";
         public const ushort DefaultRpcUrlPortDaemon = 18081;
         public const ushort DefaultRpcUrlPortAccountManager = 18082;
 
