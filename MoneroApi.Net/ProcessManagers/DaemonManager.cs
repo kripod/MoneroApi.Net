@@ -38,7 +38,11 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             get { return _networkInformation; }
 
             private set {
-                if (NetworkInformationChanging != null) NetworkInformationChanging(this, new NetworkInformationChangingEventArgs(value));
+                if (value == NetworkInformation) return;
+
+                if (NetworkInformationChanging != null) {
+                    NetworkInformationChanging(this, new NetworkInformationChangingEventArgs(value));
+                }
                 _networkInformation = value;
             }
         }

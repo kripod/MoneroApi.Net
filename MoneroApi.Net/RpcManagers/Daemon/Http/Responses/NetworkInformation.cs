@@ -45,5 +45,45 @@ namespace Jojatekok.MoneroAPI.RpcManagers.Daemon.Http.Responses
         public ulong TransactionCountTotal { get; private set; }
         [JsonProperty("tx_pool_size")]
         public ulong TransactionPoolSize { get; private set; }
+
+        public static bool operator ==(NetworkInformation a, NetworkInformation b)
+        {
+            if (ReferenceEquals(a, b)) return true;
+            if ((object)a == null ^ (object)b == null) return false;
+
+            return a.Equals(b);
+        }
+
+        public static bool operator !=(NetworkInformation a, NetworkInformation b)
+        {
+            return !(a == b);
+        }
+
+        public override bool Equals(object obj)
+        {
+            var b = obj as NetworkInformation;
+            return (object)b != null && Equals(b);
+        }
+
+        public bool Equals(NetworkInformation b)
+        {
+            return
+                AlternativeBlockCount == b.AlternativeBlockCount &&
+                BlockDifficulty == b.BlockDifficulty &&
+                BlockHeightTotal == b.BlockHeightTotal &&
+                BlockHeightDownloaded == b.BlockHeightDownloaded &&
+                PeerListSizeGrey == b.PeerListSizeGrey &&
+                PeerListSizeWhite == b.PeerListSizeWhite &&
+                ConnectionCountIncoming == b.ConnectionCountIncoming &&
+                ConnectionCountOutgoing == b.ConnectionCountOutgoing &&
+                TransactionCountTotal == b.TransactionCountTotal &&
+                TransactionPoolSize == b.TransactionPoolSize
+            ;
+        }
+
+        public override int GetHashCode()
+        {
+            return ToString().GetHashCode();
+        }
     }
 }
