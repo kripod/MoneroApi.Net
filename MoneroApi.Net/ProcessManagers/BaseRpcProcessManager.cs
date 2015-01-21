@@ -9,7 +9,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
     public abstract class BaseRpcProcessManager : IDisposable
     {
         public event EventHandler RpcAvailabilityChanged;
-        public event EventHandler<string> OnLogMessage;
+        public event EventHandler<LogMessageReceivedEventArgs> OnLogMessage;
 
         protected event EventHandler<ProcessExitedEventArgs> Exited;
 
@@ -97,7 +97,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
         public void SendConsoleCommand(string input)
         {
             if (IsProcessAlive) {
-                if (OnLogMessage != null) OnLogMessage(this, "> " + input);
+                if (OnLogMessage != null) OnLogMessage(this, new LogMessageReceivedEventArgs(new LogMessage("> " + input, DateTime.UtcNow)));
                 Process.StandardInput.WriteLine(input);
             }
         }
@@ -137,7 +137,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             var line = e.Data;
             if (line == null) return;
 
-            if (OnLogMessage != null) OnLogMessage(this, line);
+            if (OnLogMessage != null) OnLogMessage(this, new LogMessageReceivedEventArgs(new LogMessage(line, DateTime.UtcNow)));
         }
 
         private void Process_Exited(object sender, EventArgs e)

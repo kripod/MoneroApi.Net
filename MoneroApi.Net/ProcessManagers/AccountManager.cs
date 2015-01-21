@@ -57,7 +57,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             get { return _balance; }
 
             private set {
-                if (BalanceChanging != null) BalanceChanging(this, new BalanceChangingEventArgs(value));
+                if (BalanceChanging != null) BalanceChanging(this, new BalanceChangingEventArgs(value, Balance));
                 _balance = value;
             }
         }
@@ -158,13 +158,15 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             }
         }
 
-        private void AccountManager_OnLogMessage(object sender, string e)
+        private void AccountManager_OnLogMessage(object sender, LogMessageReceivedEventArgs e)
         {
+            var messageText = e.LogMessage.MessageText;
+
             // TODO: Allow selection of the deterministic seed's language
-            if (e.StartsWith("0", StringComparison.Ordinal)) {
+            if (messageText.StartsWith("0", StringComparison.Ordinal)) {
                 SendConsoleCommand("0");
 
-            } else if (e.StartsWith("*", StringComparison.Ordinal)) {
+            } else if (messageText.StartsWith("*", StringComparison.Ordinal)) {
                 OnLogMessage -= AccountManager_OnLogMessage;
                 Restart();
             }
@@ -338,7 +340,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool disposing)
+        private new void Dispose(bool disposing)
         {
             if (disposing) {
                 TimerRefresh.Dispose();

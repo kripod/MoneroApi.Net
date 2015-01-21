@@ -4,7 +4,7 @@ namespace Jojatekok.MoneroAPI
 {
     public class NetworkInformationChangingEventArgs : ValueChangingEventArgs<NetworkInformation>
     {
-        internal NetworkInformationChangingEventArgs(NetworkInformation newValue) : base(newValue)
+        internal NetworkInformationChangingEventArgs(NetworkInformation newValue, NetworkInformation oldValue) : base(newValue, oldValue)
         {
 
         }

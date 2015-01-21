@@ -4,7 +4,7 @@ namespace Jojatekok.MoneroAPI
 {
     public class BalanceChangingEventArgs : ValueChangingEventArgs<Balance>
     {
-        internal BalanceChangingEventArgs(Balance newValue) : base(newValue)
+        internal BalanceChangingEventArgs(Balance newValue, Balance oldValue) : base(newValue, oldValue)
         {
 
         }

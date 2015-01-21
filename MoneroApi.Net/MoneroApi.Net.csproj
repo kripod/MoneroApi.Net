@@ -42,11 +42,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Windows" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
@@ -55,12 +50,14 @@
     <Compile Include="EventArgs\NetworkInformationChangingEventArgs.cs" />
     <Compile Include="EventArgs\PassphraseRequestedEventArgs.cs" />
     <Compile Include="EventArgs\ProcessExitedEventArgs.cs" />
+    <Compile Include="EventArgs\LogMessageReceivedEventArgs.cs" />
     <Compile Include="EventArgs\TransactionReceivedEventArgs.cs" />
     <Compile Include="EventArgs\ValueChangingEventArgs.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="MoneroClient.cs" />
     <Compile Include="Objects\BlockHeader.cs" />
     <Compile Include="Objects\ConcurrentReadOnlyObservableCollection.cs" />
+    <Compile Include="Objects\LogMessage.cs" />
     <Compile Include="Objects\Transaction.cs" />
     <Compile Include="Objects\TransactionType.cs" />
     <Compile Include="Objects\TransferRecipient.cs" />

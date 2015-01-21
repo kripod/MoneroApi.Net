@@ -67,6 +67,7 @@ namespace Jojatekok.MoneroAPI.RpcManagers.Daemon.Http.Responses
 
         public bool Equals(NetworkInformation b)
         {
+            if (b == null) return false;
             return
                 AlternativeBlockCount == b.AlternativeBlockCount &&
                 BlockDifficulty == b.BlockDifficulty &&

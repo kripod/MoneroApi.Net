@@ -41,7 +41,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
                 if (value == NetworkInformation) return;
 
                 if (NetworkInformationChanging != null) {
-                    NetworkInformationChanging(this, new NetworkInformationChangingEventArgs(value));
+                    NetworkInformationChanging(this, new NetworkInformationChangingEventArgs(value, NetworkInformation));
                 }
                 _networkInformation = value;
             }
@@ -142,7 +142,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool disposing)
+        private new void Dispose(bool disposing)
         {
             if (disposing) {
                 TimerQueryNetworkInformation.Dispose();
