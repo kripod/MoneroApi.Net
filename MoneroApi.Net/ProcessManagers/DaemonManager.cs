@@ -21,6 +21,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
         private Timer TimerQueryNetworkInformation { get; set; }
 
         private RpcWebClient RpcWebClient { get; set; }
+        private TimerSettings TimerSettings { get; set; }
 
         private bool _isBlockchainSynced;
         public bool IsBlockchainSynced {
@@ -42,13 +43,15 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             }
         }
 
-        internal DaemonManager(RpcWebClient rpcWebClient, PathSettings paths) : base(paths.SoftwareDaemon, rpcWebClient, true)
+        internal DaemonManager(RpcWebClient rpcWebClient, PathSettings pathSettings, TimerSettings timerSettings) : base(pathSettings.SoftwareDaemon, rpcWebClient, timerSettings, true)
         {
             RpcAvailabilityChanged += Process_RpcAvailabilityChanged;
 
             TimerQueryNetworkInformation = new Timer(delegate { QueryNetworkInformation(); });
 
             RpcWebClient = rpcWebClient;
+            TimerSettings = timerSettings;
+
             var rpcSettings = RpcWebClient.RpcSettings;
             if (rpcSettings.IsDaemonRemote) {
                 IsRpcAvailable = true;
@@ -65,7 +68,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             }
 
             // TODO: Remove this temporary fix
-            ProcessArgumentsExtra.Add("--data-dir \"" + paths.DirectoryDaemonData);
+            ProcessArgumentsExtra.Add("--data-dir \"" + pathSettings.DirectoryDaemonData);
         }
 
         public void Start()

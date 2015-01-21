@@ -6,6 +6,7 @@ namespace Jojatekok.MoneroAPI.Settings
     public class RpcSettings
     {
         private string _urlHostDaemon;
+
         public string UrlHostDaemon {
             get { return _urlHostDaemon; }
             set {

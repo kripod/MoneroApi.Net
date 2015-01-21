@@ -8,23 +8,24 @@ namespace Jojatekok.MoneroAPI
     public class MoneroClient : IDisposable
     {
         private RpcWebClient RpcWebClient { get; set; }
-        private PathSettings Paths { get; set; }
+        private PathSettings PathSettings { get; set; }
+        public TimerSettings TimerSettings { get; private set; }
 
         public DaemonManager Daemon { get; private set; }
         public AccountManager AccountManager { get; private set; }
 
-        public MoneroClient(PathSettings paths, RpcSettings rpcSettings)
+        public MoneroClient(PathSettings pathSettings = null, RpcSettings rpcSettings = null, TimerSettings timerSettings = null)
         {
+            if (pathSettings == null) pathSettings = new PathSettings();
+            if (rpcSettings == null) rpcSettings = new RpcSettings();
+            if (timerSettings == null) timerSettings = new TimerSettings();
+
             RpcWebClient = new RpcWebClient(rpcSettings);
-            Paths = paths;
+            PathSettings = pathSettings;
+            TimerSettings = timerSettings;
 
-            Daemon = new DaemonManager(RpcWebClient, Paths);
-            AccountManager = new AccountManager(RpcWebClient, Paths, Daemon);
-        }
-
-        public MoneroClient() : this(new PathSettings(), new RpcSettings())
-        {
-
+            Daemon = new DaemonManager(RpcWebClient, pathSettings, timerSettings);
+            AccountManager = new AccountManager(RpcWebClient, pathSettings, timerSettings, Daemon);
         }
 
         public void Dispose()

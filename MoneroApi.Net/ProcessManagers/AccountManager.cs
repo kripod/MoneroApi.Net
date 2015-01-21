@@ -32,6 +32,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
 
         private RpcWebClient RpcWebClient { get; set; }
         private PathSettings PathSettings { get; set; }
+        private TimerSettings TimerSettings { get; set; }
         private DaemonManager Daemon { get; set; }
 
         private readonly ObservableCollection<Transaction> _transactionsPrivate = new ObservableCollection<Transaction>();
@@ -75,13 +76,14 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             }
         }
 
-        internal AccountManager(RpcWebClient rpcWebClient, PathSettings pathSettings, DaemonManager daemon) : base(pathSettings.SoftwareAccountManager, rpcWebClient, false)
+        internal AccountManager(RpcWebClient rpcWebClient, PathSettings pathSettings, TimerSettings timerSettings, DaemonManager daemon) : base(pathSettings.SoftwareAccountManager, rpcWebClient, timerSettings, false)
         {
             Exited += Process_Exited;
             RpcAvailabilityChanged += Process_RpcAvailabilityChanged;
 
             RpcWebClient = rpcWebClient;
             PathSettings = pathSettings;
+            TimerSettings = timerSettings;
             Daemon = daemon;
 
             Transactions = new ConcurrentReadOnlyObservableCollection<Transaction>(TransactionsPrivate);

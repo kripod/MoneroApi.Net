@@ -23,6 +23,9 @@ namespace MoneroApi.Net.Demo
                 new RpcSettings {
                     UrlHostDaemon = "http://xmr1.coolmining.club",
                     UrlPortDaemon = 5012
+                },
+                new TimerSettings {
+                    DaemonQueryNetworkInformationPeriod = 5000
                 }
             );
 

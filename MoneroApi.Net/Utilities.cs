@@ -22,6 +22,11 @@ namespace Jojatekok.MoneroAPI
         public const ushort DefaultRpcUrlPortDaemon = 18081;
         public const ushort DefaultRpcUrlPortAccountManager = 18082;
 
+        public const int DefaultTimerSettingRpcCheckAvailabilityPeriod = 1000;
+        public const int DefaultTimerSettingRpcCheckAvailabilityDueTime = 5000;
+        public const int DefaultTimerSettingDaemonQueryNetworkInformationPeriod = 750;
+        public const int DefaultTimerSettingAccountRefreshPeriod = 10000;
+
         public static readonly string ApplicationDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
         public static readonly JobManager JobManager = new JobManager();
