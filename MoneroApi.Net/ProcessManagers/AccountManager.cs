@@ -282,7 +282,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
         private string Backup(string path = null)
         {
             if (path == null) {
-                path = PathSettings.DirectoryAccountBackups + DateTime.Now.ToString("yyyy-MM-dd", Helper.InvariantCulture);
+                path = PathSettings.DirectoryAccountBackups + DateTime.Now.ToString("yyyy-MM-dd", Utilities.InvariantCulture);
             }
 
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);

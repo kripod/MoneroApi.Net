@@ -1,6 +1,8 @@
 ﻿using Jojatekok.MoneroAPI.ProcessManagers;
 using System;
+using System.Globalization;
 using System.IO;
+using System.Net.NetworkInformation;
 
 namespace Jojatekok.MoneroAPI
 {
@@ -23,5 +25,29 @@ namespace Jojatekok.MoneroAPI
         public static readonly string ApplicationDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
         public static readonly JobManager JobManager = new JobManager();
+
+        public static readonly CultureInfo InvariantCulture = CultureInfo.InvariantCulture;
+
+        public static string GetAbsolutePath(string input)
+        {
+            return input.Contains(":") ? input : Path.GetFullPath(Path.Combine(ApplicationDirectory, input));
+        }
+
+        public static bool IsPortInUse(int port)
+        {
+            var activeTcpListeners = IPGlobalProperties.GetIPGlobalProperties().GetActiveTcpListeners();
+            for (var i = activeTcpListeners.Length - 1; i >= 0; i--) {
+                if (activeTcpListeners[i].Port == port) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static DateTime UnixTimestampToDateTime(ulong unixTimeStamp)
+        {
+            return new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimeStamp);
+        }
     }
 }

@@ -57,7 +57,7 @@
     <Compile Include="EventArgs\ProcessExitedEventArgs.cs" />
     <Compile Include="EventArgs\TransactionReceivedEventArgs.cs" />
     <Compile Include="EventArgs\ValueChangingEventArgs.cs" />
-    <Compile Include="Helper.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="MoneroClient.cs" />
     <Compile Include="Objects\BlockHeader.cs" />
     <Compile Include="Objects\ConcurrentReadOnlyObservableCollection.cs" />

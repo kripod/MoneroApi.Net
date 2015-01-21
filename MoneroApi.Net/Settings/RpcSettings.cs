@@ -1,15 +1,25 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 
 namespace Jojatekok.MoneroAPI.Settings
 {
     public class RpcSettings
     {
-        public string UrlHostDaemon { get; set; }
+        private string _urlHostDaemon;
+        public string UrlHostDaemon {
+            get { return _urlHostDaemon; }
+            set {
+                _urlHostDaemon = value;
+                IsDaemonRemote = !new Uri(value).IsLoopback;
+            }
+        }
+
         public string UrlHostAccountManager { get; set; }
+
         public ushort UrlPortDaemon { get; set; }
         public ushort UrlPortAccountManager { get; set; }
 
-        public bool IsDaemonRemote { get; set; }
+        public bool IsDaemonRemote { get; private set; }
 
         public WebProxy Proxy { get; set; }
 

@@ -21,7 +21,6 @@ namespace MoneroApi.Net.Demo
             MoneroClient = new MoneroClient(
                 new PathSettings(),
                 new RpcSettings {
-                    IsDaemonRemote = true,
                     UrlHostDaemon = "http://xmr1.coolmining.club",
                     UrlPortDaemon = 5012
                 }

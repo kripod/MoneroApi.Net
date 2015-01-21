@@ -12,8 +12,8 @@ namespace Jojatekok.MoneroAPI
         public ushort VersionMinor { get; private set; }
 
         [JsonProperty("timestamp")]
-        private ulong TimestampUnix {
-            set { Timestamp = Helper.UnixTimeStampToDateTime(value); }
+        private ulong TimestampInternal {
+            set { Timestamp = Utilities.UnixTimestampToDateTime(value); }
         }
         public DateTime Timestamp { get; private set; }
 

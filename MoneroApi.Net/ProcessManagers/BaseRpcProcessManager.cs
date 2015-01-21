@@ -88,7 +88,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
 
         private void CheckRpcAvailability()
         {
-            IsRpcAvailable = Helper.IsPortInUse(RpcPort);
+            IsRpcAvailable = Utilities.IsPortInUse(RpcPort);
         }
 
         public void SendConsoleCommand(string input)

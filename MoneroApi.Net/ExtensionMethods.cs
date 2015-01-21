@@ -1,19 +1,14 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.IO;
 using System.Net;
-using System.Net.NetworkInformation;
 using System.Threading;
 
 namespace Jojatekok.MoneroAPI
 {
-    static class Helper
+    static class ExtensionMethods
     {
-        public static readonly CultureInfo InvariantCulture = CultureInfo.InvariantCulture;
-
         public static string GetResponseString(this HttpWebRequest request)
         {
             // Ensure a little of backwards compatibility in order to avoid RPC failures
@@ -48,7 +43,7 @@ namespace Jojatekok.MoneroAPI
         [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public static string SerializeObject<T>(this JsonSerializer serializer, T value)
         {
-            using (var stringWriter = new StringWriter(InvariantCulture)) {
+            using (var stringWriter = new StringWriter(Utilities.InvariantCulture)) {
                 using (var jsonTextWriter = new JsonTextWriter(stringWriter)) {
                     serializer.Serialize(jsonTextWriter, value);
                 }
@@ -73,28 +68,6 @@ namespace Jojatekok.MoneroAPI
         {
             if (timer == null) return;
             timer.Change(Timeout.Infinite, Timeout.Infinite);
-        }
-
-        public static string GetAbsolutePath(string input)
-        {
-            return input.Contains(":") ? input : Path.GetFullPath(Path.Combine(Utilities.ApplicationDirectory, input));
-        }
-
-        public static bool IsPortInUse(int port)
-        {
-            var activeTcpListeners = IPGlobalProperties.GetIPGlobalProperties().GetActiveTcpListeners();
-            for (var i = activeTcpListeners.Length - 1; i >= 0; i--) {
-                if (activeTcpListeners[i].Port == port) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public static DateTime UnixTimeStampToDateTime(ulong unixTimeStamp)
-        {
-            return new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimeStamp);
         }
     }
 }

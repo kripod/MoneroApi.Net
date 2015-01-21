@@ -21,7 +21,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             Marshal.StructureToPtr(infoExtended, extendedInfoPtr, false);
 
             if (!NativeMethods.SetInformationJobObject(Handle, JobObjectInfoType.ExtendedLimitInformation, extendedInfoPtr, (uint)length)) {
-                throw new Win32Exception(string.Format(Helper.InvariantCulture, "Unable to set information. Error: {0}", Marshal.GetLastWin32Error()));
+                throw new Win32Exception(string.Format(Utilities.InvariantCulture, "Unable to set information. Error: {0}", Marshal.GetLastWin32Error()));
             }
         }
 
