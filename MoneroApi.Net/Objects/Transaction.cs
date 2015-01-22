@@ -4,10 +4,12 @@ namespace Jojatekok.MoneroAPI
 {
     public class Transaction
     {
+        private string _transactionId;
+        private bool _isAmountSpendable;
+
         [JsonProperty("amount")]
         public ulong Amount { get; internal set; }
 
-        private string _transactionId;
         [JsonProperty("tx_hash")]
         public string TransactionId {
             get { return _transactionId; }
@@ -18,7 +20,6 @@ namespace Jojatekok.MoneroAPI
             }
         }
 
-        private bool _isAmountSpendable;
         [JsonProperty("spent")]
         public bool IsAmountSpendable {
             get { return _isAmountSpendable; }

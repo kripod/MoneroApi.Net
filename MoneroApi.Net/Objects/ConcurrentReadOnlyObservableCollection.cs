@@ -11,7 +11,7 @@ namespace Jojatekok.MoneroAPI
 
         public ConcurrentReadOnlyObservableCollection(ObservableCollection<T> collection) : base(collection)
         {
-            
+
         }
 
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)

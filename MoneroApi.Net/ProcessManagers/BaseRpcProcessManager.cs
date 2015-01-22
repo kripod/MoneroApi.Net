@@ -13,6 +13,9 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
 
         protected event EventHandler<ProcessExitedEventArgs> Exited;
 
+        private bool _isRpcAvailable;
+        private bool _isDisposeProcessKillNecessary = true;
+
         private string Path { get; set; }
         private Process Process { get; set; }
         private RpcWebClient RpcWebClient { get; set; }
@@ -22,7 +25,6 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
 
         private Timer TimerCheckRpcAvailability { get; set; }
 
-        private bool _isRpcAvailable;
         public bool IsRpcAvailable {
             get { return _isRpcAvailable; }
 
@@ -36,6 +38,12 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
         }
 
         private bool IsDisposing { get; set; }
+
+        protected bool IsDisposeProcessKillNecessary {
+            get { return _isDisposeProcessKillNecessary; }
+            set { _isDisposeProcessKillNecessary = value; }
+        }
+
         private bool IsProcessAlive {
             get { return Process != null && !Process.HasExited; }
         }
@@ -152,15 +160,10 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
         public void Dispose()
         {
             Dispose(true);
-        }
-
-        protected void Dispose(bool isProcessKillNecessary)
-        {
-            Dispose(true, isProcessKillNecessary);
             GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool disposing, bool isProcessKillNecessary)
+        private void Dispose(bool disposing)
         {
             if (disposing && !IsDisposing) {
                 IsDisposing = true;
@@ -170,7 +173,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
 
                 if (Process == null) return;
 
-                if (isProcessKillNecessary) {
+                if (IsDisposeProcessKillNecessary) {
                     if (!Process.HasExited) {
                         if (Process.Responding) {
                             if (!Process.WaitForExit(10000)) Process.Kill();

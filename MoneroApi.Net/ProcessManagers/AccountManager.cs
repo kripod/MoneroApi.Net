@@ -21,6 +21,11 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
         public event EventHandler<TransactionReceivedEventArgs> TransactionReceived;
         public event EventHandler<BalanceChangingEventArgs> BalanceChanging;
 
+        private readonly ObservableCollection<Transaction> _transactionsInternal = new ObservableCollection<Transaction>();
+        private string _address;
+        private Balance _balance;
+        private string _passphrase;
+
         private static readonly string[] ProcessArgumentsDefault = { "--set_log 0" };
         private List<string> ProcessArgumentsExtra { get; set; }
 
@@ -35,14 +40,12 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
         private TimerSettings TimerSettings { get; set; }
         private DaemonManager Daemon { get; set; }
 
-        private readonly ObservableCollection<Transaction> _transactionsPrivate = new ObservableCollection<Transaction>();
-        private ObservableCollection<Transaction> TransactionsPrivate {
-            get { return _transactionsPrivate; }
+        private ObservableCollection<Transaction> TransactionsInternal {
+            get { return _transactionsInternal; }
         }
 
         public ConcurrentReadOnlyObservableCollection<Transaction> Transactions { get; private set; }
 
-        private string _address;
         public string Address {
             get { return _address; }
 
@@ -52,7 +55,6 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             }
         }
 
-        private Balance _balance;
         public Balance Balance {
             get { return _balance; }
 
@@ -66,7 +68,6 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             get { return File.Exists(PathSettings.FileAccountDataKeys); }
         }
 
-        private string _passphrase;
         public string Passphrase {
             get { return _passphrase; }
 
@@ -86,7 +87,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             TimerSettings = timerSettings;
             Daemon = daemon;
 
-            Transactions = new ConcurrentReadOnlyObservableCollection<Transaction>(TransactionsPrivate);
+            Transactions = new ConcurrentReadOnlyObservableCollection<Transaction>(TransactionsInternal);
 
             TimerRefresh = new Timer(delegate { RequestRefresh(); });
         }
@@ -138,7 +139,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
 
             SetProcessArguments();
 
-            TransactionsPrivate.Clear();
+            TransactionsInternal.Clear();
             IsTransactionReceivedEventEnabled = false;
 
             Address = null;
@@ -215,7 +216,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             var transactions = JsonPostData<TransactionListValueContainer>(new QueryIncomingTransfers()).Result;
 
             if (transactions != null) {
-                var currentTransactionCount = TransactionsPrivate.Count;
+                var currentTransactionCount = TransactionsInternal.Count;
 
                 // Update existing transactions
                 for (var i = currentTransactionCount - 1; i >= 0; i--) {
@@ -223,16 +224,16 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
                     transaction.Number = (uint)(i + 1);
                     // TODO: Add support for detecting transaction type
 
-                    TransactionsPrivate[i] = transaction;
+                    TransactionsInternal[i] = transaction;
                 }
 
                 // Add new transactions
                 for (var i = currentTransactionCount; i < transactions.Value.Count; i++) {
                     var transaction = transactions.Value[i];
-                    transaction.Number = (uint)(TransactionsPrivate.Count + 1);
+                    transaction.Number = (uint)(TransactionsInternal.Count + 1);
                     // TODO: Add support for detecting transaction type
 
-                    TransactionsPrivate.Add(transaction);
+                    TransactionsInternal.Add(transaction);
                     if (IsTransactionReceivedEventEnabled && TransactionReceived != null) {
                         TransactionReceived(this, new TransactionReceivedEventArgs(transaction));
                     }
@@ -340,7 +341,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             GC.SuppressFinalize(this);
         }
 
-        private new void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (disposing) {
                 TimerRefresh.Dispose();

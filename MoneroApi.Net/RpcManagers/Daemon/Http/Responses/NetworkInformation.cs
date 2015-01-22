@@ -5,13 +5,14 @@ namespace Jojatekok.MoneroAPI.RpcManagers.Daemon.Http.Responses
 {
     public class NetworkInformation : HttpRpcResponse
     {
+        private ulong _blockHeightTotal;
+
         [JsonProperty("alt_blocks_count")]
         public ulong AlternativeBlockCount { get; private set; }
 
         [JsonProperty("difficulty")]
         public ulong BlockDifficulty { get; private set; }
 
-        private ulong _blockHeightTotal;
         [JsonProperty("target_height")]
         public ulong BlockHeightTotal {
             get { return _blockHeightTotal; }

@@ -15,6 +15,9 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
         public event EventHandler BlockchainSynced;
         public event EventHandler<NetworkInformationChangingEventArgs> NetworkInformationChanging;
 
+        private bool _isBlockchainSynced;
+        private NetworkInformation _networkInformation;
+
         private static readonly string[] ProcessArgumentsDefault = { "--log-level 0" };
         private List<string> ProcessArgumentsExtra { get; set; }
 
@@ -23,7 +26,6 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
         private RpcWebClient RpcWebClient { get; set; }
         private TimerSettings TimerSettings { get; set; }
 
-        private bool _isBlockchainSynced;
         public bool IsBlockchainSynced {
             get { return _isBlockchainSynced; }
 
@@ -33,7 +35,6 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             }
         }
 
-        private NetworkInformation _networkInformation;
         public NetworkInformation NetworkInformation {
             get { return _networkInformation; }
 
@@ -142,7 +143,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             GC.SuppressFinalize(this);
         }
 
-        private new void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (disposing) {
                 TimerQueryNetworkInformation.Dispose();
@@ -153,7 +154,8 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
                     SendConsoleCommand("exit");
                 }
 
-                base.Dispose(false);
+                IsDisposeProcessKillNecessary = false;
+                base.Dispose();
             }
         }
     }
