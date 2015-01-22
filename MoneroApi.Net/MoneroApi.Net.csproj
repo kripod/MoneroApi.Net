@@ -90,8 +90,17 @@
     <Compile Include="RpcManagers\JsonRpcResponse.cs" />
     <Compile Include="RpcManagers\RpcResponseStatus.cs" />
     <Compile Include="RpcManagers\RpcWebClient.cs" />
+    <Compile Include="Settings\IPathSettings.cs">
+      <DependentUpon>PathSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Settings\PathSettings.cs" />
+    <Compile Include="Settings\IRpcSettings.cs">
+      <DependentUpon>RpcSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Settings\RpcSettings.cs" />
+    <Compile Include="Settings\ITimerSettings.cs">
+      <DependentUpon>TimerSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utilities.cs" />
     <Compile Include="Settings\TimerSettings.cs" />
   </ItemGroup>

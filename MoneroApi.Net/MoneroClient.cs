@@ -8,13 +8,20 @@ namespace Jojatekok.MoneroAPI
     public class MoneroClient : IDisposable
     {
         private RpcWebClient RpcWebClient { get; set; }
-        private PathSettings PathSettings { get; set; }
-        public TimerSettings TimerSettings { get; private set; }
+        private IPathSettings PathSettings { get; set; }
+        /// <summary>Represents the settings of data fetching timers.</summary>
+        public ITimerSettings TimerSettings { get; private set; }
 
+        /// <summary>Contains methods to interact with the daemon.</summary>
         public DaemonManager Daemon { get; private set; }
+        /// <summary>Contains methods to interact with the account manager.</summary>
         public AccountManager AccountManager { get; private set; }
 
-        public MoneroClient(PathSettings pathSettings = null, RpcSettings rpcSettings = null, TimerSettings timerSettings = null)
+        /// <summary>Creates a new instance of Monero API .NET's client service.</summary>
+        /// <param name="pathSettings">Path settings to use for specifying the location of several files and folders.</param>
+        /// <param name="rpcSettings">IP-related settings to use when communicating through the Monero core assemblies' RPC protocol.</param>
+        /// <param name="timerSettings">Timer settings which can be used to alter data fetching intervals.</param>
+        public MoneroClient(IPathSettings pathSettings = null, IRpcSettings rpcSettings = null, ITimerSettings timerSettings = null)
         {
             if (pathSettings == null) pathSettings = new PathSettings();
             if (rpcSettings == null) rpcSettings = new RpcSettings();

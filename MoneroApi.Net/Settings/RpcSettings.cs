@@ -3,7 +3,7 @@ using System.Net;
 
 namespace Jojatekok.MoneroAPI.Settings
 {
-    public class RpcSettings
+    public class RpcSettings : IRpcSettings
     {
         private string _urlHostDaemon;
 
@@ -24,14 +24,12 @@ namespace Jojatekok.MoneroAPI.Settings
 
         public WebProxy Proxy { get; set; }
 
-        public RpcSettings(string urlHostDaemon = Utilities.DefaultRpcUrlHostDaemon, string urlHostAccountManager = Utilities.DefaultRpcUrlHostAccountManager, ushort urlPortDaemon = Utilities.DefaultRpcUrlPortDaemon, ushort urlPortAccountManager = Utilities.DefaultRpcUrlPortAccountManager, bool isDaemonRemote = false, WebProxy proxy = null)
+        public RpcSettings(string urlHostDaemon = Utilities.DefaultRpcUrlHostDaemon, string urlHostAccountManager = Utilities.DefaultRpcUrlHostAccountManager, ushort urlPortDaemon = Utilities.DefaultRpcUrlPortDaemon, ushort urlPortAccountManager = Utilities.DefaultRpcUrlPortAccountManager, WebProxy proxy = null)
         {
             UrlHostDaemon = urlHostDaemon;
             UrlHostAccountManager = urlHostAccountManager;
             UrlPortDaemon = urlPortDaemon;
             UrlPortAccountManager = urlPortAccountManager;
-
-            IsDaemonRemote = isDaemonRemote;
 
             Proxy = proxy;
         }

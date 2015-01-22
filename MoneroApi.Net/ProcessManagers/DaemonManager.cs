@@ -24,7 +24,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
         private Timer TimerQueryNetworkInformation { get; set; }
 
         private RpcWebClient RpcWebClient { get; set; }
-        private TimerSettings TimerSettings { get; set; }
+        private ITimerSettings TimerSettings { get; set; }
 
         public bool IsBlockchainSynced {
             get { return _isBlockchainSynced; }
@@ -48,7 +48,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             }
         }
 
-        internal DaemonManager(RpcWebClient rpcWebClient, PathSettings pathSettings, TimerSettings timerSettings) : base(pathSettings.SoftwareDaemon, rpcWebClient, timerSettings, true)
+        internal DaemonManager(RpcWebClient rpcWebClient, IPathSettings pathSettings, ITimerSettings timerSettings) : base(pathSettings.SoftwareDaemon, rpcWebClient, timerSettings, true)
         {
             RpcAvailabilityChanged += Process_RpcAvailabilityChanged;
 

@@ -1,6 +1,6 @@
 ﻿namespace Jojatekok.MoneroAPI.Settings
 {
-    public class TimerSettings
+    public class TimerSettings : ITimerSettings
     {
         private int _rpcCheckAvailabilityPeriod = Utilities.DefaultTimerSettingRpcCheckAvailabilityPeriod;
         private int _rpcCheckAvailabilityDueTime = Utilities.DefaultTimerSettingRpcCheckAvailabilityDueTime;

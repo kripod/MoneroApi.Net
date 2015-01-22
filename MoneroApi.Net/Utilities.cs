@@ -6,8 +6,11 @@ using System.Net.NetworkInformation;
 
 namespace Jojatekok.MoneroAPI
 {
-    static class Utilities
+    public static class Utilities
     {
+        private const double CoinAtomicValueDivider = 1000000000000;
+        private const int CoinDisplayValueDecimalPlaces = 12;
+
         private const string DefaultRelativePathDirectoryAccountData = "AccountData\\";
         private const string DefaultRelativePathDirectorySoftware = "Resources\\Software\\";
 
@@ -27,18 +30,28 @@ namespace Jojatekok.MoneroAPI
         public const int DefaultTimerSettingDaemonQueryNetworkInformationPeriod = 750;
         public const int DefaultTimerSettingAccountRefreshPeriod = 10000;
 
-        public static readonly string ApplicationDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        internal static readonly string ApplicationDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
-        public static readonly JobManager JobManager = new JobManager();
+        internal static readonly JobManager JobManager = new JobManager();
 
-        public static readonly CultureInfo InvariantCulture = CultureInfo.InvariantCulture;
+        internal static readonly CultureInfo InvariantCulture = CultureInfo.InvariantCulture;
 
-        public static string GetAbsolutePath(string input)
+        public static double CoinAtomicValueToDisplayValue(ulong atomicValue)
+        {
+            return Math.Round(atomicValue / CoinAtomicValueDivider, CoinDisplayValueDecimalPlaces, MidpointRounding.AwayFromZero);
+        }
+
+        public static ulong CoinDisplayValueToAtomicValue(double displayValue)
+        {
+            return (ulong)Math.Round(displayValue * CoinAtomicValueDivider, MidpointRounding.AwayFromZero);
+        }
+
+        internal static string GetAbsolutePath(string input)
         {
             return input.Contains(":") ? input : Path.GetFullPath(Path.Combine(ApplicationDirectory, input));
         }
 
-        public static bool IsPortInUse(int port)
+        internal static bool IsPortInUse(int port)
         {
             var activeTcpListeners = IPGlobalProperties.GetIPGlobalProperties().GetActiveTcpListeners();
             for (var i = activeTcpListeners.Length - 1; i >= 0; i--) {
@@ -50,7 +63,7 @@ namespace Jojatekok.MoneroAPI
             return false;
         }
 
-        public static DateTime UnixTimestampToDateTime(ulong unixTimeStamp)
+        internal static DateTime UnixTimestampToDateTime(ulong unixTimeStamp)
         {
             return new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(unixTimeStamp);
         }

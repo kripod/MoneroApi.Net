@@ -1,6 +1,6 @@
 ﻿namespace Jojatekok.MoneroAPI.Settings
 {
-    public class PathSettings
+    public class PathSettings : IPathSettings
     {
         private string _directoryDaemonData = Utilities.DefaultPathDirectoryDaemonData;
         private string _directoryAccountBackups = Utilities.DefaultPathDirectoryAccountBackups;

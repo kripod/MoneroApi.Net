@@ -8,12 +8,12 @@ namespace Jojatekok.MoneroAPI.RpcManagers
 {
     public sealed class RpcWebClient
     {
-        public RpcSettings RpcSettings { get; private set; }
+        public IRpcSettings RpcSettings { get; private set; }
 
         private static readonly JsonSerializer JsonSerializer = new JsonSerializer { NullValueHandling = NullValueHandling.Ignore };
         private static readonly Encoding EncodingUtf8 = Encoding.UTF8;
 
-        internal RpcWebClient(RpcSettings rpcSettings)
+        internal RpcWebClient(IRpcSettings rpcSettings)
         {
             RpcSettings = rpcSettings;
         }
