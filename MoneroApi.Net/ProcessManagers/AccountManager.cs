@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Jojatekok.MoneroAPI.ProcessManagers
 {
-    public class AccountManager : BaseRpcProcessManager, IDisposable
+    public class AccountManager : BaseRpcProcessManager, IAccountManager, IDisposable
     {
         public event EventHandler<PassphraseRequestedEventArgs> PassphraseRequested;
 
@@ -21,10 +21,10 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
         public event EventHandler<TransactionReceivedEventArgs> TransactionReceived;
         public event EventHandler<BalanceChangingEventArgs> BalanceChanging;
 
-        private readonly ObservableCollection<Transaction> _transactionsInternal = new ObservableCollection<Transaction>();
+        private string _passphrase;
         private string _address;
         private Balance _balance;
-        private string _passphrase;
+        private readonly ObservableCollection<Transaction> _transactionsInternal = new ObservableCollection<Transaction>();
 
         private static readonly string[] ProcessArgumentsDefault = { "--set_log 0" };
         private List<string> ProcessArgumentsExtra { get; set; }
@@ -44,7 +44,14 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             get { return _transactionsInternal; }
         }
 
-        public ConcurrentReadOnlyObservableCollection<Transaction> Transactions { get; private set; }
+        public string Passphrase {
+            get { return _passphrase; }
+
+            set {
+                _passphrase = value;
+                Restart();
+            }
+        }
 
         public string Address {
             get { return _address; }
@@ -64,27 +71,20 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             }
         }
 
+        public ConcurrentReadOnlyObservableCollection<Transaction> Transactions { get; private set; }
+
         private bool IsAccountKeysFileExistent {
             get { return File.Exists(PathSettings.FileAccountDataKeys); }
         }
 
-        public string Passphrase {
-            get { return _passphrase; }
-
-            set {
-                _passphrase = value;
-                Restart();
-            }
-        }
-
-        internal AccountManager(RpcWebClient rpcWebClient, IPathSettings pathSettings, ITimerSettings timerSettings, DaemonManager daemon) : base(pathSettings.SoftwareAccountManager, rpcWebClient, timerSettings, false)
+        internal AccountManager(RpcWebClient rpcWebClient, DaemonManager daemon) : base(rpcWebClient, false)
         {
             Exited += Process_Exited;
             RpcAvailabilityChanged += Process_RpcAvailabilityChanged;
 
             RpcWebClient = rpcWebClient;
-            PathSettings = pathSettings;
-            TimerSettings = timerSettings;
+            PathSettings = rpcWebClient.PathSettings;
+            TimerSettings = rpcWebClient.TimerSettings;
             Daemon = daemon;
 
             Transactions = new ConcurrentReadOnlyObservableCollection<Transaction>(TransactionsInternal);
@@ -256,7 +256,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             TimerRefresh.StartOnce(TimerSettings.AccountRefreshPeriod);
         }
 
-        public bool SendTransferSplit(IList<TransferRecipient> recipients, string paymentId, ulong mixCount)
+        public bool SendTransaction(IList<TransferRecipient> recipients, string paymentId, ulong mixCount)
         {
             if (recipients == null || recipients.Count == 0) return false;
 

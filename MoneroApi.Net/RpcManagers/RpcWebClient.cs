@@ -6,16 +6,20 @@ using System.Threading;
 
 namespace Jojatekok.MoneroAPI.RpcManagers
 {
-    public sealed class RpcWebClient
+    sealed class RpcWebClient
     {
         public IRpcSettings RpcSettings { get; private set; }
+        public IPathSettings PathSettings { get; private set; }
+        public ITimerSettings TimerSettings { get; private set; }
 
         private static readonly JsonSerializer JsonSerializer = new JsonSerializer { NullValueHandling = NullValueHandling.Ignore };
         private static readonly Encoding EncodingUtf8 = Encoding.UTF8;
 
-        internal RpcWebClient(IRpcSettings rpcSettings)
+        public RpcWebClient(IRpcSettings rpcSettings, IPathSettings pathSettings, ITimerSettings timerSettings)
         {
             RpcSettings = rpcSettings;
+            PathSettings = pathSettings;
+            TimerSettings = timerSettings;
         }
 
         public T HttpPostData<T>(string host, ushort port, string command)

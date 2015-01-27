@@ -8,6 +8,9 @@
         private string _softwareDaemon = Utilities.DefaultPathSoftwareDaemon;
         private string _softwareAccountManager = Utilities.DefaultPathSoftwareAccountManager;
 
+        private bool _startDaemonProcess = true;
+        private bool _startAccountManagerProcess = true;
+
         public string DirectoryDaemonData {
             get { return Utilities.GetAbsolutePath(_directoryDaemonData); }
             set { _directoryDaemonData = value; }
@@ -42,6 +45,16 @@
         public string SoftwareAccountManager {
             get { return Utilities.GetAbsolutePath(_softwareAccountManager); }
             set { _softwareAccountManager = value; }
+        }
+
+        public bool StartDaemonProcess {
+            get { return _startDaemonProcess; }
+            set { _startDaemonProcess = value; }
+        }
+
+        public bool StartAccountManagerProcess {
+            get { return _startAccountManagerProcess; }
+            set { _startAccountManagerProcess = value; }
         }
     }
 }

@@ -12,5 +12,8 @@
 
         string SoftwareDaemon { get; set; }
         string SoftwareAccountManager { get; set; }
+
+        bool StartDaemonProcess { get; set; }
+        bool StartAccountManagerProcess { get; set; }
     }
 }

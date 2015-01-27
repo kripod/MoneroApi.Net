@@ -61,6 +61,7 @@
     <Compile Include="Objects\Transaction.cs" />
     <Compile Include="Objects\TransactionType.cs" />
     <Compile Include="Objects\TransferRecipient.cs" />
+    <Compile Include="ProcessManagers\IAccountManager.cs" />
     <Compile Include="ProcessManagers\AccountManager.cs" />
     <Compile Include="ProcessManagers\BaseRpcProcessManager.cs" />
     <Compile Include="ProcessManagers\DaemonManager.cs" />

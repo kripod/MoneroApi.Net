@@ -6,6 +6,7 @@ using System.Net.NetworkInformation;
 
 namespace Jojatekok.MoneroAPI
 {
+    /// <summary>Provides properties used by the API, and methods for value conversion.</summary>
     public static class Utilities
     {
         private const double CoinAtomicValueDivider = 1000000000000;

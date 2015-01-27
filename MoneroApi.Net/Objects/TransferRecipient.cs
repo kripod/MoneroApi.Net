@@ -11,10 +11,16 @@ namespace Jojatekok.MoneroAPI
         [JsonProperty("amount")]
         public ulong Amount { get; set; }
 
-        public TransferRecipient(string address, ulong amount)
+        public TransferRecipient(string address, ulong amountAtomicValue)
         {
             Address = address;
-            Amount = amount;
+            Amount = amountAtomicValue;
+        }
+
+        public TransferRecipient(string address, double amountDisplayValue)
+        {
+            Address = address;
+            Amount = Utilities.CoinDisplayValueToAtomicValue(amountDisplayValue);
         }
     }
 }

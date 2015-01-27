@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Jojatekok.MoneroAPI.RpcManagers;
+using Jojatekok.MoneroAPI.Settings;
+using System;
 using System.Diagnostics;
 using System.Threading;
-using Jojatekok.MoneroAPI.RpcManagers;
-using Jojatekok.MoneroAPI.Settings;
 
 namespace Jojatekok.MoneroAPI.ProcessManagers
 {
@@ -18,8 +18,10 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
 
         private string Path { get; set; }
         private Process Process { get; set; }
+
         private RpcWebClient RpcWebClient { get; set; }
         private ITimerSettings TimerSettings { get; set; }
+
         private string RpcHost { get; set; }
         private ushort RpcPort { get; set; }
 
@@ -48,20 +50,21 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             get { return Process != null && !Process.HasExited; }
         }
 
-        protected BaseRpcProcessManager(string path, RpcWebClient rpcWebClient, ITimerSettings timerSettings, bool isDaemon) {
-            Path = path;
+        internal BaseRpcProcessManager(RpcWebClient rpcWebClient, bool isDaemon) {
             RpcWebClient = rpcWebClient;
-            TimerSettings = timerSettings;
+            TimerSettings = rpcWebClient.TimerSettings;
 
             TimerCheckRpcAvailability = new Timer(delegate { CheckRpcAvailability(); });
 
             var rpcSettings = rpcWebClient.RpcSettings;
 
             if (isDaemon) {
+                Path = rpcWebClient.PathSettings.SoftwareDaemon;
                 RpcHost = rpcSettings.UrlHostDaemon;
                 RpcPort = rpcSettings.UrlPortDaemon;
 
             } else {
+                Path = rpcWebClient.PathSettings.SoftwareAccountManager;
                 RpcHost = rpcSettings.UrlHostAccountManager;
                 RpcPort = rpcSettings.UrlPortAccountManager;
             }

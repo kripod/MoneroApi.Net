@@ -48,17 +48,19 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             }
         }
 
-        internal DaemonManager(RpcWebClient rpcWebClient, IPathSettings pathSettings, ITimerSettings timerSettings) : base(pathSettings.SoftwareDaemon, rpcWebClient, timerSettings, true)
+        internal DaemonManager(RpcWebClient rpcWebClient) : base(rpcWebClient, true)
         {
             RpcAvailabilityChanged += Process_RpcAvailabilityChanged;
 
             TimerQueryNetworkInformation = new Timer(delegate { QueryNetworkInformation(); });
 
             RpcWebClient = rpcWebClient;
-            TimerSettings = timerSettings;
+            TimerSettings = rpcWebClient.TimerSettings;
 
             var rpcSettings = RpcWebClient.RpcSettings;
-            if (rpcSettings.IsDaemonRemote) {
+            var pathSettings = RpcWebClient.PathSettings;
+
+            if (!pathSettings.StartDaemonProcess) {
                 IsRpcAvailable = true;
                 return;
             }
@@ -78,14 +80,14 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
 
         public void Start()
         {
-            if (!RpcWebClient.RpcSettings.IsDaemonRemote) {
+            if (RpcWebClient.PathSettings.StartDaemonProcess) {
                 StartProcess(ProcessArgumentsDefault.Concat(ProcessArgumentsExtra).ToArray());
             }
         }
 
         public void Stop()
         {
-            if (!RpcWebClient.RpcSettings.IsDaemonRemote) {
+            if (RpcWebClient.PathSettings.StartDaemonProcess) {
                 KillBaseProcess();
             }
         }
@@ -149,7 +151,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
                 TimerQueryNetworkInformation.Dispose();
                 TimerQueryNetworkInformation = null;
 
-                if (!RpcWebClient.RpcSettings.IsDaemonRemote) {
+                if (RpcWebClient.PathSettings.StartDaemonProcess) {
                     // Safe shutdown
                     SendConsoleCommand("exit");
                 }
