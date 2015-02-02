@@ -19,16 +19,9 @@ namespace Jojatekok.MoneroAPI.Demo
         {
             // Assign a new instance of the client to a variable
             MoneroClient = new MoneroClient(
-                new RpcSettings {
-                    UrlHostDaemon = "http://xmr1.coolmining.club",
-                    UrlPortDaemon = 5012
-                },
-                new PathSettings {
-                    StartDaemonProcess = false
-                },
-                new TimerSettings {
-                    DaemonQueryNetworkInformationPeriod = 5000
-                }
+                Config.ClientRpcSettings,
+                Config.ClientPathSettings,
+                Config.ClientTimerSettings
             );
 
             // First, declare event handlers for the daemon, and then start it
