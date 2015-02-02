@@ -78,6 +78,8 @@
     <Compile Include="RpcManagers\AccountManager\Json\Responses\KeyValueContainer.cs" />
     <Compile Include="RpcManagers\AccountManager\Json\Responses\TransactionIdListValueContainer.cs" />
     <Compile Include="RpcManagers\AccountManager\Json\Responses\TransactionListValueContainer.cs" />
+    <Compile Include="RpcManagers\Daemon\Http\Responses\MiningStatus.cs" />
+    <Compile Include="RpcManagers\Daemon\Http\Responses\BlockHeightContainer.cs" />
     <Compile Include="RpcManagers\Daemon\Http\Responses\NetworkInformation.cs" />
     <Compile Include="RpcManagers\Daemon\Json\Requests\QueryBlockHeaderByHash.cs" />
     <Compile Include="RpcManagers\Daemon\Json\Requests\QueryBlockHeaderByHeight.cs" />

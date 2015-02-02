@@ -102,7 +102,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
         {
             TimerQueryNetworkInformation.Stop();
 
-            var output = HttpPostData<NetworkInformation>(HttpRpcCommands.DaemonGetInformation);
+            var output = HttpPostData<NetworkInformation>(HttpRpcCommands.DaemonQueryNetworkInformation);
             if (output != null && output.BlockHeightTotal != 0) {
                 var blockHeaderLast = QueryBlockHeaderLast();
                 if (blockHeaderLast != null) {
@@ -119,11 +119,51 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             TimerQueryNetworkInformation.StartOnce(TimerSettings.DaemonQueryNetworkInformationPeriod);
         }
 
+        public ulong QueryCurrentBlockHeight()
+        {
+            var output = HttpPostData<BlockHeightContainer>(HttpRpcCommands.DaemonQueryCurrentBlockHeight);
+            if (output != null) {
+                return output.BlockHeight;
+            }
+
+            return 0;
+        }
+
         public BlockHeader QueryBlockHeaderLast()
         {
-            var blockHeaderValueContainer = JsonPostData<BlockHeaderValueContainer>(new QueryBlockHeaderLast()).Result;
-            if (blockHeaderValueContainer != null) {
-                return blockHeaderValueContainer.Value;
+            var output = JsonPostData<BlockHeaderValueContainer>(new QueryBlockHeaderLast()).Result;
+            if (output != null) {
+                return output.Value;
+            }
+
+            return null;
+        }
+
+        public BlockHeader QueryBlockHeaderByHeight(ulong height)
+        {
+            var output = JsonPostData<BlockHeaderValueContainer>(new QueryBlockHeaderByHeight(height)).Result;
+            if (output != null) {
+                return output.Value;
+            }
+
+            return null;
+        }
+
+        public BlockHeader QueryBlockHeaderByHash(string hash)
+        {
+            var output = JsonPostData<BlockHeaderValueContainer>(new QueryBlockHeaderByHash(hash)).Result;
+            if (output != null) {
+                return output.Value;
+            }
+
+            return null;
+        }
+
+        public MiningStatus QueryMiningStatus()
+        {
+            var output = HttpPostData<MiningStatus>(HttpRpcCommands.DaemonQueryMiningStatus);
+            if (output != null) {
+                return output;
             }
 
             return null;

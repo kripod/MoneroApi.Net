@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using Jojatekok.MoneroAPI.RpcManagers.AccountManager.Json.Responses;
-using Jojatekok.MoneroAPI.Settings;
+﻿using Jojatekok.MoneroAPI.RpcManagers.AccountManager.Json.Responses;
 using System;
 using System.Threading;
 
