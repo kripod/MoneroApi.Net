@@ -31,6 +31,8 @@ namespace Jojatekok.MoneroAPI
         public const int DefaultTimerSettingDaemonQueryNetworkInformationPeriod = 750;
         public const int DefaultTimerSettingAccountRefreshPeriod = 10000;
 
+        public const int DefaultTransactionMixCount = 1;
+
         internal static readonly string ApplicationDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
         internal static readonly JobManager JobManager = new JobManager();

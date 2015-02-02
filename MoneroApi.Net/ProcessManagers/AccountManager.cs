@@ -284,6 +284,31 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             return true;
         }
 
+        public bool SendTransaction(IList<TransferRecipient> recipients, string paymentId)
+        {
+            return SendTransaction(recipients, paymentId, Utilities.DefaultTransactionMixCount);
+        }
+
+        public bool SendTransaction(IList<TransferRecipient> recipients)
+        {
+            return SendTransaction(recipients, null, Utilities.DefaultTransactionMixCount);
+        }
+
+        public bool SendTransaction(TransferRecipient recipient, string paymentId, ulong mixCount)
+        {
+            return SendTransaction(new List<TransferRecipient> { recipient }, paymentId, mixCount);
+        }
+
+        public bool SendTransaction(TransferRecipient recipient, string paymentId)
+        {
+            return SendTransaction(new List<TransferRecipient> { recipient }, paymentId, Utilities.DefaultTransactionMixCount);
+        }
+
+        public bool SendTransaction(TransferRecipient recipient)
+        {
+            return SendTransaction(new List<TransferRecipient> { recipient }, null, Utilities.DefaultTransactionMixCount);
+        }
+
         private string Backup(string path = null)
         {
             if (path == null) {

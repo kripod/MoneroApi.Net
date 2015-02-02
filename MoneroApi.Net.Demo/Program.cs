@@ -1,10 +1,10 @@
-﻿using Jojatekok.MoneroAPI;
+﻿using System.Collections.Generic;
 using Jojatekok.MoneroAPI.RpcManagers.AccountManager.Json.Responses;
 using Jojatekok.MoneroAPI.Settings;
 using System;
 using System.Threading;
 
-namespace MoneroApi.Net.Demo
+namespace Jojatekok.MoneroAPI.Demo
 {
     class Program
     {

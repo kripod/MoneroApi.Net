@@ -23,7 +23,7 @@ namespace Jojatekok.MoneroAPI
         /// <param name="rpcSettings">IP-related settings to use when communicating through the Monero core assemblies' RPC protocol.</param>
         /// <param name="pathSettings">Path settings to use for specifying the location of several files and folders.</param>
         /// <param name="timerSettings">Timer settings which can be used to alter data fetching intervals.</param>
-        public MoneroClient(IRpcSettings rpcSettings = null, IPathSettings pathSettings = null, ITimerSettings timerSettings = null)
+        public MoneroClient(IRpcSettings rpcSettings, IPathSettings pathSettings, ITimerSettings timerSettings)
         {
             if (rpcSettings == null) rpcSettings = new RpcSettings();
             if (pathSettings == null) pathSettings = new PathSettings();
@@ -37,6 +37,27 @@ namespace Jojatekok.MoneroAPI
 
             Daemon = new DaemonManager(RpcWebClient);
             AccountManager = new AccountManager(RpcWebClient, Daemon);
+        }
+
+        /// <summary>Creates a new instance of Monero API .NET's client service.</summary>
+        /// <param name="rpcSettings">IP-related settings to use when communicating through the Monero core assemblies' RPC protocol.</param>
+        /// <param name="pathSettings">Path settings to use for specifying the location of several files and folders.</param>
+        public MoneroClient(IRpcSettings rpcSettings, IPathSettings pathSettings) : this(rpcSettings, pathSettings, null)
+        {
+
+        }
+
+        /// <summary>Creates a new instance of Monero API .NET's client service.</summary>
+        /// <param name="rpcSettings">IP-related settings to use when communicating through the Monero core assemblies' RPC protocol.</param>
+        public MoneroClient(IRpcSettings rpcSettings) : this(rpcSettings, null, null)
+        {
+
+        }
+
+        /// <summary>Creates a new instance of Monero API .NET's client service.</summary>
+        public MoneroClient() : this(null, null, null)
+        {
+
         }
 
         public void Dispose()
