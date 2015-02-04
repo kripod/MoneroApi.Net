@@ -1,6 +1,8 @@
 ﻿using Jojatekok.MoneroAPI.Settings;
 using Newtonsoft.Json;
+using System;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading;
 
@@ -9,17 +11,26 @@ namespace Jojatekok.MoneroAPI.RpcManagers
     sealed class RpcWebClient
     {
         public IRpcSettings RpcSettings { get; private set; }
-        public IPathSettings PathSettings { get; private set; }
         public ITimerSettings TimerSettings { get; private set; }
+
+        private HttpClient HttpClient { get; set; }
 
         private static readonly JsonSerializer JsonSerializer = new JsonSerializer { NullValueHandling = NullValueHandling.Ignore };
         private static readonly Encoding EncodingUtf8 = Encoding.UTF8;
 
-        public RpcWebClient(IRpcSettings rpcSettings, IPathSettings pathSettings, ITimerSettings timerSettings)
+        public RpcWebClient(IRpcSettings rpcSettings, ITimerSettings timerSettings)
         {
             RpcSettings = rpcSettings;
-            PathSettings = pathSettings;
             TimerSettings = timerSettings;
+
+            var httpClientHandler = new HttpClientHandler();
+            var proxy = rpcSettings.Proxy;
+            if (proxy != null) {
+                httpClientHandler.Proxy = proxy;
+                httpClientHandler.UseProxy = true;
+            }
+
+            HttpClient = new HttpClient(httpClientHandler);
         }
 
         public T HttpPostData<T>(string host, ushort port, string command)
@@ -38,22 +49,15 @@ namespace Jojatekok.MoneroAPI.RpcManagers
 
         private string PostString(string host, ushort port, string relativeUrl, string postData = null)
         {
-            var request = WebRequest.CreateHttp(host + ":" + port + "/" + relativeUrl);
-            request.Method = "POST";
-            request.Timeout = Timeout.Infinite;
-            request.Proxy = RpcSettings.Proxy;
+            var requestUri = host + ":" + port + "/" + relativeUrl;
+            var requestMessage = new HttpRequestMessage(HttpMethod.Post, requestUri);
 
             if (postData != null) {
-                request.ContentType = "application/json";
-                var postBytes = EncodingUtf8.GetBytes(postData);
-                request.ContentLength = postBytes.Length;
-
-                using (var requestStream = request.GetRequestStream()) {
-                    requestStream.Write(postBytes, 0, postBytes.Length);
-                }
+                requestMessage.Content = new StringContent(postData, EncodingUtf8, "application/json");
             }
 
-            return request.GetResponseString();
+            var response = HttpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, requestUri)).Result;
+            return response.Content.ReadAsStringAsync().Result;
         }
     }
 }

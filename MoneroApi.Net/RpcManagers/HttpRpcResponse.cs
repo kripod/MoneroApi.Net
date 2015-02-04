@@ -7,7 +7,7 @@ namespace Jojatekok.MoneroAPI.RpcManagers
         [JsonProperty("status")]
         private string StatusInternal {
             set {
-                switch (value.ToLower(Utilities.InvariantCulture)) {
+                switch (value.ToLower()) {
                     case "ok":
                         Status = RpcResponseStatus.Ok;
                         break;

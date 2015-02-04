@@ -1,33 +1,12 @@
 ﻿using Newtonsoft.Json;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Net;
 using System.Threading;
 
 namespace Jojatekok.MoneroAPI
 {
     static class ExtensionMethods
     {
-        public static string GetResponseString(this HttpWebRequest request)
-        {
-            // Ensure a little of backwards compatibility in order to avoid RPC failures
-            try {
-                using (var response = request.GetResponse()) {
-                    using (var stream = response.GetResponseStream()) {
-                        Debug.Assert(stream != null, "stream != null");
-
-                        using (var reader = new StreamReader(stream)) {
-                            return reader.ReadToEnd();
-                        }
-                    }
-                }
-
-            } catch {
-                return null;
-            }
-        }
-
         [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public static T DeserializeObject<T>(this JsonSerializer serializer, string value)
         {

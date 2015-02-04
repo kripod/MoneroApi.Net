@@ -10,7 +10,6 @@ namespace Jojatekok.MoneroAPI
         private RpcWebClient RpcWebClient { get; set; }
 
         private IRpcSettings RpcSettings { get; set; }
-        private IPathSettings PathSettings { get; set; }
         /// <summary>Represents the settings of data fetching timers.</summary>
         public ITimerSettings TimerSettings { get; private set; }
 
@@ -21,18 +20,15 @@ namespace Jojatekok.MoneroAPI
 
         /// <summary>Creates a new instance of Monero API .NET's client service.</summary>
         /// <param name="rpcSettings">IP-related settings to use when communicating through the Monero core assemblies' RPC protocol.</param>
-        /// <param name="pathSettings">Path settings to use for specifying the location of several files and folders.</param>
         /// <param name="timerSettings">Timer settings which can be used to alter data fetching intervals.</param>
-        public MoneroClient(IRpcSettings rpcSettings, IPathSettings pathSettings, ITimerSettings timerSettings)
+        public MoneroClient(IRpcSettings rpcSettings, ITimerSettings timerSettings)
         {
             if (rpcSettings == null) rpcSettings = new RpcSettings();
-            if (pathSettings == null) pathSettings = new PathSettings();
             if (timerSettings == null) timerSettings = new TimerSettings();
 
-            RpcWebClient = new RpcWebClient(rpcSettings, pathSettings, timerSettings);
+            RpcWebClient = new RpcWebClient(rpcSettings, timerSettings);
 
             RpcSettings = rpcSettings;
-            PathSettings = pathSettings;
             TimerSettings = timerSettings;
 
             Daemon = new DaemonManager(RpcWebClient);
@@ -41,21 +37,13 @@ namespace Jojatekok.MoneroAPI
 
         /// <summary>Creates a new instance of Monero API .NET's client service.</summary>
         /// <param name="rpcSettings">IP-related settings to use when communicating through the Monero core assemblies' RPC protocol.</param>
-        /// <param name="pathSettings">Path settings to use for specifying the location of several files and folders.</param>
-        public MoneroClient(IRpcSettings rpcSettings, IPathSettings pathSettings) : this(rpcSettings, pathSettings, null)
+        public MoneroClient(IRpcSettings rpcSettings) : this(rpcSettings, null)
         {
 
         }
 
         /// <summary>Creates a new instance of Monero API .NET's client service.</summary>
-        /// <param name="rpcSettings">IP-related settings to use when communicating through the Monero core assemblies' RPC protocol.</param>
-        public MoneroClient(IRpcSettings rpcSettings) : this(rpcSettings, null, null)
-        {
-
-        }
-
-        /// <summary>Creates a new instance of Monero API .NET's client service.</summary>
-        public MoneroClient() : this(null, null, null)
+        public MoneroClient() : this(null, null)
         {
 
         }

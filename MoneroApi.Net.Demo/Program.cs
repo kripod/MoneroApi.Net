@@ -18,23 +18,19 @@ namespace Jojatekok.MoneroAPI.Demo
             // Assign a new instance of the client to a variable
             MoneroClient = new MoneroClient(
                 Config.ClientRpcSettings,
-                Config.ClientPathSettings,
                 Config.ClientTimerSettings
             );
 
-            // First, declare event handlers for the daemon, and then start it
+            // Declare event handlers for the daemon
             var daemon = MoneroClient.Daemon;
             daemon.NetworkInformationChanging += Daemon_NetworkInformationChanging;
             daemon.BlockchainSynced += Daemon_BlockchainSynced;
-            daemon.Start();
 
-            // Optionally, declare event handlers for the account manager, and then start it if necessary
+            // Optionally, declare event handlers for the account manager
             var accountManager = MoneroClient.AccountManager;
-            accountManager.PassphraseRequested += AccountManager_PassphraseRequested;
             accountManager.AddressReceived += AccountManager_AddressReceived;
             accountManager.TransactionReceived += AccountManager_TransactionReceived;
             accountManager.BalanceChanging += AccountManager_BalanceChanging;
-            accountManager.Start();
 
             // Wait infinitely in order to keep the application running
             while (true) {
@@ -59,18 +55,6 @@ namespace Jojatekok.MoneroAPI.Demo
         {
             // This event has to fire in order to allow sending transactions with the AccountManager correctly
             IsTransactionSendingEnabled = true;
-        }
-
-        static void AccountManager_PassphraseRequested(object sender, PassphraseRequestedEventArgs e)
-        {
-            if (e.IsFirstTime) {
-                // The account to be used does not exists, create it by specifying a passphrase below
-                MoneroClient.AccountManager.Passphrase = "<New account's passphrase>";
-
-            } else {
-                // The account could not have been accessed with the current passphrase given, retry with an other string
-                MoneroClient.AccountManager.Passphrase = "<Insert correct passphrase here>";
-            }
         }
 
         static void AccountManager_AddressReceived(object sender, AddressReceivedEventArgs e)

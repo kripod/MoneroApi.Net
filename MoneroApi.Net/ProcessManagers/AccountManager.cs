@@ -4,54 +4,27 @@ using Jojatekok.MoneroAPI.RpcManagers.AccountManager.Json.Responses;
 using Jojatekok.MoneroAPI.Settings;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Jojatekok.MoneroAPI.ProcessManagers
 {
-    public class AccountManager : BaseRpcProcessManager, IAccountManager, IDisposable
+    public class AccountManager : BaseRpcProcessManager, IAccountManager
     {
-        public event EventHandler<PassphraseRequestedEventArgs> PassphraseRequested;
-
         public event EventHandler<AddressReceivedEventArgs> AddressReceived;
         public event EventHandler<TransactionReceivedEventArgs> TransactionReceived;
         public event EventHandler<BalanceChangingEventArgs> BalanceChanging;
 
-        private string _passphrase;
         private string _address;
         private Balance _balance;
-        private readonly ObservableCollection<Transaction> _transactionsInternal = new ObservableCollection<Transaction>();
+        private readonly IList<Transaction> _transactions = new List<Transaction>();
 
-        private static readonly string[] ProcessArgumentsDefault = { "--set_log 0" };
-        private List<string> ProcessArgumentsExtra { get; set; }
-
-        private bool IsWaitingForStart { get; set; }
         private bool IsTransactionReceivedEventEnabled { get; set; }
-        private bool IsStartForced { get; set; }
 
         private Timer TimerRefresh { get; set; }
 
         private RpcWebClient RpcWebClient { get; set; }
-        private IPathSettings PathSettings { get; set; }
         private ITimerSettings TimerSettings { get; set; }
         private DaemonManager Daemon { get; set; }
-
-        private ObservableCollection<Transaction> TransactionsInternal {
-            get { return _transactionsInternal; }
-        }
-
-        public string Passphrase {
-            get { return _passphrase; }
-
-            set {
-                _passphrase = value;
-                Restart();
-            }
-        }
 
         public string Address {
             get { return _address; }
@@ -71,125 +44,19 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             }
         }
 
-        public ConcurrentReadOnlyObservableCollection<Transaction> Transactions { get; private set; }
-
-        private bool IsAccountKeysFileExistent {
-            get { return File.Exists(PathSettings.FileAccountDataKeys); }
+        public IList<Transaction> Transactions {
+            get { return _transactions; }
         }
 
         internal AccountManager(RpcWebClient rpcWebClient, DaemonManager daemon) : base(rpcWebClient, false)
         {
-            Exited += Process_Exited;
             RpcAvailabilityChanged += Process_RpcAvailabilityChanged;
 
             RpcWebClient = rpcWebClient;
-            PathSettings = rpcWebClient.PathSettings;
             TimerSettings = rpcWebClient.TimerSettings;
             Daemon = daemon;
 
-            Transactions = new ConcurrentReadOnlyObservableCollection<Transaction>(TransactionsInternal);
-
-            TimerRefresh = new Timer(delegate { RequestRefresh(); });
-        }
-
-        private void SetProcessArguments()
-        {
-            var rpcSettings = RpcWebClient.RpcSettings;
-
-            ProcessArgumentsExtra = new List<string>(5) {
-                "--daemon-address " + rpcSettings.UrlHostDaemon + ":" + rpcSettings.UrlPortDaemon,
-                "--password \"" + Passphrase + "\""
-            };
-
-            if (IsAccountKeysFileExistent) {
-                // Load existing account
-                ProcessArgumentsExtra.Add("--wallet-file \"" + PathSettings.FileAccountData + "\"");
-
-                if (rpcSettings.UrlHostDaemon != Utilities.DefaultRpcUrlHostDaemon) {
-                    ProcessArgumentsExtra.Add("--rpc-bind-ip " + rpcSettings.UrlHostDaemon);
-                }
-                ProcessArgumentsExtra.Add("--rpc-bind-port " + rpcSettings.UrlPortAccountManager);
-
-            } else {
-                // Create new account
-                var directoryAccountData = PathSettings.DirectoryAccountData;
-
-                if (!Directory.Exists(directoryAccountData)) Directory.CreateDirectory(directoryAccountData);
-                ProcessArgumentsExtra.Add("--generate-new-wallet \"" + PathSettings.FileAccountData + "\"");
-            }
-        }
-
-        public void Start()
-        {
-            if (IsStartForced || IsAccountKeysFileExistent) {
-                // Start the account normally
-                IsStartForced = false;
-                StartInternal();
-
-            } else {
-                // Let the user set a password for the new account being created
-                IsStartForced = true;
-                RequestPassphrase(true);
-            }
-        }
-
-        private void StartInternal()
-        {
-            // <-- Reset variables -->
-
-            SetProcessArguments();
-
-            TransactionsInternal.Clear();
-            IsTransactionReceivedEventEnabled = false;
-
-            Address = null;
-            Balance = new Balance(null, null);
-
-            // <-- Start process -->
-
-            if (!IsAccountKeysFileExistent) {
-                OnLogMessage += AccountManager_OnLogMessage;
-            }
-
-            if (Daemon.IsRpcAvailable) {
-                StartProcess(ProcessArgumentsDefault.Concat(ProcessArgumentsExtra).ToArray());
-            } else {
-                IsWaitingForStart = true;
-                Daemon.RpcAvailabilityChanged += Daemon_RpcAvailabilityChanged;
-            }
-        }
-
-        private void AccountManager_OnLogMessage(object sender, LogMessageReceivedEventArgs e)
-        {
-            var messageText = e.LogMessage.MessageText;
-
-            // TODO: Allow selection of the deterministic seed's language
-            if (messageText.StartsWith("0", StringComparison.Ordinal)) {
-                SendConsoleCommand("0");
-
-            } else if (messageText.StartsWith("*", StringComparison.Ordinal)) {
-                OnLogMessage -= AccountManager_OnLogMessage;
-                Restart();
-            }
-        }
-
-        private void Daemon_RpcAvailabilityChanged(object sender, EventArgs e)
-        {
-            if (IsWaitingForStart && Daemon.IsRpcAvailable) {
-                IsWaitingForStart = false;
-                StartProcess(ProcessArgumentsDefault.Concat(ProcessArgumentsExtra).ToArray());
-            }
-        }
-
-        public void Stop()
-        {
-            KillBaseProcess();
-        }
-
-        public void Restart()
-        {
-            Stop();
-            StartInternal();
+            TimerRefresh = new Timer(delegate { RequestRefresh(); }, null, Timeout.Infinite, Timeout.Infinite);
         }
 
         private void QueryAddress()
@@ -216,7 +83,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             var transactions = JsonPostData<TransactionListValueContainer>(new QueryIncomingTransfers()).Result;
 
             if (transactions != null) {
-                var currentTransactionCount = TransactionsInternal.Count;
+                var currentTransactionCount = Transactions.Count;
 
                 // Update existing transactions
                 for (var i = currentTransactionCount - 1; i >= 0; i--) {
@@ -224,16 +91,16 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
                     transaction.Number = (uint)(i + 1);
                     // TODO: Add support for detecting transaction type
 
-                    TransactionsInternal[i] = transaction;
+                    Transactions[i] = transaction;
                 }
 
                 // Add new transactions
                 for (var i = currentTransactionCount; i < transactions.Value.Count; i++) {
                     var transaction = transactions.Value[i];
-                    transaction.Number = (uint)(TransactionsInternal.Count + 1);
+                    transaction.Number = (uint)(Transactions.Count + 1);
                     // TODO: Add support for detecting transaction type
 
-                    TransactionsInternal.Add(transaction);
+                    Transactions.Add(transaction);
                     if (IsTransactionReceivedEventEnabled && TransactionReceived != null) {
                         TransactionReceived(this, new TransactionReceivedEventArgs(transaction));
                     }
@@ -241,11 +108,6 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             }
 
             IsTransactionReceivedEventEnabled = true;
-        }
-
-        private void RequestPassphrase(bool isFirstTime)
-        {
-            if (PassphraseRequested != null) PassphraseRequested(this, new PassphraseRequestedEventArgs(isFirstTime));
         }
 
         private void RequestRefresh()
@@ -307,46 +169,6 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
         public bool SendTransaction(TransferRecipient recipient)
         {
             return SendTransaction(new List<TransferRecipient> { recipient }, null, Utilities.DefaultTransactionMixCount);
-        }
-
-        private string Backup(string path = null)
-        {
-            if (path == null) {
-                path = PathSettings.DirectoryAccountBackups + DateTime.Now.ToString("yyyy-MM-dd", Utilities.InvariantCulture);
-            }
-
-            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
-
-            var accountName = Path.GetFileNameWithoutExtension(PathSettings.FileAccountData);
-
-            var filesToBackup = Directory.GetFiles(PathSettings.DirectoryAccountData, accountName + "*", SearchOption.TopDirectoryOnly);
-            for (var i = filesToBackup.Length - 1; i >= 0; i--) {
-                var file = filesToBackup[i];
-                Debug.Assert(file != null, "file != null");
-                File.Copy(file, Path.Combine(path, Path.GetFileName(file)), true);
-            }
-
-            return path;
-        }
-
-        public Task<string> BackupAsync(string path)
-        {
-            return Task.Factory.StartNew(() => Backup(path));
-        }
-
-        public Task<string> BackupAsync()
-        {
-            return Task.Factory.StartNew(() => Backup());
-        }
-
-        private void Process_Exited(object sender, ProcessExitedEventArgs e)
-        {
-            switch (e.ExitCode) {
-                case 1:
-                    // Invalid passphrase
-                    RequestPassphrase(false);
-                    break;
-            }
         }
 
         private void Process_RpcAvailabilityChanged(object sender, EventArgs e)

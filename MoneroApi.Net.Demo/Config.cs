@@ -9,7 +9,6 @@ namespace Jojatekok.MoneroAPI.Demo
         // git update-index --assume-unchanged "MoneroApi.Net.Demo/Config.cs"
 
         public static readonly IRpcSettings ClientRpcSettings = new RpcSettings();
-        public static readonly IPathSettings ClientPathSettings = new PathSettings();
         public static readonly ITimerSettings ClientTimerSettings = new TimerSettings();
     }
 }

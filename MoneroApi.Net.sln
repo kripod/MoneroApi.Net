@@ -5,7 +5,7 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneroApi.Net.Demo", "MoneroApi.Net.Demo\MoneroApi.Net.Demo.csproj", "{18AC786F-55E3-48EA-92BC-87DAC2EEA759}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneroApi.Net", "MoneroApi.Net\MoneroApi.Net.csproj", "{2348DE2F-CECC-45C8-9436-2B4ECDCF2D1E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneroApi.Net", "MoneroApi.Net\MoneroApi.Net.csproj", "{D54C18E6-4678-4CBF-9D58-ECE8D7C9218D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{18AC786F-55E3-48EA-92BC-87DAC2EEA759}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18AC786F-55E3-48EA-92BC-87DAC2EEA759}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18AC786F-55E3-48EA-92BC-87DAC2EEA759}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2348DE2F-CECC-45C8-9436-2B4ECDCF2D1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2348DE2F-CECC-45C8-9436-2B4ECDCF2D1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2348DE2F-CECC-45C8-9436-2B4ECDCF2D1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2348DE2F-CECC-45C8-9436-2B4ECDCF2D1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D54C18E6-4678-4CBF-9D58-ECE8D7C9218D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D54C18E6-4678-4CBF-9D58-ECE8D7C9218D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D54C18E6-4678-4CBF-9D58-ECE8D7C9218D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D54C18E6-4678-4CBF-9D58-ECE8D7C9218D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

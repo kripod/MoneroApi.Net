@@ -6,7 +6,7 @@ using System.Resources;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MoneroApi.Net.Demo")]
+[assembly: AssemblyTitle("Monero API .NET Demo")]
 [assembly: AssemblyDescription("Demonstrates the usage of Monero API .NET")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Jojatekok")]

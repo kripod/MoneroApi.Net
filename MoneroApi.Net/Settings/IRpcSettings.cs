@@ -10,6 +10,6 @@ namespace Jojatekok.MoneroAPI.Settings
         ushort UrlPortDaemon { get; set; }
         ushort UrlPortAccountManager { get; set; }
 
-        WebProxy Proxy { get; set; }
+        IWebProxy Proxy { get; set; }
     }
 }

@@ -18,9 +18,6 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
         private bool _isBlockchainSynced;
         private NetworkInformation _networkInformation;
 
-        private static readonly string[] ProcessArgumentsDefault = { "--log-level 0" };
-        private List<string> ProcessArgumentsExtra { get; set; }
-
         private Timer TimerQueryNetworkInformation { get; set; }
 
         private RpcWebClient RpcWebClient { get; set; }
@@ -52,50 +49,15 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
         {
             RpcAvailabilityChanged += Process_RpcAvailabilityChanged;
 
-            TimerQueryNetworkInformation = new Timer(delegate { QueryNetworkInformation(); });
+            TimerQueryNetworkInformation = new Timer(
+                delegate { QueryNetworkInformation(); },
+                null,
+                Timeout.Infinite,
+                Timeout.Infinite
+            );
 
             RpcWebClient = rpcWebClient;
             TimerSettings = rpcWebClient.TimerSettings;
-
-            var rpcSettings = RpcWebClient.RpcSettings;
-            var pathSettings = RpcWebClient.PathSettings;
-
-            if (!pathSettings.StartDaemonProcess) {
-                IsRpcAvailable = true;
-                return;
-            }
-
-            ProcessArgumentsExtra = new List<string>(3) {
-                //"--data-dir \"" + paths.DirectoryDaemonData + "\"",
-                "--rpc-bind-port " + rpcSettings.UrlPortDaemon
-            };
-
-            if (rpcSettings.UrlHostDaemon != Utilities.DefaultRpcUrlHostDaemon) {
-                ProcessArgumentsExtra.Add("--rpc-bind-ip " + rpcSettings.UrlHostDaemon);
-            }
-
-            // TODO: Remove this temporary fix
-            ProcessArgumentsExtra.Add("--data-dir \"" + pathSettings.DirectoryDaemonData);
-        }
-
-        public void Start()
-        {
-            if (RpcWebClient.PathSettings.StartDaemonProcess) {
-                StartProcess(ProcessArgumentsDefault.Concat(ProcessArgumentsExtra).ToArray());
-            }
-        }
-
-        public void Stop()
-        {
-            if (RpcWebClient.PathSettings.StartDaemonProcess) {
-                KillBaseProcess();
-            }
-        }
-
-        public void Restart()
-        {
-            Stop();
-            Start();
         }
 
         private void QueryNetworkInformation()
@@ -191,12 +153,6 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
                 TimerQueryNetworkInformation.Dispose();
                 TimerQueryNetworkInformation = null;
 
-                if (RpcWebClient.PathSettings.StartDaemonProcess) {
-                    // Safe shutdown
-                    SendConsoleCommand("exit");
-                }
-
-                IsDisposeProcessKillNecessary = false;
                 base.Dispose();
             }
         }

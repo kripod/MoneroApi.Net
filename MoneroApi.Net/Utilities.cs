@@ -12,15 +12,6 @@ namespace Jojatekok.MoneroAPI
         private const double CoinAtomicValueDivider = 1000000000000;
         private const int CoinDisplayValueDecimalPlaces = 12;
 
-        private const string DefaultRelativePathDirectoryAccountData = "AccountData\\";
-        private const string DefaultRelativePathDirectorySoftware = "Resources\\Software\\";
-
-        public static readonly string DefaultPathDirectoryDaemonData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "bitmonero");
-        public const string DefaultPathDirectoryAccountBackups = DefaultRelativePathDirectoryAccountData + "Backups\\";
-        public const string DefaultPathFileAccountData = DefaultRelativePathDirectoryAccountData + "account.bin";
-        public const string DefaultPathSoftwareDaemon = DefaultRelativePathDirectorySoftware + "bitmonerod.exe";
-        public const string DefaultPathSoftwareAccountManager = DefaultRelativePathDirectorySoftware + "simplewallet.exe";
-
         public const string DefaultRpcUrlHostDaemon = "http://localhost";
         public const string DefaultRpcUrlHostAccountManager = "http://localhost";
         public const ushort DefaultRpcUrlPortDaemon = 18081;
@@ -33,37 +24,16 @@ namespace Jojatekok.MoneroAPI
 
         public const int DefaultTransactionMixCount = 1;
 
-        internal static readonly string ApplicationDirectory = AppDomain.CurrentDomain.BaseDirectory;
-
-        internal static readonly JobManager JobManager = new JobManager();
-
         internal static readonly CultureInfo InvariantCulture = CultureInfo.InvariantCulture;
 
         public static double CoinAtomicValueToDisplayValue(ulong atomicValue)
         {
-            return Math.Round(atomicValue / CoinAtomicValueDivider, CoinDisplayValueDecimalPlaces, MidpointRounding.AwayFromZero);
+            return Math.Round(atomicValue / CoinAtomicValueDivider, CoinDisplayValueDecimalPlaces);
         }
 
         public static ulong CoinDisplayValueToAtomicValue(double displayValue)
         {
-            return (ulong)Math.Round(displayValue * CoinAtomicValueDivider, MidpointRounding.AwayFromZero);
-        }
-
-        internal static string GetAbsolutePath(string input)
-        {
-            return input.Contains(":") ? input : Path.GetFullPath(Path.Combine(ApplicationDirectory, input));
-        }
-
-        internal static bool IsPortInUse(int port)
-        {
-            var activeTcpListeners = IPGlobalProperties.GetIPGlobalProperties().GetActiveTcpListeners();
-            for (var i = activeTcpListeners.Length - 1; i >= 0; i--) {
-                if (activeTcpListeners[i].Port == port) {
-                    return true;
-                }
-            }
-
-            return false;
+            return (ulong)Math.Round(displayValue * CoinAtomicValueDivider);
         }
 
         internal static DateTime UnixTimestampToDateTime(ulong unixTimeStamp)
