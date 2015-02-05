@@ -22,19 +22,20 @@ namespace Jojatekok.MoneroAPI.RpcManagers
             RpcSettings = rpcSettings;
             TimerSettings = timerSettings;
 
-            var httpClientHandler = new HttpClientHandler {
-                AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip
-            };
+            var httpClientHandler = new HttpClientHandler();
+            if (httpClientHandler.SupportsAutomaticDecompression) {
+                httpClientHandler.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+            }
 
-            var proxy = rpcSettings.Proxy;
-            if (proxy != null) {
-                httpClientHandler.Proxy = proxy;
-                httpClientHandler.UseProxy = true;
+            if (httpClientHandler.SupportsProxy) {
+                var proxy = rpcSettings.Proxy;
+                if (proxy != null) {
+                    httpClientHandler.Proxy = proxy;
+                    httpClientHandler.UseProxy = true;
+                }
             }
 
             HttpClient = new HttpClient(httpClientHandler);
-            HttpClient.DefaultRequestHeaders.AcceptEncoding.Add(StringWithQualityHeaderValue.Parse("deflate"));
-            HttpClient.DefaultRequestHeaders.AcceptEncoding.Add(StringWithQualityHeaderValue.Parse("gzip"));
         }
 
         public T HttpPostData<T>(string host, ushort port, string command)
