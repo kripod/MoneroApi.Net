@@ -21,16 +21,22 @@ namespace Jojatekok.MoneroAPI.Demo
                 Config.ClientTimerSettings
             );
 
-            // Declare event handlers for the daemon
+            // First, declare event handlers for the daemon, and then initialize it
             var daemon = MoneroClient.Daemon;
             daemon.NetworkInformationChanging += Daemon_NetworkInformationChanging;
             daemon.BlockchainSynced += Daemon_BlockchainSynced;
 
-            // Optionally, declare event handlers for the account manager
+            // Daemon functions will not be available if the line below is commented out
+            daemon.Initialize();
+
+            // Optionally, declare event handlers for the account manager, and then initialize it if necessary
             var accountManager = MoneroClient.AccountManager;
             accountManager.AddressReceived += AccountManager_AddressReceived;
             accountManager.TransactionReceived += AccountManager_TransactionReceived;
             accountManager.BalanceChanging += AccountManager_BalanceChanging;
+
+            // The account manager's functions will not be available if the line below is commented out
+            //accountManager.Initialize();
 
             // Wait infinitely in order to keep the application running
             while (true) {

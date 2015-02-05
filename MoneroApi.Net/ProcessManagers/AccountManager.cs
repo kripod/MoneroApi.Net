@@ -57,10 +57,14 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             TimerRefresh = new Timer(
                 delegate { RequestRefresh(); },
                 null,
-                0,
-                TimerSettings.AccountRefreshPeriod
+                Timeout.Infinite,
+                Timeout.Infinite
             );
+        }
 
+        public void Initialize()
+        {
+            TimerRefresh.StartImmediately(TimerSettings.AccountRefreshPeriod);
             QueryAddress();
         }
 

@@ -51,9 +51,14 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             TimerQueryNetworkInformation = new Timer(
                 delegate { QueryNetworkInformation(); },
                 null,
-                0,
-                TimerSettings.DaemonQueryNetworkInformationPeriod
+                Timeout.Infinite,
+                Timeout.Infinite
             );
+        }
+
+        public void Initialize()
+        {
+            TimerQueryNetworkInformation.StartImmediately(TimerSettings.DaemonQueryNetworkInformationPeriod);
         }
 
         private void QueryNetworkInformation()

@@ -15,6 +15,8 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
         Balance Balance { get; }
         IList<Transaction> Transactions { get; }
 
+        void Initialize();
+
         string QueryKey(QueryKeyParameters.KeyType keyType);
 
         bool SendTransaction(IList<TransferRecipient> recipients, string paymentId, ulong mixCount);
