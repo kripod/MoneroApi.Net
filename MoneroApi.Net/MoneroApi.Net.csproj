@@ -53,6 +53,9 @@
     <Compile Include="Objects\TransferRecipient.cs" />
     <Compile Include="ProcessManagers\AccountManager.cs" />
     <Compile Include="ProcessManagers\BaseRpcProcessManager.cs" />
+    <Compile Include="ProcessManagers\IDaemonManager.cs">
+      <DependentUpon>DaemonManager.cs</DependentUpon>
+    </Compile>
     <Compile Include="ProcessManagers\DaemonManager.cs" />
     <Compile Include="ProcessManagers\IAccountManager.cs">
       <DependentUpon>AccountManager.cs</DependentUpon>

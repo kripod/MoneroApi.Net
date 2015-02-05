@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace Jojatekok.MoneroAPI.ProcessManagers
 {
-    public class DaemonManager : BaseRpcProcessManager
+    public class DaemonManager : BaseRpcProcessManager, IDaemonManager
     {
         public event EventHandler BlockchainSynced;
         public event EventHandler<NetworkInformationChangingEventArgs> NetworkInformationChanging;

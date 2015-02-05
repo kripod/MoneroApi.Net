@@ -14,7 +14,7 @@ namespace Jojatekok.MoneroAPI
         public ITimerSettings TimerSettings { get; private set; }
 
         /// <summary>Contains methods to interact with the daemon.</summary>
-        public DaemonManager Daemon { get; private set; }
+        public IDaemonManager Daemon { get; private set; }
         /// <summary>Contains methods to interact with the account manager.</summary>
         public IAccountManager AccountManager { get; private set; }
 

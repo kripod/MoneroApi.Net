@@ -24,7 +24,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
 
         private RpcWebClient RpcWebClient { get; set; }
         private ITimerSettings TimerSettings { get; set; }
-        private DaemonManager Daemon { get; set; }
+        private IDaemonManager Daemon { get; set; }
 
         public string Address {
             get { return _address; }
@@ -48,7 +48,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             get { return _transactions; }
         }
 
-        internal AccountManager(RpcWebClient rpcWebClient, DaemonManager daemon) : base(rpcWebClient, false)
+        internal AccountManager(RpcWebClient rpcWebClient, IDaemonManager daemon) : base(rpcWebClient, false)
         {
             RpcWebClient = rpcWebClient;
             TimerSettings = rpcWebClient.TimerSettings;

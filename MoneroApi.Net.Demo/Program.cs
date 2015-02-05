@@ -72,8 +72,6 @@ namespace Jojatekok.MoneroAPI.Demo
         static void AccountManager_TransactionReceived(object sender, TransactionReceivedEventArgs e)
         {
             // Whether a new transaction is sent from or received by your account, its details can be viewed here
-            // You should use MoneroClient.AccountManager.Transactions instead of events whether you are binding to a DataSource property
-
             var transaction = e.Transaction;
             Console.WriteLine(
                 "New transaction: {0} ({1} atomic units, {2})",
