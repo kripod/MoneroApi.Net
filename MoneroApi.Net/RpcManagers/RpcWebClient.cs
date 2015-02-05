@@ -1,10 +1,9 @@
-﻿using Jojatekok.MoneroAPI.Settings;
+﻿using System.Net;
+using System.Net.Http.Headers;
+using Jojatekok.MoneroAPI.Settings;
 using Newtonsoft.Json;
-using System;
-using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Threading;
 
 namespace Jojatekok.MoneroAPI.RpcManagers
 {
@@ -23,7 +22,10 @@ namespace Jojatekok.MoneroAPI.RpcManagers
             RpcSettings = rpcSettings;
             TimerSettings = timerSettings;
 
-            var httpClientHandler = new HttpClientHandler();
+            var httpClientHandler = new HttpClientHandler {
+                AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip
+            };
+
             var proxy = rpcSettings.Proxy;
             if (proxy != null) {
                 httpClientHandler.Proxy = proxy;
@@ -31,6 +33,8 @@ namespace Jojatekok.MoneroAPI.RpcManagers
             }
 
             HttpClient = new HttpClient(httpClientHandler);
+            HttpClient.DefaultRequestHeaders.AcceptEncoding.Add(StringWithQualityHeaderValue.Parse("deflate"));
+            HttpClient.DefaultRequestHeaders.AcceptEncoding.Add(StringWithQualityHeaderValue.Parse("gzip"));
         }
 
         public T HttpPostData<T>(string host, ushort port, string command)
@@ -56,7 +60,7 @@ namespace Jojatekok.MoneroAPI.RpcManagers
                 requestMessage.Content = new StringContent(postData, EncodingUtf8, "application/json");
             }
 
-            var response = HttpClient.SendAsync(new HttpRequestMessage(HttpMethod.Post, requestUri)).Result;
+            var response = HttpClient.SendAsync(requestMessage).Result;
             return response.Content.ReadAsStringAsync().Result;
         }
     }

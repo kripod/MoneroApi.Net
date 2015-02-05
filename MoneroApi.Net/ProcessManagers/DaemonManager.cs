@@ -4,8 +4,6 @@ using Jojatekok.MoneroAPI.RpcManagers.Daemon.Json.Requests;
 using Jojatekok.MoneroAPI.RpcManagers.Daemon.Json.Responses;
 using Jojatekok.MoneroAPI.Settings;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 
 namespace Jojatekok.MoneroAPI.ProcessManagers
@@ -47,17 +45,15 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
 
         internal DaemonManager(RpcWebClient rpcWebClient) : base(rpcWebClient, true)
         {
-            RpcAvailabilityChanged += Process_RpcAvailabilityChanged;
+            RpcWebClient = rpcWebClient;
+            TimerSettings = rpcWebClient.TimerSettings;
 
             TimerQueryNetworkInformation = new Timer(
                 delegate { QueryNetworkInformation(); },
                 null,
-                Timeout.Infinite,
-                Timeout.Infinite
+                0,
+                TimerSettings.DaemonQueryNetworkInformationPeriod
             );
-
-            RpcWebClient = rpcWebClient;
-            TimerSettings = rpcWebClient.TimerSettings;
         }
 
         private void QueryNetworkInformation()
@@ -131,17 +127,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             return null;
         }
 
-        private void Process_RpcAvailabilityChanged(object sender, EventArgs e)
-        {
-            if (IsRpcAvailable) {
-                TimerQueryNetworkInformation.StartImmediately(TimerSettings.DaemonQueryNetworkInformationPeriod);
-
-            } else {
-                TimerQueryNetworkInformation.Stop();
-            }
-        }
-
-        public new void Dispose()
+        public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
@@ -152,8 +138,6 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             if (disposing) {
                 TimerQueryNetworkInformation.Dispose();
                 TimerQueryNetworkInformation = null;
-
-                base.Dispose();
             }
         }
     }

@@ -50,13 +50,18 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
 
         internal AccountManager(RpcWebClient rpcWebClient, DaemonManager daemon) : base(rpcWebClient, false)
         {
-            RpcAvailabilityChanged += Process_RpcAvailabilityChanged;
-
             RpcWebClient = rpcWebClient;
             TimerSettings = rpcWebClient.TimerSettings;
             Daemon = daemon;
 
-            TimerRefresh = new Timer(delegate { RequestRefresh(); }, null, Timeout.Infinite, Timeout.Infinite);
+            TimerRefresh = new Timer(
+                delegate { RequestRefresh(); },
+                null,
+                0,
+                TimerSettings.AccountRefreshPeriod
+            );
+
+            QueryAddress();
         }
 
         private void QueryAddress()
@@ -171,18 +176,7 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             return SendTransaction(new List<TransferRecipient> { recipient }, null, Utilities.DefaultTransactionMixCount);
         }
 
-        private void Process_RpcAvailabilityChanged(object sender, EventArgs e)
-        {
-            if (IsRpcAvailable) {
-                QueryAddress();
-                RequestRefresh();
-
-            } else {
-                TimerRefresh.Stop();
-            }
-        }
-
-        public new void Dispose()
+        public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
@@ -193,8 +187,6 @@ namespace Jojatekok.MoneroAPI.ProcessManagers
             if (disposing) {
                 TimerRefresh.Dispose();
                 TimerRefresh = null;
-
-                base.Dispose();
             }
         }
     }
