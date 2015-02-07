@@ -1,6 +1,6 @@
 ﻿using Jojatekok.MoneroAPI.Extensions.Settings;
-using Jojatekok.MoneroAPI.ProcessManagers;
 using Jojatekok.MoneroAPI.RpcManagers;
+using Jojatekok.MoneroAPI.RpcUtilities;
 using Jojatekok.MoneroAPI.Settings;
 using System;
 

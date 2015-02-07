@@ -81,7 +81,6 @@
     <Compile Include="Objects\LogMessage.cs" />
     <Compile Include="ProcessManagers\BaseProcessManager.cs" />
     <Compile Include="ProcessManagers\JobManager.cs" />
-    <Compile Include="ProcessManagers\ProcessManager.cs" />
     <Compile Include="Settings\DaemonPathSettings.cs" />
     <Compile Include="Settings\IDaemonPathSettings.cs">
       <DependentUpon>DaemonPathSettings.cs</DependentUpon>

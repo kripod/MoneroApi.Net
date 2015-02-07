@@ -43,47 +43,47 @@
     <Compile Include="EventArgs\TransactionReceivedEventArgs.cs" />
     <Compile Include="EventArgs\ValueChangingEventArgs.cs" />
     <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="MoneroClient.cs" />
+    <Compile Include="MoneroRpcManager.cs" />
     <Compile Include="Objects\BlockHeader.cs" />
     <Compile Include="Objects\Transaction.cs" />
     <Compile Include="Objects\TransactionType.cs" />
     <Compile Include="Objects\TransferRecipient.cs" />
-    <Compile Include="ProcessManagers\AccountManager.cs" />
-    <Compile Include="ProcessManagers\BaseRpcProcessManager.cs" />
-    <Compile Include="ProcessManagers\IDaemonManager.cs">
-      <DependentUpon>DaemonManager.cs</DependentUpon>
+    <Compile Include="RpcManagers\AccountRpcManager.cs" />
+    <Compile Include="RpcManagers\BaseRpcManager.cs" />
+    <Compile Include="RpcManagers\IAccountRpcManager.cs">
+      <DependentUpon>AccountRpcManager.cs</DependentUpon>
     </Compile>
-    <Compile Include="ProcessManagers\DaemonManager.cs" />
-    <Compile Include="ProcessManagers\IAccountManager.cs">
-      <DependentUpon>AccountManager.cs</DependentUpon>
-    </Compile>
+    <Compile Include="RpcManagers\DaemonRpcManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RpcManagers\AccountManager\Json\Requests\QueryAddress.cs" />
-    <Compile Include="RpcManagers\AccountManager\Json\Requests\QueryBalance.cs" />
-    <Compile Include="RpcManagers\AccountManager\Json\Requests\QueryIncomingTransfers.cs" />
-    <Compile Include="RpcManagers\AccountManager\Json\Requests\QueryKey.cs" />
-    <Compile Include="RpcManagers\AccountManager\Json\Requests\RequestSaveAccount.cs" />
-    <Compile Include="RpcManagers\AccountManager\Json\Requests\SendTransferSplit.cs" />
-    <Compile Include="RpcManagers\AccountManager\Json\Responses\AddressValueContainer.cs" />
-    <Compile Include="RpcManagers\AccountManager\Json\Responses\Balance.cs" />
-    <Compile Include="RpcManagers\AccountManager\Json\Responses\KeyValueContainer.cs" />
-    <Compile Include="RpcManagers\AccountManager\Json\Responses\TransactionIdListValueContainer.cs" />
-    <Compile Include="RpcManagers\AccountManager\Json\Responses\TransactionListValueContainer.cs" />
-    <Compile Include="RpcManagers\Daemon\Http\Responses\BlockHeightContainer.cs" />
-    <Compile Include="RpcManagers\Daemon\Http\Responses\MiningStatus.cs" />
-    <Compile Include="RpcManagers\Daemon\Http\Responses\NetworkInformation.cs" />
-    <Compile Include="RpcManagers\Daemon\Json\Requests\QueryBlockHeaderByHash.cs" />
-    <Compile Include="RpcManagers\Daemon\Json\Requests\QueryBlockHeaderByHeight.cs" />
-    <Compile Include="RpcManagers\Daemon\Json\Requests\QueryBlockHeaderLast.cs" />
-    <Compile Include="RpcManagers\Daemon\Json\Responses\BlockHeaderValueContainer.cs" />
-    <Compile Include="RpcManagers\HttpRpcCommands.cs" />
-    <Compile Include="RpcManagers\HttpRpcResponse.cs" />
-    <Compile Include="RpcManagers\IValueContainer.cs" />
-    <Compile Include="RpcManagers\JsonError.cs" />
-    <Compile Include="RpcManagers\JsonRpcRequest.cs" />
-    <Compile Include="RpcManagers\JsonRpcResponse.cs" />
-    <Compile Include="RpcManagers\RpcResponseStatus.cs" />
-    <Compile Include="RpcManagers\RpcWebClient.cs" />
+    <Compile Include="RpcManagers\IDaemonRpcManager.cs">
+      <DependentUpon>DaemonRpcManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RpcUtilities\AccountManager\Json\Requests\QueryAddress.cs" />
+    <Compile Include="RpcUtilities\AccountManager\Json\Requests\QueryBalance.cs" />
+    <Compile Include="RpcUtilities\AccountManager\Json\Requests\QueryIncomingTransfers.cs" />
+    <Compile Include="RpcUtilities\AccountManager\Json\Requests\QueryKey.cs" />
+    <Compile Include="RpcUtilities\AccountManager\Json\Requests\RequestSaveAccount.cs" />
+    <Compile Include="RpcUtilities\AccountManager\Json\Requests\SendTransferSplit.cs" />
+    <Compile Include="RpcUtilities\AccountManager\Json\Responses\AddressValueContainer.cs" />
+    <Compile Include="RpcUtilities\AccountManager\Json\Responses\Balance.cs" />
+    <Compile Include="RpcUtilities\AccountManager\Json\Responses\KeyValueContainer.cs" />
+    <Compile Include="RpcUtilities\AccountManager\Json\Responses\TransactionIdListValueContainer.cs" />
+    <Compile Include="RpcUtilities\AccountManager\Json\Responses\TransactionListValueContainer.cs" />
+    <Compile Include="RpcUtilities\Daemon\Http\Responses\BlockHeightContainer.cs" />
+    <Compile Include="RpcUtilities\Daemon\Http\Responses\MiningStatus.cs" />
+    <Compile Include="RpcUtilities\Daemon\Http\Responses\NetworkInformation.cs" />
+    <Compile Include="RpcUtilities\Daemon\Json\Requests\QueryBlockHeaderByHash.cs" />
+    <Compile Include="RpcUtilities\Daemon\Json\Requests\QueryBlockHeaderByHeight.cs" />
+    <Compile Include="RpcUtilities\Daemon\Json\Requests\QueryBlockHeaderLast.cs" />
+    <Compile Include="RpcUtilities\Daemon\Json\Responses\BlockHeaderValueContainer.cs" />
+    <Compile Include="RpcUtilities\HttpRpcCommands.cs" />
+    <Compile Include="RpcUtilities\HttpRpcResponse.cs" />
+    <Compile Include="RpcUtilities\IValueContainer.cs" />
+    <Compile Include="RpcUtilities\JsonError.cs" />
+    <Compile Include="RpcUtilities\JsonRpcRequest.cs" />
+    <Compile Include="RpcUtilities\JsonRpcResponse.cs" />
+    <Compile Include="RpcUtilities\RpcResponseStatus.cs" />
+    <Compile Include="RpcUtilities\RpcWebClient.cs" />
     <Compile Include="Settings\IRpcSettings.cs">
       <DependentUpon>RpcSettings.cs</DependentUpon>
     </Compile>
@@ -121,6 +121,7 @@
       <HintPath>..\packages\Microsoft.Bcl.1.1.9\lib\portable-net40+sl5+win8+wp8+wpa81\System.Threading.Tasks.dll</HintPath>
     </Reference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">

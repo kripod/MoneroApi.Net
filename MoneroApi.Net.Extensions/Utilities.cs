@@ -1,9 +1,5 @@
 ﻿using Jojatekok.MoneroAPI.Extensions.ProcessManagers;
-using Jojatekok.MoneroAPI.Extensions.Settings;
-using Jojatekok.MoneroAPI.ProcessManagers;
-using Jojatekok.MoneroAPI.Settings;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Net.NetworkInformation;
@@ -30,21 +26,6 @@ namespace Jojatekok.MoneroAPI.Extensions
         internal static readonly string ApplicationDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
         internal static readonly CultureInfo InvariantCulture = CultureInfo.InvariantCulture;
-
-        public static void StartProcess(this IDaemonManager daemon, IDaemonPathSettings pathSettings, IRpcSettings rpcSettings)
-        {
-            var processArguments = new List<string> {
-                "--log-level 0",
-                "--data-dir \"" + pathSettings.DirectoryDaemonData + "\"",
-                "--rpc-bind-port " + rpcSettings.UrlPortDaemon
-            };
-
-            if (rpcSettings.UrlHostDaemon != MoneroAPI.Utilities.DefaultRpcUrlHost) {
-                processArguments.Add("--rpc-bind-ip " + rpcSettings.UrlHostDaemon);
-            }
-
-            ProcessManager.StartProcess(pathSettings.SoftwareDaemon, processArguments, rpcSettings.UrlHostDaemon, rpcSettings.UrlPortDaemon);
-        }
 
         internal static string GetAbsolutePath(string input)
         {

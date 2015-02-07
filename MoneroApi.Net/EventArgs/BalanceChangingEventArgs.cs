@@ -1,4 +1,4 @@
-﻿using Jojatekok.MoneroAPI.RpcManagers.AccountManager.Json.Responses;
+﻿using Jojatekok.MoneroAPI.RpcUtilities.AccountManager.Json.Responses;
 
 namespace Jojatekok.MoneroAPI
 {

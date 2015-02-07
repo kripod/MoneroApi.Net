@@ -1,4 +1,4 @@
-﻿using Jojatekok.MoneroAPI.RpcManagers.AccountManager.Json.Responses;
+﻿using Jojatekok.MoneroAPI.RpcUtilities.AccountManager.Json.Responses;
 using System;
 using System.Threading;
 
@@ -9,7 +9,7 @@ namespace Jojatekok.MoneroAPI.Demo
 {
     class Program
     {
-        static MoneroClient MoneroClient { get; set; }
+        static MoneroRpcManager MoneroRpcManager { get; set; }
 
         static string AccountAddress { get; set; }
         static Balance AccountBalance { get; set; }
@@ -19,13 +19,13 @@ namespace Jojatekok.MoneroAPI.Demo
         static void Main()
         {
             // Assign a new instance of the client to a variable
-            MoneroClient = new MoneroClient(
+            MoneroRpcManager = new MoneroRpcManager(
                 Config.ClientRpcSettings,
                 Config.ClientTimerSettings
             );
 
             // First, declare event handlers for the daemon, and then initialize it
-            var daemon = MoneroClient.Daemon;
+            var daemon = MoneroRpcManager.Daemon;
             daemon.NetworkInformationChanging += Daemon_NetworkInformationChanging;
             daemon.BlockchainSynced += Daemon_BlockchainSynced;
 
@@ -33,7 +33,7 @@ namespace Jojatekok.MoneroAPI.Demo
             daemon.Initialize();
 
             // Optionally, declare event handlers for the account manager, and then initialize it if necessary
-            var accountManager = MoneroClient.AccountManager;
+            var accountManager = MoneroRpcManager.AccountManager;
             accountManager.AddressReceived += AccountManager_AddressReceived;
             accountManager.TransactionReceived += AccountManager_TransactionReceived;
             accountManager.BalanceChanging += AccountManager_BalanceChanging;
