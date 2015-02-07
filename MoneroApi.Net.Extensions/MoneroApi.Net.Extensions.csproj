@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{18AC786F-55E3-48EA-92BC-87DAC2EEA759}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{9EC04B31-36B2-4E99-B962-29407D16CBC1}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Jojatekok.MoneroAPI.Demo</RootNamespace>
-    <AssemblyName>MoneroApi.Net.Demo</AssemblyName>
+    <RootNamespace>Jojatekok.MoneroAPI.Extensions</RootNamespace>
+    <AssemblyName>MoneroApi.Net.Extensions</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -32,15 +30,24 @@
     </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Threading.Tasks">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.IO">
       <HintPath>..\packages\Microsoft.Bcl.1.1.9\lib\net40\System.IO.dll</HintPath>
     </Reference>
+    <Reference Include="System.Net" />
     <Reference Include="System.Net.Http, Version=2.2.28.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Net.Http.2.2.28\lib\net40\System.Net.Http.dll</HintPath>
@@ -61,25 +68,40 @@
     <Reference Include="System.Threading.Tasks">
       <HintPath>..\packages\Microsoft.Bcl.1.1.9\lib\net40\System.Threading.Tasks.dll</HintPath>
     </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="EventArgs\LogMessageReceivedEventArgs.cs" />
+    <Compile Include="EventArgs\ProcessExitedEventArgs.cs" />
+    <Compile Include="MoneroProcessManager.cs" />
+    <Compile Include="Objects\LogMessage.cs" />
+    <Compile Include="ProcessManagers\BaseProcessManager.cs" />
+    <Compile Include="ProcessManagers\JobManager.cs" />
+    <Compile Include="ProcessManagers\ProcessManager.cs" />
+    <Compile Include="Settings\DaemonPathSettings.cs" />
+    <Compile Include="Settings\IDaemonPathSettings.cs">
+      <DependentUpon>DaemonPathSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\IAccountManagerPathSettings.cs">
+      <DependentUpon>AccountManagerPathSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\AccountManagerPathSettings.cs" />
+    <Compile Include="Utilities.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\MoneroApi.Net.Extensions\MoneroApi.Net.Extensions.csproj">
-      <Project>{9ec04b31-36b2-4e99-b962-29407d16cbc1}</Project>
-      <Name>MoneroApi.Net.Extensions</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MoneroApi.Net\MoneroApi.Net.csproj">
       <Project>{d54c18e6-4678-4cbf-9d58-ece8d7c9218d}</Project>
       <Name>MoneroApi.Net</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />

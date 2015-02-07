@@ -2,6 +2,9 @@
 using System;
 using System.Threading;
 
+// Include the namespace below in order to access process manager functionality
+using Jojatekok.MoneroAPI.Extensions;
+
 namespace Jojatekok.MoneroAPI.Demo
 {
     class Program

@@ -12,7 +12,7 @@ namespace Jojatekok.MoneroAPI.Settings
 
         public IWebProxy Proxy { get; set; }
 
-        public RpcSettings(string urlHostDaemon = Utilities.DefaultRpcUrlHostDaemon, ushort urlPortDaemon = Utilities.DefaultRpcUrlPortDaemon, string urlHostAccountManager = Utilities.DefaultRpcUrlHostAccountManager, ushort urlPortAccountManager = Utilities.DefaultRpcUrlPortAccountManager, IWebProxy proxy = null)
+        public RpcSettings(string urlHostDaemon = Utilities.DefaultRpcUrlHost, ushort urlPortDaemon = Utilities.DefaultRpcUrlPortDaemon, string urlHostAccountManager = Utilities.DefaultRpcUrlHost, ushort urlPortAccountManager = Utilities.DefaultRpcUrlPortAccountManager, IWebProxy proxy = null)
         {
             UrlHostDaemon = urlHostDaemon;
             UrlPortDaemon = urlPortDaemon;

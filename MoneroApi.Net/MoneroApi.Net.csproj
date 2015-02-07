@@ -8,7 +8,7 @@
     <ProjectGuid>{D54C18E6-4678-4CBF-9D58-ECE8D7C9218D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Jojatekok.MoneroApi.Net</RootNamespace>
+    <RootNamespace>Jojatekok.MoneroAPI</RootNamespace>
     <AssemblyName>MoneroApi.Net</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
@@ -38,16 +38,13 @@
   <ItemGroup>
     <Compile Include="EventArgs\AddressReceivedEventArgs.cs" />
     <Compile Include="EventArgs\BalanceChangingEventArgs.cs" />
-    <Compile Include="EventArgs\LogMessageReceivedEventArgs.cs" />
     <Compile Include="EventArgs\NetworkInformationChangingEventArgs.cs" />
     <Compile Include="EventArgs\PassphraseRequestedEventArgs.cs" />
-    <Compile Include="EventArgs\ProcessExitedEventArgs.cs" />
     <Compile Include="EventArgs\TransactionReceivedEventArgs.cs" />
     <Compile Include="EventArgs\ValueChangingEventArgs.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="MoneroClient.cs" />
     <Compile Include="Objects\BlockHeader.cs" />
-    <Compile Include="Objects\LogMessage.cs" />
     <Compile Include="Objects\Transaction.cs" />
     <Compile Include="Objects\TransactionType.cs" />
     <Compile Include="Objects\TransferRecipient.cs" />

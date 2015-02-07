@@ -5,10 +5,10 @@ using System.Threading;
 
 namespace Jojatekok.MoneroAPI
 {
-    static class ExtensionMethods
+    public static class ExtensionMethods
     {
         [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
-        public static T DeserializeObject<T>(this JsonSerializer serializer, string value)
+        internal static T DeserializeObject<T>(this JsonSerializer serializer, string value)
         {
             if (value == null) return default(T);
 
@@ -20,7 +20,7 @@ namespace Jojatekok.MoneroAPI
         }
 
         [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
-        public static string SerializeObject<T>(this JsonSerializer serializer, T value)
+        internal static string SerializeObject<T>(this JsonSerializer serializer, T value)
         {
             using (var stringWriter = new StringWriter(Utilities.InvariantCulture)) {
                 using (var jsonTextWriter = new JsonTextWriter(stringWriter)) {
@@ -31,13 +31,13 @@ namespace Jojatekok.MoneroAPI
             }
         }
 
-        public static void StartImmediately(this Timer timer, int period)
+        internal static void StartImmediately(this Timer timer, int period)
         {
             if (timer == null) return;
             timer.Change(0, period);
         }
 
-        public static void StartOnce(this Timer timer, int dueTime)
+        internal static void StartOnce(this Timer timer, int dueTime)
         {
             if (timer == null) return;
             timer.Change(dueTime, Timeout.Infinite);

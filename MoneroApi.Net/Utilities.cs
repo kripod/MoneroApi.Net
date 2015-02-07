@@ -1,8 +1,5 @@
-﻿using Jojatekok.MoneroAPI.ProcessManagers;
-using System;
+﻿using System;
 using System.Globalization;
-using System.IO;
-using System.Net.NetworkInformation;
 
 namespace Jojatekok.MoneroAPI
 {
@@ -12,8 +9,7 @@ namespace Jojatekok.MoneroAPI
         private const double CoinAtomicValueDivider = 1000000000000;
         private const int CoinDisplayValueDecimalPlaces = 12;
 
-        public const string DefaultRpcUrlHostDaemon = "http://localhost";
-        public const string DefaultRpcUrlHostAccountManager = "http://localhost";
+        public const string DefaultRpcUrlHost = "http://localhost";
         public const ushort DefaultRpcUrlPortDaemon = 18081;
         public const ushort DefaultRpcUrlPortAccountManager = 18082;
 
