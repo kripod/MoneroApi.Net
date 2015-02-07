@@ -7,13 +7,15 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
 {
     public abstract class BaseRpcProcessManager : IDisposable
     {
-        public event EventHandler RpcAvailabilityChanged;
+        public event EventHandler Initialized;
         public event EventHandler<LogMessageReceivedEventArgs> OnLogMessage;
 
         protected event EventHandler<ProcessExitedEventArgs> Exited;
 
         private bool _isRpcAvailable;
         private bool _isDisposeProcessKillNecessary = true;
+
+        private bool IsInitialized { get; set; }
 
         private string Path { get; set; }
         private Process Process { get; set; }
@@ -23,15 +25,19 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
 
         private Timer TimerCheckRpcAvailability { get; set; }
 
-        public bool IsRpcAvailable {
+        internal bool IsRpcAvailable {
             get { return _isRpcAvailable; }
 
-            protected set {
+            private set {
                 if (value == _isRpcAvailable) return;
 
                 _isRpcAvailable = value;
                 if (value) TimerCheckRpcAvailability.Stop();
-                if (RpcAvailabilityChanged != null) RpcAvailabilityChanged(this, EventArgs.Empty);
+
+                if (!IsInitialized) {
+                    IsInitialized = true;
+                    Initialized(this, EventArgs.Empty);
+                }
             }
         }
 

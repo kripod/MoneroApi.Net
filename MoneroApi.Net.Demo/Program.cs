@@ -9,6 +9,7 @@ namespace Jojatekok.MoneroAPI.Demo
 {
     class Program
     {
+        static MoneroProcessManager MoneroProcessManager { get; set; }
         static MoneroRpcManager MoneroRpcManager { get; set; }
 
         static string AccountAddress { get; set; }
@@ -18,28 +19,46 @@ namespace Jojatekok.MoneroAPI.Demo
 
         static void Main()
         {
-            // Assign a new instance of the client to a variable
+            // Assign a new instance of the process manager to a variable
+            MoneroProcessManager = new MoneroProcessManager();
+
+            // Assign a new instance of the RPC manager to a variable
             MoneroRpcManager = new MoneroRpcManager(
                 Config.ClientRpcSettings,
                 Config.ClientTimerSettings
             );
 
-            // First, declare event handlers for the daemon, and then initialize it
-            var daemon = MoneroRpcManager.Daemon;
-            daemon.NetworkInformationChanging += Daemon_NetworkInformationChanging;
-            daemon.BlockchainSynced += Daemon_BlockchainSynced;
+            // First, declare event handlers for the daemon
+            var daemonRpc = MoneroRpcManager.Daemon;
+            daemonRpc.NetworkInformationChanging += Daemon_NetworkInformationChanging;
+            daemonRpc.BlockchainSynced += Daemon_BlockchainSynced;
 
-            // Daemon functions will not be available if the line below is commented out
-            daemon.Initialize();
+            // Optionally, declare event handlers for the account manager
+            var accountManagerRpc = MoneroRpcManager.AccountManager;
+            accountManagerRpc.AddressReceived += AccountManager_AddressReceived;
+            accountManagerRpc.TransactionReceived += AccountManager_TransactionReceived;
+            accountManagerRpc.BalanceChanging += AccountManager_BalanceChanging;
 
-            // Optionally, declare event handlers for the account manager, and then initialize it if necessary
-            var accountManager = MoneroRpcManager.AccountManager;
-            accountManager.AddressReceived += AccountManager_AddressReceived;
-            accountManager.TransactionReceived += AccountManager_TransactionReceived;
-            accountManager.BalanceChanging += AccountManager_BalanceChanging;
+            // Initialize the daemon RPC manager as soon as the corresponding process is available
+            var daemonProcess = MoneroProcessManager.Daemon;
+            daemonProcess.Initialized += delegate {
+                // Daemon RPC functions will not be available if the line below is commented out
+                daemonRpc.Initialize();
+            };
 
-            // The account manager's functions will not be available if the line below is commented out
-            //accountManager.Initialize();
+            // Initialize the account manager's RPC wrapper as soon as the corresponding process is available
+            var accountManagerProcess = MoneroProcessManager.AccountManager;
+            accountManagerProcess.Initialized += delegate {
+                // The account manager's RPC functions will not be available if the line below is commented out
+                accountManagerRpc.Initialize();
+            };
+            accountManagerProcess.PassphraseRequested += delegate {
+                accountManagerProcess.Passphrase = "x";
+            };
+
+            // Start the Monero Core processes
+            daemonProcess.Start();
+            accountManagerProcess.Start();
 
             // Wait infinitely in order to keep the application running
             while (true) {

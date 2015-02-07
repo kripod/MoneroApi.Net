@@ -13,9 +13,9 @@ namespace Jojatekok.MoneroAPI
         /// <summary>Represents the settings of data fetching timers.</summary>
         public ITimerSettings TimerSettings { get; private set; }
 
-        /// <summary>Contains methods to interact with the daemon.</summary>
+        /// <summary>Contains methods to interact with the daemon's RPC service.</summary>
         public IDaemonRpcManager Daemon { get; private set; }
-        /// <summary>Contains methods to interact with the account manager.</summary>
+        /// <summary>Contains methods to interact with the account manager's RPC service.</summary>
         public IAccountRpcManager AccountManager { get; private set; }
 
         /// <summary>Creates a new instance of Monero API .NET's RPC manager service.</summary>
