@@ -2,20 +2,20 @@
 
 namespace Jojatekok.MoneroAPI.RpcUtilities.Daemon.Json.Requests
 {
-    public class QueryBlockHeaderByHeight : JsonRpcRequest<QueryBlockHeaderByHeightParameters>
+    class QueryBlockHeaderByHeight : JsonRpcRequest<QueryBlockHeaderByHeightParameters>
     {
-        internal QueryBlockHeaderByHeight(ulong height) : base("getblockheaderbyheight", new QueryBlockHeaderByHeightParameters(height))
+        public QueryBlockHeaderByHeight(ulong height) : base("getblockheaderbyheight", new QueryBlockHeaderByHeightParameters(height))
         {
 
         }
     }
 
-    public class QueryBlockHeaderByHeightParameters
+    class QueryBlockHeaderByHeightParameters
     {
         [JsonProperty("height")]
         public ulong Height { get; private set; }
 
-        internal QueryBlockHeaderByHeightParameters(ulong height)
+        public QueryBlockHeaderByHeightParameters(ulong height)
         {
             Height = height;
         }

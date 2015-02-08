@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace Jojatekok.MoneroAPI.RpcUtilities.AccountManager.Json.Responses
+namespace Jojatekok.MoneroAPI
 {
-    public class Balance
+    public class AccountBalance
     {
         [JsonProperty("balance")]
         public ulong? Total { get; private set; }
@@ -17,7 +17,7 @@ namespace Jojatekok.MoneroAPI.RpcUtilities.AccountManager.Json.Responses
             }
         }
 
-        public Balance(ulong? total, ulong? spendable)
+        public AccountBalance(ulong? total, ulong? spendable)
         {
             Total = total;
             Spendable = spendable;

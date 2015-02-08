@@ -1,6 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using Jojatekok.MoneroAPI.RpcUtilities;
+using Newtonsoft.Json;
 
-namespace Jojatekok.MoneroAPI.RpcUtilities.Daemon.Http.Responses
+namespace Jojatekok.MoneroAPI
 {
     public class MiningStatus : HttpRpcResponse
     {

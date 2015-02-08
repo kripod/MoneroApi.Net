@@ -2,39 +2,32 @@
 
 namespace Jojatekok.MoneroAPI.RpcUtilities.AccountManager.Json.Requests
 {
-    public class QueryKey : JsonRpcRequest<QueryKeyParameters>
+    class QueryKey : JsonRpcRequest<QueryKeyParameters>
     {
-        internal QueryKey(QueryKeyParameters.KeyType keyType) : base("query_key", new QueryKeyParameters(keyType))
+        public QueryKey(AccountKeyType accountKeyType) : base("query_key", new QueryKeyParameters(accountKeyType))
         {
 
         }
     }
 
     [JsonObject(MemberSerialization.OptIn)]
-    public class QueryKeyParameters
+    class QueryKeyParameters
     {
-        public enum KeyType
-        {
-            ViewKey,
-            SpendKey,
-            Mnemonic
-        }
-
         [JsonProperty("key_type")]
         private string KeyTypeString { get; set; }
 
-        internal QueryKeyParameters(KeyType keyType)
+        public QueryKeyParameters(AccountKeyType accountKeyType)
         {
-            switch (keyType) {
-                case KeyType.ViewKey:
+            switch (accountKeyType) {
+                case AccountKeyType.ViewKey:
                     KeyTypeString = "view_key";
                     break;
 
-                case KeyType.SpendKey:
+                case AccountKeyType.SpendKey:
                     KeyTypeString = "spend_key";
                     break;
 
-                case KeyType.Mnemonic:
+                case AccountKeyType.Mnemonic:
                     KeyTypeString = "mnemonic";
                     break;
             }

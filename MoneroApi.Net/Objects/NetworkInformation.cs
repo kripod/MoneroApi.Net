@@ -1,7 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using Jojatekok.MoneroAPI.RpcUtilities;
+using Newtonsoft.Json;
 using System;
 
-namespace Jojatekok.MoneroAPI.RpcUtilities.Daemon.Http.Responses
+namespace Jojatekok.MoneroAPI
 {
     public class NetworkInformation : HttpRpcResponse
     {

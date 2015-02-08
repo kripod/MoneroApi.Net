@@ -2,21 +2,21 @@
 
 namespace Jojatekok.MoneroAPI.RpcUtilities.AccountManager.Json.Requests
 {
-    public class QueryIncomingTransfers : JsonRpcRequest<QueryIncomingTransfersParameters>
+    class QueryIncomingTransfers : JsonRpcRequest<QueryIncomingTransfersParameters>
     {
-        internal QueryIncomingTransfers(QueryIncomingTransfersParameters.TransfersType transfersType) : base("incoming_transfers", new QueryIncomingTransfersParameters(transfersType))
+        public QueryIncomingTransfers(QueryIncomingTransfersParameters.TransfersType transfersType) : base("incoming_transfers", new QueryIncomingTransfersParameters(transfersType))
         {
 
         }
 
-        internal QueryIncomingTransfers() : this(QueryIncomingTransfersParameters.TransfersType.All)
+        public QueryIncomingTransfers() : this(QueryIncomingTransfersParameters.TransfersType.All)
         {
 
         }
     }
 
     [JsonObject(MemberSerialization.OptIn)]
-    public class QueryIncomingTransfersParameters
+    class QueryIncomingTransfersParameters
     {
         public enum TransfersType
         {
@@ -28,7 +28,7 @@ namespace Jojatekok.MoneroAPI.RpcUtilities.AccountManager.Json.Requests
         [JsonProperty("transfer_type")]
         private string TransfersTypeString { get; set; }
 
-        internal QueryIncomingTransfersParameters(TransfersType transfersType)
+        public QueryIncomingTransfersParameters(TransfersType transfersType)
         {
             switch (transfersType) {
                 case TransfersType.All:

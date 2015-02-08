@@ -12,10 +12,10 @@ namespace Jojatekok.MoneroAPI.RpcManagers
     {
         public event EventHandler<AddressReceivedEventArgs> AddressReceived;
         public event EventHandler<TransactionReceivedEventArgs> TransactionReceived;
-        public event EventHandler<BalanceChangingEventArgs> BalanceChanging;
+        public event EventHandler<AccountBalanceChangingEventArgs> BalanceChanging;
 
         private string _address;
-        private Balance _balance;
+        private AccountBalance _balance;
         private readonly IList<Transaction> _transactions = new List<Transaction>();
 
         private bool IsTransactionReceivedEventEnabled { get; set; }
@@ -35,11 +35,11 @@ namespace Jojatekok.MoneroAPI.RpcManagers
             }
         }
 
-        public Balance Balance {
+        public AccountBalance Balance {
             get { return _balance; }
 
             private set {
-                if (BalanceChanging != null) BalanceChanging(this, new BalanceChangingEventArgs(value, Balance));
+                if (BalanceChanging != null) BalanceChanging(this, new AccountBalanceChangingEventArgs(value, Balance));
                 _balance = value;
             }
         }
@@ -73,7 +73,7 @@ namespace Jojatekok.MoneroAPI.RpcManagers
             Address = JsonPostData<AddressValueContainer>(new QueryAddress()).Result.Value;
         }
 
-        public string QueryKey(QueryKeyParameters.KeyType keyType)
+        public string QueryKey(AccountKeyType keyType)
         {
             var key = JsonPostData<KeyValueContainer>(new QueryKey(keyType)).Result;
             return key != null ? key.Value : null;
@@ -81,7 +81,7 @@ namespace Jojatekok.MoneroAPI.RpcManagers
 
         private void QueryBalance()
         {
-            var balance = JsonPostData<Balance>(new QueryBalance()).Result;
+            var balance = JsonPostData<AccountBalance>(new QueryBalance()).Result;
             if (balance != null) {
                 Balance = balance;
             }

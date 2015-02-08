@@ -1,5 +1,4 @@
-﻿using Jojatekok.MoneroAPI.RpcUtilities.AccountManager.Json.Responses;
-using System;
+﻿using System;
 using System.Threading;
 
 // Include the namespace below in order to access process manager functionality
@@ -13,7 +12,7 @@ namespace Jojatekok.MoneroAPI.Demo
         static MoneroRpcManager MoneroRpcManager { get; set; }
 
         static string AccountAddress { get; set; }
-        static Balance AccountBalance { get; set; }
+        static AccountBalance AccountBalance { get; set; }
 
         static bool IsTransactionSendingEnabled { get; set; }
 
@@ -142,7 +141,7 @@ namespace Jojatekok.MoneroAPI.Demo
             );
         }
 
-        static void AccountManager_BalanceChanging(object sender, BalanceChangingEventArgs e)
+        static void AccountManager_BalanceChanging(object sender, AccountBalanceChangingEventArgs e)
         {
             // This event fires during account initialization, and on each incoming/outgoing transaction
             AccountBalance = e.NewValue;

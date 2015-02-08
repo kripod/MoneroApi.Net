@@ -37,12 +37,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="EventArgs\AddressReceivedEventArgs.cs" />
-    <Compile Include="EventArgs\BalanceChangingEventArgs.cs" />
+    <Compile Include="EventArgs\AccountBalanceChangingEventArgs.cs" />
     <Compile Include="EventArgs\NetworkInformationChangingEventArgs.cs" />
     <Compile Include="EventArgs\TransactionReceivedEventArgs.cs" />
     <Compile Include="EventArgs\ValueChangingEventArgs.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="MoneroRpcManager.cs" />
+    <Compile Include="Objects\AccountKeyType.cs" />
     <Compile Include="Objects\BlockHeader.cs" />
     <Compile Include="Objects\Transaction.cs" />
     <Compile Include="Objects\TransactionType.cs" />
@@ -64,13 +65,13 @@
     <Compile Include="RpcUtilities\AccountManager\Json\Requests\RequestSaveAccount.cs" />
     <Compile Include="RpcUtilities\AccountManager\Json\Requests\SendTransferSplit.cs" />
     <Compile Include="RpcUtilities\AccountManager\Json\Responses\AddressValueContainer.cs" />
-    <Compile Include="RpcUtilities\AccountManager\Json\Responses\Balance.cs" />
+    <Compile Include="Objects\AccountBalance.cs" />
     <Compile Include="RpcUtilities\AccountManager\Json\Responses\KeyValueContainer.cs" />
     <Compile Include="RpcUtilities\AccountManager\Json\Responses\TransactionIdListValueContainer.cs" />
     <Compile Include="RpcUtilities\AccountManager\Json\Responses\TransactionListValueContainer.cs" />
-    <Compile Include="RpcUtilities\Daemon\Http\Responses\BlockHeightContainer.cs" />
-    <Compile Include="RpcUtilities\Daemon\Http\Responses\MiningStatus.cs" />
-    <Compile Include="RpcUtilities\Daemon\Http\Responses\NetworkInformation.cs" />
+    <Compile Include="RpcUtilities\Daemon\Http\Responses\BlockHeightValueContainer.cs" />
+    <Compile Include="Objects\MiningStatus.cs" />
+    <Compile Include="Objects\NetworkInformation.cs" />
     <Compile Include="RpcUtilities\Daemon\Json\Requests\QueryBlockHeaderByHash.cs" />
     <Compile Include="RpcUtilities\Daemon\Json\Requests\QueryBlockHeaderByHeight.cs" />
     <Compile Include="RpcUtilities\Daemon\Json\Requests\QueryBlockHeaderLast.cs" />

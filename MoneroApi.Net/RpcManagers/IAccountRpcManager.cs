@@ -9,15 +9,15 @@ namespace Jojatekok.MoneroAPI.RpcManagers
     {
         event EventHandler<AddressReceivedEventArgs> AddressReceived;
         event EventHandler<TransactionReceivedEventArgs> TransactionReceived;
-        event EventHandler<BalanceChangingEventArgs> BalanceChanging;
+        event EventHandler<AccountBalanceChangingEventArgs> BalanceChanging;
 
         string Address { get; }
-        Balance Balance { get; }
+        AccountBalance Balance { get; }
         IList<Transaction> Transactions { get; }
 
         void Initialize();
 
-        string QueryKey(QueryKeyParameters.KeyType keyType);
+        string QueryKey(AccountKeyType keyType);
 
         bool SendTransaction(IList<TransferRecipient> recipients, string paymentId, ulong mixCount);
     }

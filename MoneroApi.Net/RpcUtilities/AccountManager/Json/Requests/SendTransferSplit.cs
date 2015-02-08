@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 namespace Jojatekok.MoneroAPI.RpcUtilities.AccountManager.Json.Requests
 {
-    public class SendTransferSplit : JsonRpcRequest<SendTransferSplitParameters>
+    class SendTransferSplit : JsonRpcRequest<SendTransferSplitParameters>
     {
-        internal SendTransferSplit(SendTransferSplitParameters parameters) : base("transfer_split", parameters)
+        public SendTransferSplit(SendTransferSplitParameters parameters) : base("transfer_split", parameters)
         {
 
         }
     }
 
     [JsonObject(MemberSerialization.OptIn)]
-    public class SendTransferSplitParameters
+    class SendTransferSplitParameters
     {
         [JsonProperty("destinations")]
         private IList<TransferRecipient> Recipients { get; set; }
@@ -31,7 +31,7 @@ namespace Jojatekok.MoneroAPI.RpcUtilities.AccountManager.Json.Requests
         [JsonProperty("unlock_time")]
         public ulong UnlockTime { get; set; }
 
-        internal SendTransferSplitParameters(IList<TransferRecipient> recipients)
+        public SendTransferSplitParameters(IList<TransferRecipient> recipients)
         {
             Recipients = recipients;
         }

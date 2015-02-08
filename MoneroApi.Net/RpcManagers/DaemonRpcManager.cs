@@ -84,9 +84,9 @@ namespace Jojatekok.MoneroAPI.RpcManagers
 
         public ulong QueryCurrentBlockHeight()
         {
-            var output = HttpPostData<BlockHeightContainer>(HttpRpcCommands.DaemonQueryCurrentBlockHeight);
+            var output = HttpPostData<BlockHeightValueContainer>(HttpRpcCommands.DaemonQueryCurrentBlockHeight);
             if (output != null) {
-                return output.BlockHeight;
+                return output.Value;
             }
 
             return 0;

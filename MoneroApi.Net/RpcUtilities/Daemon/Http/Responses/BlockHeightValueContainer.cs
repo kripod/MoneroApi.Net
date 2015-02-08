@@ -2,9 +2,9 @@
 
 namespace Jojatekok.MoneroAPI.RpcUtilities.Daemon.Http.Responses
 {
-    public class BlockHeightContainer : HttpRpcResponse
+    class BlockHeightValueContainer : HttpRpcResponse, IValueContainer<ulong>
     {
         [JsonProperty("height")]
-        public ulong BlockHeight { get; private set; }
+        public ulong Value { get; private set; }
     }
 }
