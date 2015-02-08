@@ -23,8 +23,8 @@ namespace Jojatekok.MoneroAPI.Extensions
         public MoneroProcessManager(IRpcSettings rpcSettings, IAccountManagerPathSettings accountManagerPathSettings, IDaemonPathSettings daemonPathSettings)
         {
             if (rpcSettings == null) rpcSettings = new RpcSettings();
-            if (DaemonPathSettings == null) daemonPathSettings = new DaemonPathSettings();
-            if (AccountManagerPathSettings == null) accountManagerPathSettings = new AccountManagerPathSettings();
+            if (daemonPathSettings == null) daemonPathSettings = new DaemonPathSettings();
+            if (accountManagerPathSettings == null) accountManagerPathSettings = new AccountManagerPathSettings();
 
             RpcSettings = rpcSettings;
             DaemonPathSettings = daemonPathSettings;

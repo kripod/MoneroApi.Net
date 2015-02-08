@@ -14,16 +14,13 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
         internal DaemonProcessManager(IRpcSettings rpcSettings, IDaemonPathSettings pathSettings) : base(pathSettings.SoftwareDaemon, rpcSettings.UrlHostDaemon, rpcSettings.UrlPortDaemon)
         {
             ProcessArgumentsExtra = new List<string> {
-                //"--data-dir \"" + paths.DirectoryDaemonData + "\"",
+                "--data-dir \"" + pathSettings.DirectoryDaemonData + "\"",
                 "--rpc-bind-port " + rpcSettings.UrlPortDaemon
             };
 
             if (rpcSettings.UrlHostDaemon != MoneroAPI.Utilities.DefaultRpcUrlHost) {
                 ProcessArgumentsExtra.Add("--rpc-bind-ip " + rpcSettings.UrlHostDaemon);
             }
-
-            // TODO: Remove this temporary fix
-            ProcessArgumentsExtra.Add("--data-dir \"" + pathSettings.DirectoryDaemonData);
         }
 
         public void Start()
