@@ -14,6 +14,7 @@ namespace Jojatekok.MoneroAPI.RpcManagers
 
         public event EventHandler<AddressReceivedEventArgs> AddressReceived;
         public event EventHandler<TransactionReceivedEventArgs> TransactionReceived;
+        public event EventHandler<TransactionChangingEventArgs> TransactionChanging;
         public event EventHandler<AccountBalanceChangingEventArgs> BalanceChanging;
 
         private bool _isInitialized;
@@ -127,22 +128,28 @@ namespace Jojatekok.MoneroAPI.RpcManagers
 
                 // Update existing transactions
                 for (var i = currentTransactionCount - 1; i >= 0; i--) {
-                    var transaction = transactions.Value[i];
-                    transaction.Number = (uint)(i + 1);
+                    var newTransaction = transactions.Value[i];
+                    newTransaction.Number = (uint)(i + 1);
                     // TODO: Add support for detecting transaction type
 
-                    Transactions[i] = transaction;
+                    var oldTransaction = Transactions[i];
+                    if (newTransaction.IsAmountSpendable != oldTransaction.IsAmountSpendable) {
+                        if (IsTransactionListInitialized && TransactionChanging != null) {
+                            TransactionChanging(this, new TransactionChangingEventArgs(newTransaction, oldTransaction, i));
+                        }
+                        Transactions[i] = newTransaction;
+                    }
                 }
 
                 // Add new transactions
                 for (var i = currentTransactionCount; i < transactions.Value.Count; i++) {
-                    var transaction = transactions.Value[i];
-                    transaction.Number = (uint)(Transactions.Count + 1);
+                    var newTransaction = transactions.Value[i];
+                    newTransaction.Number = (uint)(Transactions.Count + 1);
                     // TODO: Add support for detecting transaction type
 
-                    Transactions.Add(transaction);
+                    Transactions.Add(newTransaction);
                     if (IsTransactionListInitialized && TransactionReceived != null) {
-                        TransactionReceived(this, new TransactionReceivedEventArgs(transaction));
+                        TransactionReceived(this, new TransactionReceivedEventArgs(newTransaction));
                     }
                 }
             }

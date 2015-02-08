@@ -39,6 +39,7 @@
     <Compile Include="EventArgs\AddressReceivedEventArgs.cs" />
     <Compile Include="EventArgs\AccountBalanceChangingEventArgs.cs" />
     <Compile Include="EventArgs\NetworkInformationChangingEventArgs.cs" />
+    <Compile Include="EventArgs\TransactionChangingEventArgs.cs" />
     <Compile Include="EventArgs\TransactionReceivedEventArgs.cs" />
     <Compile Include="EventArgs\ValueChangingEventArgs.cs" />
     <Compile Include="ExtensionMethods.cs" />

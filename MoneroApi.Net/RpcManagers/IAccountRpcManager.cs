@@ -1,14 +1,15 @@
-﻿using Jojatekok.MoneroAPI.RpcUtilities.AccountManager.Json.Requests;
-using Jojatekok.MoneroAPI.RpcUtilities.AccountManager.Json.Responses;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Jojatekok.MoneroAPI.RpcManagers
 {
     public interface IAccountRpcManager : IDisposable
     {
+        event EventHandler Initialized;
+
         event EventHandler<AddressReceivedEventArgs> AddressReceived;
         event EventHandler<TransactionReceivedEventArgs> TransactionReceived;
+        event EventHandler<TransactionChangingEventArgs> TransactionChanging;
         event EventHandler<AccountBalanceChangingEventArgs> BalanceChanging;
 
         string Address { get; }
