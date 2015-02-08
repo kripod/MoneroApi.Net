@@ -7,9 +7,9 @@ The class library is written in [C#][]. A [NuGet package of the project][] is al
 [NuGet package of the project]: https://www.nuget.org/packages/MoneroApi.Net
 
 ## Usage requirements
-Installing [Microsoft .NET Framework 4.5][] (or higher) is a requirement for both end-users and developers.
+Installing [Microsoft .NET Framework 4][] (or higher) is a requirement for both end-users and developers.
 
-[Microsoft .NET Framework 4.5]: http://www.microsoft.com/download/details.aspx?id=30653
+[Microsoft .NET Framework 4]: http://www.microsoft.com/download/details.aspx?id=17851
 
 ## About versioning
 The project uses [Semantic Versioning 2.0.0][] for keeping track of changes.

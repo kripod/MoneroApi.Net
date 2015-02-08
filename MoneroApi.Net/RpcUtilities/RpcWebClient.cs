@@ -1,8 +1,10 @@
 ﻿using Jojatekok.MoneroAPI.Settings;
 using Newtonsoft.Json;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 
 namespace Jojatekok.MoneroAPI.RpcUtilities
 {
@@ -34,7 +36,9 @@ namespace Jojatekok.MoneroAPI.RpcUtilities
                 }
             }
 
-            HttpClient = new HttpClient(httpClientHandler);
+            HttpClient = new HttpClient(httpClientHandler) {
+                Timeout = TimeSpan.FromMilliseconds(Timeout.Infinite)
+            };
         }
 
         public T HttpPostData<T>(string host, ushort port, string command)
