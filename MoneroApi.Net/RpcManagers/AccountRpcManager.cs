@@ -10,15 +10,43 @@ namespace Jojatekok.MoneroAPI.RpcManagers
 {
     public class AccountRpcManager : BaseRpcManager, IAccountRpcManager
     {
+        public event EventHandler Initialized;
+
         public event EventHandler<AddressReceivedEventArgs> AddressReceived;
         public event EventHandler<TransactionReceivedEventArgs> TransactionReceived;
         public event EventHandler<AccountBalanceChangingEventArgs> BalanceChanging;
 
+        private bool _isInitialized;
+        private bool _isTransactionListInitialized;
         private string _address;
         private AccountBalance _balance;
         private readonly IList<Transaction> _transactions = new List<Transaction>();
 
-        private bool IsTransactionReceivedEventEnabled { get; set; }
+        private bool IsInitialized {
+            get { return _isInitialized; }
+
+            set {
+                if (value == _isInitialized) return;
+                _isInitialized = value;
+
+                if (value && Initialized != null) {
+                    Initialized(this, EventArgs.Empty);
+                }
+            }
+        }
+
+        private bool IsTransactionListInitialized {
+            get { return _isTransactionListInitialized; }
+
+            set {
+                if (value == _isTransactionListInitialized) return;
+                _isTransactionListInitialized = value;
+
+                if (value && Address != null) {
+                    IsInitialized = true;
+                }
+            }
+        }
 
         private Timer TimerRefresh { get; set; }
 
@@ -71,6 +99,9 @@ namespace Jojatekok.MoneroAPI.RpcManagers
         private void QueryAddress()
         {
             Address = JsonPostData<AddressValueContainer>(new QueryAddress()).Result.Value;
+            if (IsTransactionListInitialized) {
+                IsInitialized = true;
+            }
         }
 
         public string QueryKey(AccountKeyType keyType)
@@ -110,13 +141,13 @@ namespace Jojatekok.MoneroAPI.RpcManagers
                     // TODO: Add support for detecting transaction type
 
                     Transactions.Add(transaction);
-                    if (IsTransactionReceivedEventEnabled && TransactionReceived != null) {
+                    if (IsTransactionListInitialized && TransactionReceived != null) {
                         TransactionReceived(this, new TransactionReceivedEventArgs(transaction));
                     }
                 }
             }
 
-            IsTransactionReceivedEventEnabled = true;
+            IsTransactionListInitialized = true;
         }
 
         private void RequestRefresh()
