@@ -58,8 +58,8 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
                 // Load existing account
                 ProcessArgumentsExtra.Add("--wallet-file \"" + PathSettings.FileAccountData + "\"");
 
-                if (RpcSettings.UrlHostDaemon != MoneroAPI.Utilities.DefaultRpcUrlHost) {
-                    ProcessArgumentsExtra.Add("--rpc-bind-ip " + RpcSettings.UrlHostDaemon);
+                if (RpcSettings.UrlHostAccountManager != MoneroAPI.Utilities.DefaultRpcUrlHost) {
+                    ProcessArgumentsExtra.Add("--rpc-bind-ip " + RpcSettings.UrlHostAccountManager);
                 }
                 ProcessArgumentsExtra.Add("--rpc-bind-port " + RpcSettings.UrlPortAccountManager);
 
