@@ -18,11 +18,7 @@ namespace Jojatekok.MoneroAPI.Demo
 
         static void Main()
         {
-            if (Config.IsProcessRemote) {
-                StartRemoteProcessDemo();
-            } else {
-                StartLocalProcessDemo();
-            }
+            StartDemo();
 
             // Wait infinitely in order to keep the application running
             while (true) {
@@ -32,7 +28,7 @@ namespace Jojatekok.MoneroAPI.Demo
             }
         }
 
-        static void StartLocalProcessDemo()
+        static void StartDemo()
         {
             // Assign a new instance of the process manager to a variable
             MoneroProcessManager = new MoneroProcessManager(
@@ -58,52 +54,37 @@ namespace Jojatekok.MoneroAPI.Demo
             accountManagerRpc.TransactionReceived += AccountManager_TransactionReceived;
             accountManagerRpc.BalanceChanging += AccountManager_BalanceChanging;
 
-            // Initialize the daemon RPC manager as soon as the corresponding process is available
-            var daemonProcess = MoneroProcessManager.Daemon;
-            daemonProcess.Initialized += delegate {
+            if (Config.IsDaemonProcessRemote) {
                 // Daemon RPC functions will not be available if the line below is commented out
                 daemonRpc.Initialize();
-            };
 
-            // Initialize the account manager's RPC wrapper as soon as the corresponding process is available
-            var accountManagerProcess = MoneroProcessManager.AccountManager;
-            accountManagerProcess.Initialized += delegate {
+            } else {
+                // Initialize the daemon RPC manager as soon as the corresponding process is available
+                var daemonProcess = MoneroProcessManager.Daemon;
+                daemonProcess.Initialized += delegate {
+                    // Daemon RPC functions will not be available if the line below is commented out
+                    daemonRpc.Initialize();
+                };
+                daemonProcess.Start();
+            }
+
+            if (Config.IsAccountManagerProcessRemote) {
                 // The account manager's RPC functions will not be available if the line below is commented out
                 accountManagerRpc.Initialize();
-            };
-            accountManagerProcess.PassphraseRequested += delegate {
-                accountManagerProcess.Passphrase = "x";
-            };
 
-            // Start the Monero Core processes
-            daemonProcess.Start();
-            accountManagerProcess.Start();
-        }
-
-        static void StartRemoteProcessDemo()
-        {
-            // Assign a new instance of the RPC manager to a variable
-            MoneroRpcManager = new MoneroRpcManager(
-                Config.ClientRpcSettings,
-                Config.ClientTimerSettings
-            );
-
-            // First, declare event handlers for the daemon, and then initialize it
-            var daemonRpc = MoneroRpcManager.Daemon;
-            daemonRpc.NetworkInformationChanging += Daemon_NetworkInformationChanging;
-            daemonRpc.BlockchainSynced += Daemon_BlockchainSynced;
-
-            // Daemon RPC functions will not be available if the line below is commented out
-            daemonRpc.Initialize();
-
-            // Optionally, declare event handlers for the account manager, and then initialize it if necessary
-            var accountManagerRpc = MoneroRpcManager.AccountManager;
-            accountManagerRpc.AddressReceived += AccountManager_AddressReceived;
-            accountManagerRpc.TransactionReceived += AccountManager_TransactionReceived;
-            accountManagerRpc.BalanceChanging += AccountManager_BalanceChanging;
-
-            // The account manager's RPC functions will not be available if the line below is commented out
-            //accountManagerRpc.Initialize();
+            } else {
+                // Initialize the account manager's RPC wrapper as soon as the corresponding process is available
+                var accountManagerProcess = MoneroProcessManager.AccountManager;
+                accountManagerProcess.Initialized += delegate {
+                    // The account manager's RPC functions will not be available if the line below is commented out
+                    accountManagerRpc.Initialize();
+                };
+                accountManagerProcess.PassphraseRequested += delegate {
+                    accountManagerProcess.Passphrase = "x";
+                };
+                accountManagerProcess.Start();
+            }
+            
         }
 
         static void Daemon_NetworkInformationChanging(object sender, NetworkInformationChangingEventArgs e)

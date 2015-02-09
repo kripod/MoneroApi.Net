@@ -2,6 +2,8 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Net;
 using System.Net.NetworkInformation;
 
 namespace Jojatekok.MoneroAPI.Extensions
@@ -30,6 +32,22 @@ namespace Jojatekok.MoneroAPI.Extensions
         internal static string GetAbsolutePath(string input)
         {
             return input.Contains(":") ? input : Path.GetFullPath(Path.Combine(ApplicationDirectory, input));
+        }
+
+        internal static bool IsHostLocal(string input)
+        {
+            var uri = new Uri(input);
+            IPAddress[] host;
+
+            try {
+                host = Dns.GetHostAddresses(uri.Host);
+            } catch (Exception) {
+                return false;
+            }
+
+            var hostIps = Dns.GetHostAddresses(Dns.GetHostName());
+
+            return host.Any(hostAddress => IPAddress.IsLoopback(hostAddress) || hostIps.Contains(hostAddress));
         }
 
         internal static bool IsPortInUse(int port)

@@ -9,7 +9,8 @@ namespace Jojatekok.MoneroAPI.Demo
         // In order to disable tracking, execute the following command in your shell:
         // git update-index --assume-unchanged "MoneroApi.Net.Demo/Config.cs"
 
-        public const bool IsProcessRemote = false;
+        public const bool IsDaemonProcessRemote = false;
+        public const bool IsAccountManagerProcessRemote = false;
 
         public static readonly IRpcSettings ClientRpcSettings = new RpcSettings();
         public static readonly ITimerSettings ClientTimerSettings = new TimerSettings();

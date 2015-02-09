@@ -32,11 +32,13 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
                 if (value == _isRpcAvailable) return;
 
                 _isRpcAvailable = value;
-                if (value) TimerCheckRpcAvailability.Stop();
+                if (!value) return;
+
+                if (TimerCheckRpcAvailability != null) TimerCheckRpcAvailability.Stop();
 
                 if (!IsInitialized) {
                     IsInitialized = true;
-                    Initialized(this, EventArgs.Empty);
+                    if (Initialized != null) Initialized(this, EventArgs.Empty);
                 }
             }
         }
@@ -53,7 +55,11 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
         }
 
         internal BaseRpcProcessManager(string path, string rpcHost, ushort rpcPort) {
-            TimerCheckRpcAvailability = new Timer(delegate { CheckRpcAvailability(); });
+            if (Utilities.IsHostLocal(rpcHost)) {
+                TimerCheckRpcAvailability = new Timer(delegate { CheckRpcAvailability(); });
+            } else {
+                IsRpcAvailable = true;
+            }
 
             Path = path;
             RpcHost = rpcHost;
@@ -86,8 +92,10 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
             Utilities.JobManager.AddProcess(Process);
             Process.BeginOutputReadLine();
 
-            // Constantly check for the RPC port's activeness
-            TimerCheckRpcAvailability.Change(Utilities.TimerSettingRpcCheckAvailabilityDueTime, Utilities.TimerSettingRpcCheckAvailabilityPeriod);
+            if (TimerCheckRpcAvailability != null) {
+                // Constantly check for the RPC port's activeness
+                TimerCheckRpcAvailability.Change(Utilities.TimerSettingRpcCheckAvailabilityDueTime, Utilities.TimerSettingRpcCheckAvailabilityPeriod);
+            }
         }
 
         private void CheckRpcAvailability()
@@ -138,8 +146,10 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
             if (disposing && !IsDisposing) {
                 IsDisposing = true;
 
-                TimerCheckRpcAvailability.Dispose();
-                TimerCheckRpcAvailability = null;
+                if (TimerCheckRpcAvailability != null) {
+                    TimerCheckRpcAvailability.Dispose();
+                    TimerCheckRpcAvailability = null;
+                }
 
                 if (Process == null) return;
 
