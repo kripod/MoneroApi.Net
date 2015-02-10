@@ -8,5 +8,8 @@
         public const string DaemonQueryMiningStatus = "mining_status";
 
         public const string DaemonQueryTransactions = "gettransactions";
+
+        public const string DaemonRequestMiningStart = "start_mining";
+        public const string DaemonRequestMiningStop = "stop_mining";
     }
 }

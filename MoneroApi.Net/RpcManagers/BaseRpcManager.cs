@@ -22,15 +22,19 @@ namespace Jojatekok.MoneroAPI.RpcManagers
                 RpcPort = rpcSettings.UrlPortAccountManager;
             }
         }
-
-        protected T HttpPostData<T>(string command) where T : HttpRpcResponse
+        protected T HttpPostData<T>(string command, JsonRpcRequest jsonRpcRequest = null) where T : HttpRpcResponse
         {
-            var output = RpcWebClient.HttpPostData<T>(RpcHost, RpcPort, command);
+            var output = RpcWebClient.HttpPostData<T>(RpcHost, RpcPort, command, jsonRpcRequest);
             if (output != null && output.Status == RpcResponseStatus.Ok) {
                 return output;
             }
 
             return null;
+        }
+
+        protected void HttpPostData(string command, JsonRpcRequest jsonRpcRequest = null)
+        {
+            HttpPostData<HttpRpcResponse>(command, jsonRpcRequest);
         }
 
         protected JsonRpcResponse<T> JsonPostData<T>(JsonRpcRequest jsonRpcRequest) where T : class

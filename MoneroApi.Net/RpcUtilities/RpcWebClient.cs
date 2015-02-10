@@ -41,12 +41,16 @@ namespace Jojatekok.MoneroAPI.RpcUtilities
             };
         }
 
-        public T HttpPostData<T>(string host, ushort port, string command)
+        public T HttpPostData<T>(string host, ushort port, string command, JsonRpcRequest jsonRpcRequest = null)
         {
-            var jsonString = PostString(host, port, command);
-            var output = JsonSerializer.DeserializeObject<T>(jsonString);
+            string jsonString;
+            if (jsonRpcRequest != null) {
+                jsonString = PostString(host, port, command, JsonSerializer.SerializeObject(jsonRpcRequest));
+            } else {
+                jsonString = PostString(host, port, command);
+            };
 
-            return output;
+            return JsonSerializer.DeserializeObject<T>(jsonString);
         }
 
         public JsonRpcResponse<T> JsonPostData<T>(string host, ushort port, JsonRpcRequest jsonRpcRequest)

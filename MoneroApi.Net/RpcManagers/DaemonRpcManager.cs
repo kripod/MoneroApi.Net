@@ -1,4 +1,5 @@
 ﻿using Jojatekok.MoneroAPI.RpcUtilities;
+using Jojatekok.MoneroAPI.RpcUtilities.Daemon.Http.Requests;
 using Jojatekok.MoneroAPI.RpcUtilities.Daemon.Http.Responses;
 using Jojatekok.MoneroAPI.RpcUtilities.Daemon.Json.Requests;
 using Jojatekok.MoneroAPI.RpcUtilities.Daemon.Json.Responses;
@@ -130,6 +131,16 @@ namespace Jojatekok.MoneroAPI.RpcManagers
             }
 
             return null;
+        }
+
+        public void RequestMiningStart(string accountAddress, ulong threadsCount)
+        {
+            HttpPostData(HttpRpcCommands.DaemonRequestMiningStart, new RequestMiningStart(accountAddress, threadsCount));
+        }
+
+        public void RequestMiningStop()
+        {
+            HttpPostData(HttpRpcCommands.DaemonRequestMiningStop);
         }
 
         public void Dispose()

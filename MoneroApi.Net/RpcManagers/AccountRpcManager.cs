@@ -232,7 +232,9 @@ namespace Jojatekok.MoneroAPI.RpcManagers
         private void Dispose(bool disposing)
         {
             if (disposing) {
-                RequestSaveAccount();
+                if (IsInitialized) {
+                    RequestSaveAccount();
+                }
 
                 TimerRefresh.Dispose();
                 TimerRefresh = null;

@@ -71,6 +71,7 @@
     <Compile Include="RpcUtilities\AccountManager\Json\Responses\KeyValueContainer.cs" />
     <Compile Include="RpcUtilities\AccountManager\Json\Responses\TransactionIdListValueContainer.cs" />
     <Compile Include="RpcUtilities\AccountManager\Json\Responses\TransactionListValueContainer.cs" />
+    <Compile Include="RpcUtilities\Daemon\Http\Requests\RequestMiningStart.cs" />
     <Compile Include="RpcUtilities\Daemon\Http\Responses\BlockHeightValueContainer.cs" />
     <Compile Include="Objects\MiningStatus.cs" />
     <Compile Include="Objects\NetworkInformation.cs" />
