@@ -109,10 +109,18 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
             // TODO: Allow selection of the deterministic seed's language
             if (messageText.StartsWith("0", StringComparison.Ordinal)) {
                 SendConsoleCommand("0");
+                return;
+            }
 
-            } else if (messageText.StartsWith("*", StringComparison.Ordinal)) {
+            if (messageText.StartsWith("*", StringComparison.Ordinal)) {
                 OnLogMessage -= AccountManager_OnLogMessage;
                 Restart();
+                return;
+            }
+
+            if (IsDisposing && messageText.Contains("data saved")) {
+                OnLogMessage -= AccountManager_OnLogMessage;
+                StopProcess();
             }
         }
 
@@ -177,6 +185,24 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
                     // Invalid passphrase
                     RequestPassphrase(false);
                     break;
+            }
+        }
+
+        public new void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing) {
+                // Safe shutdown
+                OnLogMessage += AccountManager_OnLogMessage;
+                SendConsoleCommand("save");
+                IsDisposeProcessKillNecessary = false;
+
+                base.Dispose();
             }
         }
     }

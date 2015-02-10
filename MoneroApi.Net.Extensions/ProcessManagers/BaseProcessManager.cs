@@ -43,7 +43,7 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
             }
         }
 
-        private bool IsDisposing { get; set; }
+        protected bool IsDisposing { get; private set; }
 
         protected bool IsDisposeProcessKillNecessary {
             get { return _isDisposeProcessKillNecessary; }
@@ -96,6 +96,22 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
                 // Constantly check for the RPC port's activeness
                 TimerCheckRpcAvailability.Change(Utilities.TimerSettingRpcCheckAvailabilityDueTime, Utilities.TimerSettingRpcCheckAvailabilityPeriod);
             }
+        }
+
+        protected void StopProcess()
+        {
+            if (Process == null) return;
+
+            if (!Process.HasExited) {
+                if (Process.Responding) {
+                    if (!Process.WaitForExit(10000)) Process.Kill();
+                } else {
+                    Process.Kill();
+                }
+            }
+
+            Process.Dispose();
+            Process = null;
         }
 
         private void CheckRpcAvailability()
@@ -151,21 +167,9 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
                     TimerCheckRpcAvailability = null;
                 }
 
-                if (Process == null) return;
-
                 if (IsDisposeProcessKillNecessary) {
-                    if (!Process.HasExited) {
-                        if (Process.Responding) {
-                            if (!Process.WaitForExit(10000)) Process.Kill();
-                        } else {
-                            Process.Kill();
-                        }
-                    }
-
-                    Process.Dispose();
-                    Process = null;
-
-                } else {
+                    StopProcess();
+                } else if (Process != null) {
                     Process.WaitForExit();
                 }
             }

@@ -64,14 +64,14 @@ namespace Jojatekok.MoneroAPI.Extensions
         private void Dispose(bool disposing)
         {
             if (disposing) {
-                if (Daemon != null) {
-                    Daemon.Dispose();
-                    Daemon = null;
-                }
-
                 if (AccountManager != null) {
                     AccountManager.Dispose();
                     AccountManager = null;
+                }
+
+                if (Daemon != null) {
+                    Daemon.Dispose();
+                    Daemon = null;
                 }
             }
         }
