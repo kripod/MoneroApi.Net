@@ -165,6 +165,11 @@ namespace Jojatekok.MoneroAPI.RpcManagers
             TimerRefresh.StartOnce(TimerSettings.AccountRefreshPeriod);
         }
 
+        private void RequestSaveAccount()
+        {
+            JsonPostData(new RequestSaveAccount());
+        }
+
         public bool SendTransaction(IList<TransferRecipient> recipients, string paymentId, ulong mixCount)
         {
             if (recipients == null || recipients.Count == 0) return false;
@@ -227,6 +232,8 @@ namespace Jojatekok.MoneroAPI.RpcManagers
         private void Dispose(bool disposing)
         {
             if (disposing) {
+                RequestSaveAccount();
+
                 TimerRefresh.Dispose();
                 TimerRefresh = null;
             }
