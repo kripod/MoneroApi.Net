@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Jojatekok.MoneroAPI.RpcUtilities.AccountManager.Json.Responses
 {
-    class TransactionListValueContainer : IValueContainer<IList<Transaction>>
+    class TransactionOutputListValueContainer : IValueContainer<IList<TransactionOutput>>
     {
         [JsonProperty("transfers")]
-        public IList<Transaction> Value { get; private set; }
+        public IList<TransactionOutput> Value { get; private set; }
     }
 }

@@ -47,8 +47,8 @@
     <Compile Include="MoneroRpcManager.cs" />
     <Compile Include="Objects\AccountKeyType.cs" />
     <Compile Include="Objects\BlockHeader.cs" />
+    <Compile Include="Objects\TransactionOutput.cs" />
     <Compile Include="Objects\Transaction.cs" />
-    <Compile Include="Objects\TransactionType.cs" />
     <Compile Include="Objects\TransferRecipient.cs" />
     <Compile Include="RpcManagers\AccountRpcManager.cs" />
     <Compile Include="RpcManagers\BaseRpcManager.cs" />
@@ -70,7 +70,7 @@
     <Compile Include="Objects\AccountBalance.cs" />
     <Compile Include="RpcUtilities\AccountManager\Json\Responses\KeyValueContainer.cs" />
     <Compile Include="RpcUtilities\AccountManager\Json\Responses\TransactionIdListValueContainer.cs" />
-    <Compile Include="RpcUtilities\AccountManager\Json\Responses\TransactionListValueContainer.cs" />
+    <Compile Include="RpcUtilities\AccountManager\Json\Responses\TransactionOutputListValueContainer.cs" />
     <Compile Include="RpcUtilities\Daemon\Http\Requests\RequestMiningStart.cs" />
     <Compile Include="RpcUtilities\Daemon\Http\Responses\BlockHeightValueContainer.cs" />
     <Compile Include="Objects\MiningStatus.cs" />

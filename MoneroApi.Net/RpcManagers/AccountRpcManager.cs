@@ -21,7 +21,8 @@ namespace Jojatekok.MoneroAPI.RpcManagers
         private bool _isTransactionListInitialized;
         private string _address;
         private AccountBalance _balance;
-        private readonly IList<Transaction> _transactions = new List<Transaction>();
+        private IList<Transaction> _transactions = new List<Transaction>();
+        private IList<TransactionOutput> _transactionOutputs = new List<TransactionOutput>();
 
         private bool IsInitialized {
             get { return _isInitialized; }
@@ -75,6 +76,12 @@ namespace Jojatekok.MoneroAPI.RpcManagers
 
         public IList<Transaction> Transactions {
             get { return _transactions; }
+            private set { _transactions = value; }
+        }
+
+        public IList<TransactionOutput> TransactionOutputs {
+            get { return _transactionOutputs; }
+            private set { _transactionOutputs = value; }
         }
 
         internal AccountRpcManager(RpcWebClient rpcWebClient, IDaemonRpcManager daemon) : base(rpcWebClient, false)
@@ -121,37 +128,70 @@ namespace Jojatekok.MoneroAPI.RpcManagers
 
         private void QueryIncomingTransfers()
         {
-            var transactions = JsonPostData<TransactionListValueContainer>(new QueryIncomingTransfers()).Result;
+            var transactionOutputsContainer = JsonPostData<TransactionOutputListValueContainer>(new QueryIncomingTransfers()).Result;
+            if (transactionOutputsContainer == null) return;
 
-            if (transactions != null) {
-                var currentTransactionCount = Transactions.Count;
+            var transactionOutputs = transactionOutputsContainer.Value;
+            var transactionOutputsCount = transactionOutputs.Count;
+            
+            TransactionOutputs = transactionOutputs;
 
-                // Update existing transactions
-                for (var i = currentTransactionCount - 1; i >= 0; i--) {
-                    var newTransaction = transactions.Value[i];
-                    newTransaction.Number = (uint)(i + 1);
-                    // TODO: Add support for detecting transaction type
+            if (transactionOutputsCount != 0) {
+                var transactions = new List<Transaction>();
 
-                    var oldTransaction = Transactions[i];
-                    if (newTransaction.IsAmountSpendable != oldTransaction.IsAmountSpendable) {
-                        if (IsTransactionListInitialized && TransactionChanging != null) {
-                            TransactionChanging(this, new TransactionChangingEventArgs(newTransaction, oldTransaction, i));
+                var previousTransactionId = transactionOutputs[0].TransactionId;
+                var transactionIndex = 0U;
+                var transaction = new Transaction {
+                    TransactionId = previousTransactionId,
+                    Index = transactionIndex
+                };
+
+                for (var i = 0; i < transactionOutputsCount; i++) {
+                    var transactionOutput = transactionOutputs[i];
+                    var transactionId = transactionOutput.TransactionId;
+
+                    if (transactionId != previousTransactionId) {
+                        transaction = new Transaction {
+                            TransactionId = transactionId,
+                            Index = transactionIndex
+                        };
+
+                        transactions.Add(transaction);
+                        previousTransactionId = transactionId;
+                        transactionIndex += 1;
+                    }
+
+                    if (transactionOutput.IsAmountSpendable) {
+                        transaction.AmountSpendable += transactionOutput.Amount;
+                    } else {
+                        transaction.AmountUnspendable += transactionOutput.Amount;
+                    }
+                }
+
+                if (IsTransactionListInitialized) {
+                    var previousTransactionsCount = Transactions.Count;
+
+                    if (TransactionChanging != null) {
+                        // Notify about changed transactions
+                        for (var i = 0; i < previousTransactionsCount; i++) {
+                            var oldTransaction = Transactions[i];
+                            var newTransaction = transactions[i];
+
+                            if (newTransaction.AmountSpendable != oldTransaction.AmountSpendable) {
+                                TransactionChanging(this, new TransactionChangingEventArgs(newTransaction, oldTransaction, i));
+                            }
                         }
-                        Transactions[i] = newTransaction;
+                    }
+
+                    if (TransactionReceived != null) {
+                        // Notify about new transactions
+                        for (var i = previousTransactionsCount; i < transactions.Count; i++) {
+                            TransactionReceived(this, new TransactionReceivedEventArgs(transactions[i]));
+                        }
                     }
                 }
 
-                // Add new transactions
-                for (var i = currentTransactionCount; i < transactions.Value.Count; i++) {
-                    var newTransaction = transactions.Value[i];
-                    newTransaction.Number = (uint)(Transactions.Count + 1);
-                    // TODO: Add support for detecting transaction type
-
-                    Transactions.Add(newTransaction);
-                    if (IsTransactionListInitialized && TransactionReceived != null) {
-                        TransactionReceived(this, new TransactionReceivedEventArgs(newTransaction));
-                    }
-                }
+                Transactions = transactions;
             }
 
             IsTransactionListInitialized = true;
@@ -181,18 +221,6 @@ namespace Jojatekok.MoneroAPI.RpcManagers
 
             var output = JsonPostData<TransactionIdListValueContainer>(new SendTransferSplit(parameters));
             if (output == null) return false;
-
-            ulong amountTotal = 0;
-            for (var i = recipients.Count - 1; i >= 0; i--) {
-                amountTotal += recipients[i].Amount;
-            }
-            
-            if (TransactionReceived != null) {
-                TransactionReceived(this, new TransactionReceivedEventArgs(new Transaction {
-                    Type = TransactionType.Send,
-                    Amount = amountTotal
-                }));
-            }
 
             RequestRefresh();
             return true;

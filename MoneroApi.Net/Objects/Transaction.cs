@@ -1,36 +1,15 @@
-﻿using Newtonsoft.Json;
-
-namespace Jojatekok.MoneroAPI
+﻿namespace Jojatekok.MoneroAPI
 {
     public class Transaction
     {
-        private string _transactionId;
-        private bool _isAmountSpendable;
+        public string TransactionId { get; internal set; }
 
-        [JsonProperty("amount")]
-        public ulong Amount { get; internal set; }
+        public ulong AmountSpendable { get; internal set; }
+        public ulong AmountUnspendable { get; internal set; }
 
-        [JsonProperty("tx_hash")]
-        public string TransactionId {
-            get { return _transactionId; }
+        public uint Index { get; internal set; }
 
-            internal set {
-                // Discard the '<' and '>' characters
-                _transactionId = value.Substring(1, value.Length - 2);
-            }
-        }
-
-        [JsonProperty("spent")]
-        public bool IsAmountSpendable {
-            get { return _isAmountSpendable; }
-            internal set { _isAmountSpendable = !value; }
-        }
-
-        public TransactionType Type { get; internal set; }
-
-        public uint Number { get; internal set; }
-
-        [JsonProperty("global_index")]
-        public ulong GlobalIndex { get; internal set; }
+        // TODO: Replace this with a date
+        public uint Number { get { return Index + 1; } }
     }
 }

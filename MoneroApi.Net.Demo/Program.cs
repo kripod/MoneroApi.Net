@@ -115,10 +115,12 @@ namespace Jojatekok.MoneroAPI.Demo
             // Whether a new transaction is sent from or received by your account, its details can be viewed here
             var transaction = e.Transaction;
             Console.WriteLine(
-                "New transaction: {0} ({1} atomic units, {2})",
+                "New transaction: {0}" + Environment.NewLine +
+                "    Spendable: {1} atomic units" + Environment.NewLine +
+                "    Unspendable: {2} atomic units",
                 transaction.TransactionId,
-                transaction.Amount,
-                transaction.IsAmountSpendable ? "spendable" : "not spendable"
+                transaction.AmountSpendable,
+                transaction.AmountUnspendable
             );
         }
 
