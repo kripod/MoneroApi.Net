@@ -10,6 +10,7 @@ MoneroApi.Net.Demo/Config.cs
 *.suo
 *.user
 *.sln.docstates
+*.userprefs
 
 # Build results
 [Dd]ebug/
