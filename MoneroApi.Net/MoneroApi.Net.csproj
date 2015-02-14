@@ -1,18 +1,14 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D54C18E6-4678-4CBF-9D58-ECE8D7C9218D}</ProjectGuid>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{EFA80668-3BBA-495F-A4AC-7A72A9ABDB47}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Jojatekok.MoneroAPI</RootNamespace>
     <AssemblyName>MoneroApi.Net</AssemblyName>
-    <DefaultLanguage>en-US</DefaultLanguage>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <TargetFrameworkProfile>Profile328</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
   </PropertyGroup>
@@ -20,63 +16,44 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>bin\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\MoneroApi.Net.XML</DocumentationFile>
-    <DebugSymbols>true</DebugSymbols>
+    <ConsolePause>false</ConsolePause>
+    <DocumentationFile>bin\Release\MoneroApi.Net.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="EventArgs\AddressReceivedEventArgs.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="MoneroRpcManager.cs" />
+    <Compile Include="Utilities.cs" />
     <Compile Include="EventArgs\AccountBalanceChangingEventArgs.cs" />
+    <Compile Include="EventArgs\AddressReceivedEventArgs.cs" />
     <Compile Include="EventArgs\NetworkInformationChangingEventArgs.cs" />
     <Compile Include="EventArgs\TransactionChangingEventArgs.cs" />
     <Compile Include="EventArgs\TransactionReceivedEventArgs.cs" />
     <Compile Include="EventArgs\ValueChangingEventArgs.cs" />
-    <Compile Include="ExtensionMethods.cs" />
-    <Compile Include="MoneroRpcManager.cs" />
+    <Compile Include="Objects\AccountBalance.cs" />
     <Compile Include="Objects\AccountKeyType.cs" />
     <Compile Include="Objects\BlockHeader.cs" />
-    <Compile Include="Objects\TransactionOutput.cs" />
+    <Compile Include="Objects\MiningStatus.cs" />
+    <Compile Include="Objects\NetworkInformation.cs" />
     <Compile Include="Objects\Transaction.cs" />
+    <Compile Include="Objects\TransactionOutput.cs" />
     <Compile Include="Objects\TransferRecipient.cs" />
     <Compile Include="RpcManagers\AccountRpcManager.cs" />
     <Compile Include="RpcManagers\BaseRpcManager.cs" />
-    <Compile Include="RpcManagers\IAccountRpcManager.cs">
-      <DependentUpon>AccountRpcManager.cs</DependentUpon>
-    </Compile>
     <Compile Include="RpcManagers\DaemonRpcManager.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RpcManagers\IDaemonRpcManager.cs">
-      <DependentUpon>DaemonRpcManager.cs</DependentUpon>
-    </Compile>
-    <Compile Include="RpcUtilities\AccountManager\Json\Requests\QueryAddress.cs" />
-    <Compile Include="RpcUtilities\AccountManager\Json\Requests\QueryBalance.cs" />
-    <Compile Include="RpcUtilities\AccountManager\Json\Requests\QueryIncomingTransfers.cs" />
-    <Compile Include="RpcUtilities\AccountManager\Json\Requests\QueryKey.cs" />
-    <Compile Include="RpcUtilities\AccountManager\Json\Requests\RequestSaveAccount.cs" />
-    <Compile Include="RpcUtilities\AccountManager\Json\Requests\SendTransferSplit.cs" />
-    <Compile Include="RpcUtilities\AccountManager\Json\Responses\AddressValueContainer.cs" />
-    <Compile Include="Objects\AccountBalance.cs" />
-    <Compile Include="RpcUtilities\AccountManager\Json\Responses\KeyValueContainer.cs" />
-    <Compile Include="RpcUtilities\AccountManager\Json\Responses\TransactionIdListValueContainer.cs" />
-    <Compile Include="RpcUtilities\AccountManager\Json\Responses\TransactionOutputListValueContainer.cs" />
-    <Compile Include="RpcUtilities\Daemon\Http\Requests\RequestMiningStart.cs" />
-    <Compile Include="RpcUtilities\Daemon\Http\Responses\BlockHeightValueContainer.cs" />
-    <Compile Include="Objects\MiningStatus.cs" />
-    <Compile Include="Objects\NetworkInformation.cs" />
-    <Compile Include="RpcUtilities\Daemon\Json\Requests\QueryBlockHeaderByHash.cs" />
-    <Compile Include="RpcUtilities\Daemon\Json\Requests\QueryBlockHeaderByHeight.cs" />
-    <Compile Include="RpcUtilities\Daemon\Json\Requests\QueryBlockHeaderLast.cs" />
-    <Compile Include="RpcUtilities\Daemon\Json\Responses\BlockHeaderValueContainer.cs" />
+    <Compile Include="RpcManagers\IAccountRpcManager.cs" />
+    <Compile Include="RpcManagers\IDaemonRpcManager.cs" />
     <Compile Include="RpcUtilities\HttpRpcCommands.cs" />
     <Compile Include="RpcUtilities\HttpRpcResponse.cs" />
     <Compile Include="RpcUtilities\IValueContainer.cs" />
@@ -85,18 +62,28 @@
     <Compile Include="RpcUtilities\JsonRpcResponse.cs" />
     <Compile Include="RpcUtilities\RpcResponseStatus.cs" />
     <Compile Include="RpcUtilities\RpcWebClient.cs" />
-    <Compile Include="Settings\IRpcSettings.cs">
-      <DependentUpon>RpcSettings.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Settings\ITimerSettings.cs">
-      <DependentUpon>TimerSettings.cs</DependentUpon>
-    </Compile>
+    <Compile Include="RpcUtilities\AccountManager\Json\Requests\QueryAddress.cs" />
+    <Compile Include="RpcUtilities\AccountManager\Json\Requests\QueryBalance.cs" />
+    <Compile Include="RpcUtilities\AccountManager\Json\Requests\QueryIncomingTransfers.cs" />
+    <Compile Include="RpcUtilities\AccountManager\Json\Requests\QueryKey.cs" />
+    <Compile Include="RpcUtilities\AccountManager\Json\Requests\RequestSaveAccount.cs" />
+    <Compile Include="RpcUtilities\AccountManager\Json\Requests\SendTransferSplit.cs" />
+    <Compile Include="RpcUtilities\AccountManager\Json\Responses\AddressValueContainer.cs" />
+    <Compile Include="RpcUtilities\AccountManager\Json\Responses\KeyValueContainer.cs" />
+    <Compile Include="RpcUtilities\AccountManager\Json\Responses\TransactionIdListValueContainer.cs" />
+    <Compile Include="RpcUtilities\AccountManager\Json\Responses\TransactionOutputListValueContainer.cs" />
+    <Compile Include="RpcUtilities\Daemon\Http\Requests\RequestMiningStart.cs" />
+    <Compile Include="RpcUtilities\Daemon\Http\Responses\BlockHeightValueContainer.cs" />
+    <Compile Include="RpcUtilities\Daemon\Json\Requests\QueryBlockHeaderByHash.cs" />
+    <Compile Include="RpcUtilities\Daemon\Json\Requests\QueryBlockHeaderByHeight.cs" />
+    <Compile Include="RpcUtilities\Daemon\Json\Requests\QueryBlockHeaderLast.cs" />
+    <Compile Include="RpcUtilities\Daemon\Json\Responses\BlockHeaderValueContainer.cs" />
+    <Compile Include="Settings\IRpcSettings.cs" />
+    <Compile Include="Settings\ITimerSettings.cs" />
     <Compile Include="Settings\RpcSettings.cs" />
     <Compile Include="Settings\TimerSettings.cs" />
-    <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -105,6 +92,12 @@
     </Reference>
     <Reference Include="System.IO">
       <HintPath>..\packages\Microsoft.Bcl.1.1.9\lib\portable-net40+sl5+win8+wp8+wpa81\System.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime">
+      <HintPath>..\packages\Microsoft.Bcl.1.1.9\lib\portable-net40+sl5+win8+wp8+wpa81\System.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks">
+      <HintPath>..\packages\Microsoft.Bcl.1.1.9\lib\portable-net40+sl5+win8+wp8+wpa81\System.Threading.Tasks.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.28\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.dll</HintPath>
@@ -115,25 +108,11 @@
     <Reference Include="System.Net.Http.Primitives">
       <HintPath>..\packages\Microsoft.Net.Http.2.2.28\lib\portable-net40+sl4+win8+wp71+wpa81\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
-    <Reference Include="System.Runtime">
-      <HintPath>..\packages\Microsoft.Bcl.1.1.9\lib\portable-net40+sl5+win8+wp8+wpa81\System.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Threading.Tasks">
-      <HintPath>..\packages\Microsoft.Bcl.1.1.9\lib\portable-net40+sl5+win8+wp8+wpa81\System.Threading.Tasks.dll</HintPath>
-    </Reference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
     <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
     <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
   </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
