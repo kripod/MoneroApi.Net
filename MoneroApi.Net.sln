@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneroApi.Net.Demo", "MoneroApi.Net.Demo\MoneroApi.Net.Demo.csproj", "{6D81CF98-C42E-4CD2-87C7-CCFA35A6863E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MoneroApi.Net", "MoneroApi.Net\MoneroApi.Net.csproj", "{EFA80668-3BBA-495F-A4AC-7A72A9ABDB47}"
@@ -17,13 +19,16 @@ Global
 		{6D81CF98-C42E-4CD2-87C7-CCFA35A6863E}.Debug|x86.Build.0 = Debug|x86
 		{6D81CF98-C42E-4CD2-87C7-CCFA35A6863E}.Release|x86.ActiveCfg = Release|x86
 		{6D81CF98-C42E-4CD2-87C7-CCFA35A6863E}.Release|x86.Build.0 = Release|x86
-		{9E02819D-8B4F-4408-8F03-16042A325FF9}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{9E02819D-8B4F-4408-8F03-16042A325FF9}.Debug|x86.Build.0 = Debug|Any CPU
-		{9E02819D-8B4F-4408-8F03-16042A325FF9}.Release|x86.ActiveCfg = Release|Any CPU
-		{9E02819D-8B4F-4408-8F03-16042A325FF9}.Release|x86.Build.0 = Release|Any CPU
 		{EFA80668-3BBA-495F-A4AC-7A72A9ABDB47}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{EFA80668-3BBA-495F-A4AC-7A72A9ABDB47}.Debug|x86.Build.0 = Debug|Any CPU
 		{EFA80668-3BBA-495F-A4AC-7A72A9ABDB47}.Release|x86.ActiveCfg = Release|Any CPU
 		{EFA80668-3BBA-495F-A4AC-7A72A9ABDB47}.Release|x86.Build.0 = Release|Any CPU
+		{9E02819D-8B4F-4408-8F03-16042A325FF9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9E02819D-8B4F-4408-8F03-16042A325FF9}.Debug|x86.Build.0 = Debug|Any CPU
+		{9E02819D-8B4F-4408-8F03-16042A325FF9}.Release|x86.ActiveCfg = Release|Any CPU
+		{9E02819D-8B4F-4408-8F03-16042A325FF9}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
