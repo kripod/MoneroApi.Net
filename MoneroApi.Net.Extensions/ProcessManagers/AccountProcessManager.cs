@@ -53,6 +53,10 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
                 "--password \"" + Passphrase + "\""
             };
 
+            if (ProcessSettings.UseTestnet) {
+                ProcessArguments.Add("--testnet");
+            }
+
             if (IsAccountKeysFileExistent) {
                 // Load existing account
                 ProcessArguments.Add("--wallet-file \"" + ProcessSettings.FileAccountData + "\"");

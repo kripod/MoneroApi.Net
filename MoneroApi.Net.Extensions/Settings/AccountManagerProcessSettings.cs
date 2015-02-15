@@ -8,6 +8,8 @@
 
         public LogLevel LogLevel { get; set; }
 
+        public bool UseTestnet { get; set; }
+
         public string SoftwareAccountManager {
             get { return Utilities.GetAbsolutePath(_softwareAccountManager); }
             set { _softwareAccountManager = value; }

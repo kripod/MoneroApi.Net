@@ -7,6 +7,8 @@
 
         public LogLevel LogLevel { get; set; }
 
+        public bool UseTestnet { get; set; }
+
         public string SoftwareDaemon {
             get { return Utilities.GetAbsolutePath(_softwareDaemon); }
             set { _softwareDaemon = value; }

@@ -4,6 +4,8 @@
     {
         LogLevel LogLevel { get; set; }
 
+        bool UseTestnet { get; set; }
+
         string SoftwareAccountManager { get; set; }
 
         string DirectoryAccountData { get; }

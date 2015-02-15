@@ -13,15 +13,23 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
         internal DaemonProcessManager(IRpcSettings rpcSettings, IDaemonProcessSettings processSettings) : base(processSettings.SoftwareDaemon, rpcSettings.UrlHostDaemon, rpcSettings.UrlPortDaemon)
         {
             ProcessArguments = new List<string> {
-                "--log-level " + (int)processSettings.LogLevel,
-                "--rpc-bind-port " + rpcSettings.UrlPortDaemon
+                "--log-level " + (int)processSettings.LogLevel
             };
+
+            string testnetString;
+            if (processSettings.UseTestnet) {
+                testnetString = "testnet-";
+                ProcessArguments.Add("--testnet");
+            } else {
+                testnetString = "";
+            }
 
             if (rpcSettings.UrlHostDaemon != MoneroAPI.Utilities.DefaultRpcUrlHost) {
                 ProcessArguments.Add("--rpc-bind-ip " + rpcSettings.UrlHostDaemon);
             }
 
-            ProcessArguments.Add("--data-dir \"" + processSettings.DirectoryDaemonData);
+            ProcessArguments.Add("--" + testnetString + "rpc-bind-port " + rpcSettings.UrlPortDaemon);
+            ProcessArguments.Add("--" + testnetString + "data-dir \"" + processSettings.DirectoryDaemonData);
         }
 
         public void Start()
