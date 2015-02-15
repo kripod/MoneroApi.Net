@@ -1,9 +1,11 @@
 ﻿namespace Jojatekok.MoneroAPI.Extensions.Settings
 {
-    public class DaemonPathSettings : IDaemonPathSettings
+    public class DaemonProcessSettings : IDaemonProcessSettings
     {
         private string _softwareDaemon = Utilities.DefaultPathSoftwareDaemon;
         private string _directoryDaemonData = Utilities.DefaultPathDirectoryDaemonData;
+
+        public LogLevel LogLevel { get; set; }
 
         public string SoftwareDaemon {
             get { return Utilities.GetAbsolutePath(_softwareDaemon); }

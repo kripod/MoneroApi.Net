@@ -1,7 +1,9 @@
 ﻿namespace Jojatekok.MoneroAPI.Extensions.Settings
 {
-    public interface IDaemonPathSettings
+    public interface IDaemonProcessSettings
     {
+        LogLevel LogLevel { get; set; }
+
         string SoftwareDaemon { get; set; }
 
         string DirectoryDaemonData { get; set; }

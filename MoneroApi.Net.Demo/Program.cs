@@ -33,8 +33,8 @@ namespace Jojatekok.MoneroAPI.Demo
             // Assign a new instance of the process manager to a variable
             MoneroProcessManager = new MoneroProcessManager(
                 Config.ClientRpcSettings,
-                Config.ClientAccountManagerPathSettings,
-                Config.ClientDaemonPathSettings
+                Config.ClientAccountManagerProcessSettings,
+                Config.ClientDaemonProcessSettings
             );
 
             // Assign a new instance of the RPC manager to a variable

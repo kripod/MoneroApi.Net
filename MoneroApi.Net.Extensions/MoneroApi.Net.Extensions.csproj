@@ -73,10 +73,15 @@
     <Compile Include="ProcessManagers\AccountProcessManager.cs" />
     <Compile Include="ProcessManagers\BaseProcessManager.cs" />
     <Compile Include="ProcessManagers\DaemonProcessManager.cs" />
-    <Compile Include="Settings\AccountManagerPathSettings.cs" />
-    <Compile Include="Settings\DaemonPathSettings.cs" />
-    <Compile Include="Settings\IAccountManagerPathSettings.cs" />
-    <Compile Include="Settings\IDaemonPathSettings.cs" />
+    <Compile Include="Objects\LogLevel.cs" />
+    <Compile Include="Settings\DaemonProcessSettings.cs" />
+    <Compile Include="Settings\IAccountManagerProcessSettings.cs">
+      <DependentUpon>AccountManagerProcessSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\IDaemonProcessSettings.cs">
+      <DependentUpon>DaemonProcessSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\AccountManagerProcessSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

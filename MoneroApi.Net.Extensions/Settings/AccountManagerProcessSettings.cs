@@ -1,10 +1,12 @@
 ﻿namespace Jojatekok.MoneroAPI.Extensions.Settings
 {
-    public class AccountManagerPathSettings : IAccountManagerPathSettings
+    public class AccountManagerProcessSettings : IAccountManagerProcessSettings
     {
         private string _softwareAccountManager = Utilities.DefaultPathSoftwareAccountManager;
         private string _directoryAccountBackups = Utilities.DefaultPathDirectoryAccountBackups;
         private string _fileAccountData = Utilities.DefaultPathFileAccountData;
+
+        public LogLevel LogLevel { get; set; }
 
         public string SoftwareAccountManager {
             get { return Utilities.GetAbsolutePath(_softwareAccountManager); }

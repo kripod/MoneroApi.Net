@@ -8,8 +8,8 @@ namespace Jojatekok.MoneroAPI.Extensions
     public class MoneroProcessManager : IDisposable
     {
         private IRpcSettings RpcSettings { get; set; }
-        private IDaemonPathSettings DaemonPathSettings { get; set; }
-        private IAccountManagerPathSettings AccountManagerPathSettings { get; set; }
+        private IDaemonProcessSettings DaemonProcessSettings { get; set; }
+        private IAccountManagerProcessSettings AccountManagerProcessSettings { get; set; }
 
         /// <summary>Contains methods to interact with the daemon process.</summary>
         public DaemonProcessManager Daemon { get; private set; }
@@ -18,26 +18,26 @@ namespace Jojatekok.MoneroAPI.Extensions
 
         /// <summary>Creates a new instance of Monero API .NET's process manager service.</summary>
         /// <param name="rpcSettings">IP-related settings to use when communicating through the Monero core assemblies' RPC protocol.</param>
-        /// <param name="accountManagerPathSettings">Path settings for the account manager process.</param>
-        /// <param name="daemonPathSettings">Path settings for the daemon process.</param>
-        public MoneroProcessManager(IRpcSettings rpcSettings, IAccountManagerPathSettings accountManagerPathSettings, IDaemonPathSettings daemonPathSettings)
+        /// <param name="accountManagerProcessSettings">Path settings for the account manager process.</param>
+        /// <param name="daemonProcessSettings">Path settings for the daemon process.</param>
+        public MoneroProcessManager(IRpcSettings rpcSettings, IAccountManagerProcessSettings accountManagerProcessSettings, IDaemonProcessSettings daemonProcessSettings)
         {
             if (rpcSettings == null) rpcSettings = new RpcSettings();
-            if (daemonPathSettings == null) daemonPathSettings = new DaemonPathSettings();
-            if (accountManagerPathSettings == null) accountManagerPathSettings = new AccountManagerPathSettings();
+            if (daemonProcessSettings == null) daemonProcessSettings = new DaemonProcessSettings();
+            if (accountManagerProcessSettings == null) accountManagerProcessSettings = new AccountManagerProcessSettings();
 
             RpcSettings = rpcSettings;
-            DaemonPathSettings = daemonPathSettings;
-            AccountManagerPathSettings = accountManagerPathSettings;
+            DaemonProcessSettings = daemonProcessSettings;
+            AccountManagerProcessSettings = accountManagerProcessSettings;
 
-            Daemon = new DaemonProcessManager(rpcSettings, daemonPathSettings);
-            AccountManager = new AccountProcessManager(rpcSettings, accountManagerPathSettings, Daemon);
+            Daemon = new DaemonProcessManager(rpcSettings, daemonProcessSettings);
+            AccountManager = new AccountProcessManager(rpcSettings, accountManagerProcessSettings, Daemon);
         }
 
         /// <summary>Creates a new instance of Monero API .NET's process manager service.</summary>
         /// <param name="rpcSettings">IP-related settings to use when communicating through the Monero core assemblies' RPC protocol.</param>
-        /// <param name="accountManagerPathSettings">Path settings for the account manager process.</param>
-        public MoneroProcessManager(IRpcSettings rpcSettings, IAccountManagerPathSettings accountManagerPathSettings) : this(rpcSettings, accountManagerPathSettings, null)
+        /// <param name="accountManagerProcessSettings">Path settings for the account manager process.</param>
+        public MoneroProcessManager(IRpcSettings rpcSettings, IAccountManagerProcessSettings accountManagerProcessSettings) : this(rpcSettings, accountManagerProcessSettings, null)
         {
 
         }

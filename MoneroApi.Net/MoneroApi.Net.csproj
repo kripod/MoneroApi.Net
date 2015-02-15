@@ -52,8 +52,12 @@
     <Compile Include="RpcManagers\AccountRpcManager.cs" />
     <Compile Include="RpcManagers\BaseRpcManager.cs" />
     <Compile Include="RpcManagers\DaemonRpcManager.cs" />
-    <Compile Include="RpcManagers\IAccountRpcManager.cs" />
-    <Compile Include="RpcManagers\IDaemonRpcManager.cs" />
+    <Compile Include="RpcManagers\IAccountRpcManager.cs">
+      <DependentUpon>AccountRpcManager.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RpcManagers\IDaemonRpcManager.cs">
+      <DependentUpon>DaemonRpcManager.cs</DependentUpon>
+    </Compile>
     <Compile Include="RpcUtilities\HttpRpcCommands.cs" />
     <Compile Include="RpcUtilities\HttpRpcResponse.cs" />
     <Compile Include="RpcUtilities\IValueContainer.cs" />
@@ -78,8 +82,12 @@
     <Compile Include="RpcUtilities\Daemon\Json\Requests\QueryBlockHeaderByHeight.cs" />
     <Compile Include="RpcUtilities\Daemon\Json\Requests\QueryBlockHeaderLast.cs" />
     <Compile Include="RpcUtilities\Daemon\Json\Responses\BlockHeaderValueContainer.cs" />
-    <Compile Include="Settings\IRpcSettings.cs" />
-    <Compile Include="Settings\ITimerSettings.cs" />
+    <Compile Include="Settings\IRpcSettings.cs">
+      <DependentUpon>RpcSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Settings\ITimerSettings.cs">
+      <DependentUpon>TimerSettings.cs</DependentUpon>
+    </Compile>
     <Compile Include="Settings\RpcSettings.cs" />
     <Compile Include="Settings\TimerSettings.cs" />
   </ItemGroup>

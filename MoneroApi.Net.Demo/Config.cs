@@ -15,7 +15,7 @@ namespace Jojatekok.MoneroAPI.Demo
         public static readonly IRpcSettings ClientRpcSettings = new RpcSettings();
         public static readonly ITimerSettings ClientTimerSettings = new TimerSettings();
 
-        public static readonly DaemonPathSettings ClientDaemonPathSettings = new DaemonPathSettings();
-        public static readonly AccountManagerPathSettings ClientAccountManagerPathSettings = new AccountManagerPathSettings();
+        public static readonly DaemonProcessSettings ClientDaemonProcessSettings = new DaemonProcessSettings();
+        public static readonly AccountManagerProcessSettings ClientAccountManagerProcessSettings = new AccountManagerProcessSettings();
     }
 }

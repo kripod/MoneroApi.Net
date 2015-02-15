@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
@@ -15,14 +14,13 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
 
         private string _passphrase;
 
-        private static readonly string[] ProcessArgumentsDefault = { "--set_log 0" };
-        private List<string> ProcessArgumentsExtra { get; set; }
+        private List<string> ProcessArguments { get; set; }
 
         private bool IsWaitingForStart { get; set; }
         private bool IsStartForced { get; set; }
 
         private IRpcSettings RpcSettings { get; set; }
-        private IAccountManagerPathSettings PathSettings { get; set; }
+        private IAccountManagerProcessSettings ProcessSettings { get; set; }
         private DaemonProcessManager DaemonProcess { get; set; }
 
         public string Passphrase {
@@ -35,40 +33,41 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
         }
 
         private bool IsAccountKeysFileExistent {
-            get { return File.Exists(PathSettings.FileAccountDataKeys); }
+            get { return File.Exists(ProcessSettings.FileAccountDataKeys); }
         }
 
-        internal AccountProcessManager(IRpcSettings rpcSettings, IAccountManagerPathSettings pathSettings, DaemonProcessManager daemonProcess) : base(pathSettings.SoftwareAccountManager, rpcSettings.UrlHostAccountManager, rpcSettings.UrlPortAccountManager)
+        internal AccountProcessManager(IRpcSettings rpcSettings, IAccountManagerProcessSettings pathSettings, DaemonProcessManager daemonProcess) : base(pathSettings.SoftwareAccountManager, rpcSettings.UrlHostAccountManager, rpcSettings.UrlPortAccountManager)
         {
             Exited += Process_Exited;
 
             RpcSettings = rpcSettings;
-            PathSettings = pathSettings;
+            ProcessSettings = pathSettings;
             DaemonProcess = daemonProcess;
         }
 
         private void SetProcessArguments()
         {
-            ProcessArgumentsExtra = new List<string>(5) {
+            ProcessArguments = new List<string> {
+                "--set_log " + (int)ProcessSettings.LogLevel,
                 "--daemon-address " + RpcSettings.UrlHostDaemon + ":" + RpcSettings.UrlPortDaemon,
                 "--password \"" + Passphrase + "\""
             };
 
             if (IsAccountKeysFileExistent) {
                 // Load existing account
-                ProcessArgumentsExtra.Add("--wallet-file \"" + PathSettings.FileAccountData + "\"");
+                ProcessArguments.Add("--wallet-file \"" + ProcessSettings.FileAccountData + "\"");
 
                 if (RpcSettings.UrlHostAccountManager != MoneroAPI.Utilities.DefaultRpcUrlHost) {
-                    ProcessArgumentsExtra.Add("--rpc-bind-ip " + RpcSettings.UrlHostAccountManager);
+                    ProcessArguments.Add("--rpc-bind-ip " + RpcSettings.UrlHostAccountManager);
                 }
-                ProcessArgumentsExtra.Add("--rpc-bind-port " + RpcSettings.UrlPortAccountManager);
+                ProcessArguments.Add("--rpc-bind-port " + RpcSettings.UrlPortAccountManager);
 
             } else {
                 // Create new account
-                var directoryAccountData = PathSettings.DirectoryAccountData;
+                var directoryAccountData = ProcessSettings.DirectoryAccountData;
 
                 if (!Directory.Exists(directoryAccountData)) Directory.CreateDirectory(directoryAccountData);
-                ProcessArgumentsExtra.Add("--generate-new-wallet \"" + PathSettings.FileAccountData + "\"");
+                ProcessArguments.Add("--generate-new-wallet \"" + ProcessSettings.FileAccountData + "\"");
             }
         }
 
@@ -95,7 +94,7 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
             }
 
             if (DaemonProcess.IsRpcAvailable) {
-                StartProcess(ProcessArgumentsDefault.Concat(ProcessArgumentsExtra).ToArray());
+                StartProcess(ProcessArguments);
             } else {
                 IsWaitingForStart = true;
                 DaemonProcess.Initialized += Daemon_Initialized;
@@ -122,7 +121,7 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
         {
             if (IsWaitingForStart) {
                 IsWaitingForStart = false;
-                StartProcess(ProcessArgumentsDefault.Concat(ProcessArgumentsExtra).ToArray());
+                StartProcess(ProcessArguments);
             }
         }
 
@@ -145,14 +144,14 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
         private string Backup(string path = null)
         {
             if (path == null) {
-                path = PathSettings.DirectoryAccountBackups + DateTime.Now.ToString("yyyy-MM-dd", Utilities.InvariantCulture);
+                path = ProcessSettings.DirectoryAccountBackups + DateTime.Now.ToString("yyyy-MM-dd", Utilities.InvariantCulture);
             }
 
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
 
-            var accountName = Path.GetFileNameWithoutExtension(PathSettings.FileAccountData);
+            var accountName = Path.GetFileNameWithoutExtension(ProcessSettings.FileAccountData);
 
-            var filesToBackup = Directory.GetFiles(PathSettings.DirectoryAccountData, accountName + "*", SearchOption.TopDirectoryOnly);
+            var filesToBackup = Directory.GetFiles(ProcessSettings.DirectoryAccountData, accountName + "*", SearchOption.TopDirectoryOnly);
             for (var i = filesToBackup.Length - 1; i >= 0; i--) {
                 var file = filesToBackup[i];
                 Debug.Assert(file != null, "file != null");

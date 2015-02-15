@@ -8,25 +8,25 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
 {
     public class DaemonProcessManager : BaseRpcProcessManager
     {
-        private static readonly string[] ProcessArgumentsDefault = { "--log-level 0" };
-        private List<string> ProcessArgumentsExtra { get; set; }
+        private List<string> ProcessArguments { get; set; }
 
-        internal DaemonProcessManager(IRpcSettings rpcSettings, IDaemonPathSettings pathSettings) : base(pathSettings.SoftwareDaemon, rpcSettings.UrlHostDaemon, rpcSettings.UrlPortDaemon)
+        internal DaemonProcessManager(IRpcSettings rpcSettings, IDaemonProcessSettings processSettings) : base(processSettings.SoftwareDaemon, rpcSettings.UrlHostDaemon, rpcSettings.UrlPortDaemon)
         {
-            ProcessArgumentsExtra = new List<string> {
+            ProcessArguments = new List<string> {
+                "--log-level " + (int)processSettings.LogLevel,
                 "--rpc-bind-port " + rpcSettings.UrlPortDaemon
             };
 
             if (rpcSettings.UrlHostDaemon != MoneroAPI.Utilities.DefaultRpcUrlHost) {
-                ProcessArgumentsExtra.Add("--rpc-bind-ip " + rpcSettings.UrlHostDaemon);
+                ProcessArguments.Add("--rpc-bind-ip " + rpcSettings.UrlHostDaemon);
             }
 
-            ProcessArgumentsExtra.Add("--data-dir \"" + pathSettings.DirectoryDaemonData);
+            ProcessArguments.Add("--data-dir \"" + processSettings.DirectoryDaemonData);
         }
 
         public void Start()
         {
-            StartProcess(ProcessArgumentsDefault.Concat(ProcessArgumentsExtra));
+            StartProcess(ProcessArguments);
         }
 
         public void Stop()

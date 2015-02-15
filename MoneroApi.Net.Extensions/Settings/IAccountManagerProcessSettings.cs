@@ -1,7 +1,9 @@
 ﻿namespace Jojatekok.MoneroAPI.Extensions.Settings
 {
-    public interface IAccountManagerPathSettings
+    public interface IAccountManagerProcessSettings
     {
+        LogLevel LogLevel { get; set; }
+
         string SoftwareAccountManager { get; set; }
 
         string DirectoryAccountData { get; }

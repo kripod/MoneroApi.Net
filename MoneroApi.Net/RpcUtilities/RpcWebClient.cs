@@ -39,6 +39,8 @@ namespace Jojatekok.MoneroAPI.RpcUtilities
             HttpClient = new HttpClient(httpClientHandler) {
                 Timeout = TimeSpan.FromMilliseconds(Timeout.Infinite)
             };
+
+            HttpClient.DefaultRequestHeaders.ExpectContinue = false;
         }
 
         public T HttpPostData<T>(string host, ushort port, string command, JsonRpcRequest jsonRpcRequest = null)
