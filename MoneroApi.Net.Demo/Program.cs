@@ -84,7 +84,6 @@ namespace Jojatekok.MoneroAPI.Demo
                 };
                 accountManagerProcess.Start();
             }
-            
         }
 
         static void Daemon_NetworkInformationChanging(object sender, NetworkInformationChangingEventArgs e)

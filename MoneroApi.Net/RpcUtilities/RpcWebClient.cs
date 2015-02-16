@@ -10,10 +10,17 @@ namespace Jojatekok.MoneroAPI.RpcUtilities
 {
     sealed class RpcWebClient
     {
+        private bool _isEnabled;
+
         public IRpcSettings RpcSettings { get; private set; }
         public ITimerSettings TimerSettings { get; private set; }
 
         private HttpClient HttpClient { get; set; }
+
+        public bool IsEnabled {
+            get { return _isEnabled; }
+            set { _isEnabled = value; }
+        }
 
         private static readonly JsonSerializer JsonSerializer = new JsonSerializer { NullValueHandling = NullValueHandling.Ignore };
         private static readonly Encoding EncodingUtf8 = Encoding.UTF8;
@@ -63,6 +70,8 @@ namespace Jojatekok.MoneroAPI.RpcUtilities
 
         private string PostString(string host, ushort port, string relativeUrl, string postData = null)
         {
+            if (!IsEnabled) return null;
+
             var requestUri = host + ":" + port + "/" + relativeUrl;
             var requestMessage = new HttpRequestMessage(HttpMethod.Post, requestUri);
 

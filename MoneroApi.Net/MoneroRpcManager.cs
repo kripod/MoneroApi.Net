@@ -57,6 +57,8 @@ namespace Jojatekok.MoneroAPI
         private void Dispose(bool disposing)
         {
             if (disposing) {
+                RpcWebClient.IsEnabled = false;
+
                 if (AccountManager != null) {
                     AccountManager.Dispose();
                     AccountManager = null;

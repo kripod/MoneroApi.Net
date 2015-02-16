@@ -2,7 +2,6 @@
 using Jojatekok.MoneroAPI.Settings;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
 {
@@ -48,6 +47,15 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
             Start();
         }
 
+        public void DisposeSafely()
+        {
+            // Save the blockchain before disposing
+            SendConsoleCommand("exit");
+            IsDisposeSafe = true;
+
+            Dispose();
+        }
+
         public new void Dispose()
         {
             Dispose(true);
@@ -57,10 +65,6 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
         private void Dispose(bool disposing)
         {
             if (disposing) {
-                // Safe shutdown
-                SendConsoleCommand("exit");
-                IsDisposeProcessKillNecessary = false;
-
                 base.Dispose();
             }
         }

@@ -16,6 +16,8 @@ namespace Jojatekok.MoneroAPI.Extensions
         /// <summary>Contains methods to interact with the account manager process.</summary>
         public AccountProcessManager AccountManager { get; private set; }
 
+        private bool IsDisposeSafe { get; set; }
+
         /// <summary>Creates a new instance of Monero API .NET's process manager service.</summary>
         /// <param name="rpcSettings">IP-related settings to use when communicating through the Monero core assemblies' RPC protocol.</param>
         /// <param name="accountManagerProcessSettings">Path settings for the account manager process.</param>
@@ -55,6 +57,13 @@ namespace Jojatekok.MoneroAPI.Extensions
 
         }
 
+        /// <summary>Saves the blockchain file, and then disposes the processes.</summary>
+        public void DisposeSafely()
+        {
+            IsDisposeSafe = true;
+            Dispose();
+        }
+
         public void Dispose()
         {
             Dispose(true);
@@ -70,7 +79,11 @@ namespace Jojatekok.MoneroAPI.Extensions
                 }
 
                 if (Daemon != null) {
-                    Daemon.Dispose();
+                    if (IsDisposeSafe) {
+                        Daemon.DisposeSafely();
+                    } else {
+                        Daemon.Dispose();
+                    }
                     Daemon = null;
                 }
             }

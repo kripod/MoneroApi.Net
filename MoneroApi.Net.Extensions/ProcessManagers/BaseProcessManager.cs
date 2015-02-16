@@ -13,14 +13,12 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
         protected event EventHandler<ProcessExitedEventArgs> Exited;
 
         private bool _isRpcAvailable;
-        private bool _isDisposeProcessKillNecessary = true;
 
         private bool IsInitialized { get; set; }
 
         private string Path { get; set; }
         private Process Process { get; set; }
 
-        private string RpcHost { get; set; }
         private ushort RpcPort { get; set; }
 
         private Timer TimerCheckRpcAvailability { get; set; }
@@ -43,12 +41,8 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
             }
         }
 
-        protected bool IsDisposing { get; private set; }
-
-        protected bool IsDisposeProcessKillNecessary {
-            get { return _isDisposeProcessKillNecessary; }
-            set { _isDisposeProcessKillNecessary = value; }
-        }
+        protected bool IsDisposeSafe { get; set; }
+        private bool IsDisposing { get; set; }
 
         private bool IsProcessAlive {
             get { return Process != null && !Process.HasExited; }
@@ -62,7 +56,6 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
             }
 
             Path = path;
-            RpcHost = rpcHost;
             RpcPort = rpcPort;
         }
 
@@ -102,12 +95,16 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
         {
             if (Process == null) return;
 
-            if (!Process.HasExited) {
-                if (Process.Responding) {
-                    if (!Process.WaitForExit(10000)) Process.Kill();
-                } else {
-                    Process.Kill();
+            try {
+                if (!Process.HasExited) {
+                    if (IsDisposeSafe) {
+                        Process.WaitForExit();
+                    } else {
+                        Process.Kill();
+                    }
                 }
+            } catch {
+                
             }
 
             Process.Dispose();
@@ -167,11 +164,7 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
                     TimerCheckRpcAvailability = null;
                 }
 
-                if (IsDisposeProcessKillNecessary) {
-                    StopProcess();
-                } else if (Process != null) {
-                    Process.WaitForExit();
-                }
+                StopProcess();
             }
         }
     }
