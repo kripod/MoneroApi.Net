@@ -1,4 +1,6 @@
-﻿namespace Jojatekok.MoneroAPI.Extensions.Settings
+﻿using System.IO;
+
+namespace Jojatekok.MoneroAPI.Extensions.Settings
 {
     public class AccountManagerProcessSettings : IAccountManagerProcessSettings
     {
@@ -16,10 +18,7 @@
         }
 
         public string DirectoryAccountData {
-            get {
-                var lastIndexOfSlash = FileAccountData.LastIndexOf('\\');
-                return lastIndexOfSlash >= 0 ? Utilities.GetAbsolutePath(FileAccountData.Substring(0, FileAccountData.LastIndexOf('\\'))) : Utilities.ApplicationDirectory;
-            }
+            get { return new FileInfo(FileAccountData).DirectoryName; }
         }
 
         public string DirectoryAccountBackups {

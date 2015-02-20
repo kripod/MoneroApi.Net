@@ -10,7 +10,7 @@ namespace Jojatekok.MoneroAPI.RpcUtilities
 {
     sealed class RpcWebClient
     {
-        private bool _isEnabled;
+        private bool _isEnabled = true;
 
         public IRpcSettings RpcSettings { get; private set; }
         public ITimerSettings TimerSettings { get; private set; }
