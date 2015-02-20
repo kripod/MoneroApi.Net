@@ -57,7 +57,7 @@ namespace Jojatekok.MoneroAPI.RpcUtilities
                 jsonString = PostString(host, port, command, JsonSerializer.SerializeObject(jsonRpcRequest));
             } else {
                 jsonString = PostString(host, port, command);
-            };
+            }
 
             return JsonSerializer.DeserializeObject<T>(jsonString);
         }

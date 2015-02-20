@@ -23,8 +23,6 @@ namespace Jojatekok.MoneroAPI.Extensions
         internal const int TimerSettingRpcCheckAvailabilityDueTime = 3000;
         internal const int TimerSettingRpcCheckAvailabilityPeriod = 1000;
 
-        internal static readonly JobManager JobManager = new JobManager();
-
         internal static readonly string ApplicationDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
         internal static readonly CultureInfo InvariantCulture = CultureInfo.InvariantCulture;

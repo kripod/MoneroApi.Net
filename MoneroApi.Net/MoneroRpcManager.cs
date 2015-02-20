@@ -32,7 +32,7 @@ namespace Jojatekok.MoneroAPI
             TimerSettings = timerSettings;
 
             Daemon = new DaemonRpcManager(RpcWebClient);
-            AccountManager = new AccountRpcManager(RpcWebClient, Daemon);
+            AccountManager = new AccountRpcManager(RpcWebClient);
         }
 
         /// <summary>Creates a new instance of Monero API .NET's RPC manager service.</summary>

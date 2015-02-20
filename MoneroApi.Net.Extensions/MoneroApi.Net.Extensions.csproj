@@ -68,7 +68,6 @@
     <Compile Include="EventArgs\LogMessageReceivedEventArgs.cs" />
     <Compile Include="EventArgs\PassphraseRequestedEventArgs.cs" />
     <Compile Include="EventArgs\ProcessExitedEventArgs.cs" />
-    <Compile Include="Objects\JobManager.cs" />
     <Compile Include="Objects\LogMessage.cs" />
     <Compile Include="ProcessManagers\AccountProcessManager.cs" />
     <Compile Include="ProcessManagers\BaseProcessManager.cs" />

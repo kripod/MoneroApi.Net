@@ -52,9 +52,7 @@ namespace Jojatekok.MoneroAPI.RpcManagers
 
         private Timer TimerRefresh { get; set; }
 
-        private RpcWebClient RpcWebClient { get; set; }
         private ITimerSettings TimerSettings { get; set; }
-        private IDaemonRpcManager Daemon { get; set; }
 
         public string Address {
             get { return _address; }
@@ -69,6 +67,8 @@ namespace Jojatekok.MoneroAPI.RpcManagers
             get { return _balance; }
 
             private set {
+                if (value == Balance) return;
+
                 if (BalanceChanging != null) BalanceChanging(this, new AccountBalanceChangingEventArgs(value, Balance));
                 _balance = value;
             }
@@ -84,11 +84,9 @@ namespace Jojatekok.MoneroAPI.RpcManagers
             private set { _transactionOutputs = value; }
         }
 
-        internal AccountRpcManager(RpcWebClient rpcWebClient, IDaemonRpcManager daemon) : base(rpcWebClient, false)
+        internal AccountRpcManager(RpcWebClient rpcWebClient) : base(rpcWebClient, false)
         {
-            RpcWebClient = rpcWebClient;
             TimerSettings = rpcWebClient.TimerSettings;
-            Daemon = daemon;
 
             TimerRefresh = new Timer(
                 delegate { RequestRefresh(); },

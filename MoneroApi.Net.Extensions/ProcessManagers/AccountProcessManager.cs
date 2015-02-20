@@ -38,7 +38,7 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
 
         internal AccountProcessManager(IRpcSettings rpcSettings, IAccountManagerProcessSettings pathSettings, DaemonProcessManager daemonProcess) : base(pathSettings.SoftwareAccountManager, rpcSettings.UrlHostAccountManager, rpcSettings.UrlPortAccountManager)
         {
-            Exited += Process_Exited;
+            Exited += OnProcessExited;
 
             RpcSettings = rpcSettings;
             ProcessSettings = pathSettings;
@@ -101,7 +101,7 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
                 StartProcess(ProcessArguments);
             } else {
                 IsWaitingForStart = true;
-                DaemonProcess.Initialized += Daemon_Initialized;
+                DaemonProcess.Initialized += OnDaemonInitialized;
             }
         }
 
@@ -121,7 +121,7 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
             }
         }
 
-        private void Daemon_Initialized(object sender, EventArgs e)
+        private void OnDaemonInitialized(object sender, EventArgs e)
         {
             if (IsWaitingForStart) {
                 IsWaitingForStart = false;
@@ -175,7 +175,7 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
             return Task.Factory.StartNew(() => Backup());
         }
 
-        private void Process_Exited(object sender, ProcessExitedEventArgs e)
+        private void OnProcessExited(object sender, ProcessExitedEventArgs e)
         {
             switch (e.ExitCode) {
                 case 1:

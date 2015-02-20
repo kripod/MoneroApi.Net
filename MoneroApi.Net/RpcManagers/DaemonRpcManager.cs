@@ -19,7 +19,6 @@ namespace Jojatekok.MoneroAPI.RpcManagers
 
         private Timer TimerQueryNetworkInformation { get; set; }
 
-        private RpcWebClient RpcWebClient { get; set; }
         private ITimerSettings TimerSettings { get; set; }
 
         public bool IsBlockchainSynced {
@@ -46,7 +45,6 @@ namespace Jojatekok.MoneroAPI.RpcManagers
 
         internal DaemonRpcManager(RpcWebClient rpcWebClient) : base(rpcWebClient, true)
         {
-            RpcWebClient = rpcWebClient;
             TimerSettings = rpcWebClient.TimerSettings;
 
             TimerQueryNetworkInformation = new Timer(

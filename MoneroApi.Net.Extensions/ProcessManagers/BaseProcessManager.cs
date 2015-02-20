@@ -78,11 +78,10 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
                 Process.StartInfo.Arguments = string.Join(" ", arguments);
             }
 
-            Process.OutputDataReceived += Process_OutputDataReceived;
-            Process.Exited += Process_Exited;
+            Process.OutputDataReceived += OnProcessOutputDataReceived;
+            Process.Exited += OnProcessExited;
 
             Process.Start();
-            Utilities.JobManager.AddProcess(Process);
             Process.BeginOutputReadLine();
 
             if (TimerCheckRpcAvailability != null) {
@@ -131,7 +130,7 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
             }
         }
 
-        private void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        private void OnProcessOutputDataReceived(object sender, DataReceivedEventArgs e)
         {
             var line = e.Data;
             if (line == null) return;
@@ -139,7 +138,7 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
             if (OnLogMessage != null) OnLogMessage(this, new LogMessageReceivedEventArgs(new LogMessage(line, DateTime.UtcNow)));
         }
 
-        private void Process_Exited(object sender, EventArgs e)
+        private void OnProcessExited(object sender, EventArgs e)
         {
             if (IsDisposing) return;
 
