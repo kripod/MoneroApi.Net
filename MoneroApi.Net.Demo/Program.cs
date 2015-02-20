@@ -6,7 +6,7 @@ using Jojatekok.MoneroAPI.Extensions;
 
 namespace Jojatekok.MoneroAPI.Demo
 {
-    class Program
+    static class Program
     {
         static MoneroProcessManager MoneroProcessManager { get; set; }
         static MoneroRpcManager MoneroRpcManager { get; set; }
@@ -45,14 +45,14 @@ namespace Jojatekok.MoneroAPI.Demo
 
             // First, declare event handlers for the daemon
             var daemonRpc = MoneroRpcManager.Daemon;
-            daemonRpc.NetworkInformationChanging += Daemon_NetworkInformationChanging;
-            daemonRpc.BlockchainSynced += Daemon_BlockchainSynced;
+            daemonRpc.NetworkInformationChanged += OnDaemonNetworkInformationChanged;
+            daemonRpc.BlockchainSynced += OnDaemonBlockchainSynced;
 
             // Optionally, declare event handlers for the account manager
             var accountManagerRpc = MoneroRpcManager.AccountManager;
-            accountManagerRpc.AddressReceived += AccountManager_AddressReceived;
-            accountManagerRpc.TransactionReceived += AccountManager_TransactionReceived;
-            accountManagerRpc.BalanceChanging += AccountManager_BalanceChanging;
+            accountManagerRpc.AddressReceived += OnAccountManagerAddressReceived;
+            accountManagerRpc.TransactionReceived += OnAccountManagerTransactionReceived;
+            accountManagerRpc.BalanceChanged += OnAccountManagerBalanceChanged;
 
             if (Config.IsDaemonProcessRemote) {
                 // Daemon RPC functions will not be available if the line below is commented out
@@ -86,10 +86,10 @@ namespace Jojatekok.MoneroAPI.Demo
             }
         }
 
-        static void Daemon_NetworkInformationChanging(object sender, NetworkInformationChangingEventArgs e)
+        static void OnDaemonNetworkInformationChanged(object sender, NetworkInformationChangedEventArgs e)
         {
             // Get important data about the network's changes here
-            var networkInformation = e.NewValue;
+            var networkInformation = e.NetworkInformation;
             Console.WriteLine(
                 "Current block height: {0} (Downloaded: {1})",
                 networkInformation.BlockHeightTotal,
@@ -97,19 +97,19 @@ namespace Jojatekok.MoneroAPI.Demo
             );
         }
 
-        static void Daemon_BlockchainSynced(object sender, EventArgs e)
+        static void OnDaemonBlockchainSynced(object sender, EventArgs e)
         {
             // This event has to fire in order to allow sending transactions with the AccountManager correctly
             IsTransactionSendingEnabled = true;
         }
 
-        static void AccountManager_AddressReceived(object sender, AddressReceivedEventArgs e)
+        static void OnAccountManagerAddressReceived(object sender, AccountAddressReceivedEventArgs e)
         {
             // This event fires when the opened account's public address has been loaded
-            AccountAddress = e.Address;
+            AccountAddress = e.AccountAddress;
         }
 
-        static void AccountManager_TransactionReceived(object sender, TransactionReceivedEventArgs e)
+        static void OnAccountManagerTransactionReceived(object sender, TransactionReceivedEventArgs e)
         {
             // Whether a new transaction is sent from or received by your account, its details can be viewed here
             var transaction = e.Transaction;
@@ -123,10 +123,10 @@ namespace Jojatekok.MoneroAPI.Demo
             );
         }
 
-        static void AccountManager_BalanceChanging(object sender, AccountBalanceChangingEventArgs e)
+        static void OnAccountManagerBalanceChanged(object sender, AccountBalanceChangedEventArgs e)
         {
             // This event fires during account initialization, and on each incoming/outgoing transaction
-            AccountBalance = e.NewValue;
+            AccountBalance = e.AccountBalance;
         }
     }
 }

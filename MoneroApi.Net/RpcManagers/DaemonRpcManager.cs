@@ -12,7 +12,7 @@ namespace Jojatekok.MoneroAPI.RpcManagers
     public class DaemonRpcManager : BaseRpcManager, IDaemonRpcManager
     {
         public event EventHandler BlockchainSynced;
-        public event EventHandler<NetworkInformationChangingEventArgs> NetworkInformationChanging;
+        public event EventHandler<NetworkInformationChangedEventArgs> NetworkInformationChanged;
 
         private bool _isBlockchainSynced;
         private NetworkInformation _networkInformation;
@@ -36,10 +36,8 @@ namespace Jojatekok.MoneroAPI.RpcManagers
             private set {
                 if (value == NetworkInformation) return;
 
-                if (NetworkInformationChanging != null) {
-                    NetworkInformationChanging(this, new NetworkInformationChangingEventArgs(value, NetworkInformation));
-                }
                 _networkInformation = value;
+                if (NetworkInformationChanged != null) NetworkInformationChanged(this, new NetworkInformationChangedEventArgs(value));
             }
         }
 

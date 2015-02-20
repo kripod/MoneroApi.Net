@@ -12,10 +12,10 @@ namespace Jojatekok.MoneroAPI.RpcManagers
     {
         public event EventHandler Initialized;
 
-        public event EventHandler<AddressReceivedEventArgs> AddressReceived;
+        public event EventHandler<AccountAddressReceivedEventArgs> AddressReceived;
         public event EventHandler<TransactionReceivedEventArgs> TransactionReceived;
-        public event EventHandler<TransactionChangingEventArgs> TransactionChanging;
-        public event EventHandler<AccountBalanceChangingEventArgs> BalanceChanging;
+        public event EventHandler<TransactionChangedEventArgs> TransactionChanged;
+        public event EventHandler<AccountBalanceChangedEventArgs> BalanceChanged;
 
         private bool _isInitialized;
         private bool _isTransactionListInitialized;
@@ -59,7 +59,7 @@ namespace Jojatekok.MoneroAPI.RpcManagers
 
             private set {
                 _address = value;
-                if (AddressReceived != null) AddressReceived(this, new AddressReceivedEventArgs(value));
+                if (AddressReceived != null) AddressReceived(this, new AccountAddressReceivedEventArgs(value));
             }
         }
 
@@ -69,8 +69,8 @@ namespace Jojatekok.MoneroAPI.RpcManagers
             private set {
                 if (value == Balance) return;
 
-                if (BalanceChanging != null) BalanceChanging(this, new AccountBalanceChangingEventArgs(value, Balance));
                 _balance = value;
+                if (BalanceChanged != null) BalanceChanged(this, new AccountBalanceChangedEventArgs(value));
             }
         }
 
@@ -169,14 +169,14 @@ namespace Jojatekok.MoneroAPI.RpcManagers
                 if (IsTransactionListInitialized) {
                     var previousTransactionsCount = Transactions.Count;
 
-                    if (TransactionChanging != null) {
+                    if (TransactionChanged != null) {
                         // Notify about changed transactions
                         for (var i = 0; i < previousTransactionsCount; i++) {
                             var oldTransaction = Transactions[i];
                             var newTransaction = transactions[i];
 
                             if (newTransaction.AmountSpendable != oldTransaction.AmountSpendable) {
-                                TransactionChanging(this, new TransactionChangingEventArgs(newTransaction, oldTransaction, i));
+                                TransactionChanged(this, new TransactionChangedEventArgs(i, newTransaction));
                             }
                         }
                     }

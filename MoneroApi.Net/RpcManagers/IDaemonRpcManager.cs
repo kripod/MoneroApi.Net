@@ -6,7 +6,7 @@ namespace Jojatekok.MoneroAPI.RpcManagers
     public interface IDaemonRpcManager : IDisposable
     {
         event EventHandler BlockchainSynced;
-        event EventHandler<NetworkInformationChangingEventArgs> NetworkInformationChanging;
+        event EventHandler<NetworkInformationChangedEventArgs> NetworkInformationChanged;
 
         bool IsBlockchainSynced { get; }
 

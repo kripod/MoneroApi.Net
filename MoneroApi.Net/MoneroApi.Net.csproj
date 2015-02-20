@@ -35,12 +35,11 @@
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="MoneroRpcManager.cs" />
     <Compile Include="Utilities.cs" />
-    <Compile Include="EventArgs\AccountBalanceChangingEventArgs.cs" />
-    <Compile Include="EventArgs\AddressReceivedEventArgs.cs" />
-    <Compile Include="EventArgs\NetworkInformationChangingEventArgs.cs" />
-    <Compile Include="EventArgs\TransactionChangingEventArgs.cs" />
+    <Compile Include="EventArgs\AccountBalanceChangedEventArgs.cs" />
+    <Compile Include="EventArgs\AccountAddressReceivedEventArgs.cs" />
+    <Compile Include="EventArgs\NetworkInformationChangedEventArgs.cs" />
+    <Compile Include="EventArgs\TransactionChangedEventArgs.cs" />
     <Compile Include="EventArgs\TransactionReceivedEventArgs.cs" />
-    <Compile Include="EventArgs\ValueChangingEventArgs.cs" />
     <Compile Include="Objects\AccountBalance.cs" />
     <Compile Include="Objects\AccountKeyType.cs" />
     <Compile Include="Objects\BlockHeader.cs" />

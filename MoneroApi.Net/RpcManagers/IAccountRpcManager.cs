@@ -7,10 +7,10 @@ namespace Jojatekok.MoneroAPI.RpcManagers
     {
         event EventHandler Initialized;
 
-        event EventHandler<AddressReceivedEventArgs> AddressReceived;
+        event EventHandler<AccountAddressReceivedEventArgs> AddressReceived;
         event EventHandler<TransactionReceivedEventArgs> TransactionReceived;
-        event EventHandler<TransactionChangingEventArgs> TransactionChanging;
-        event EventHandler<AccountBalanceChangingEventArgs> BalanceChanging;
+        event EventHandler<TransactionChangedEventArgs> TransactionChanged;
+        event EventHandler<AccountBalanceChangedEventArgs> BalanceChanged;
 
         string Address { get; }
         AccountBalance Balance { get; }
