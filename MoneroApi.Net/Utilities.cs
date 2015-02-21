@@ -6,8 +6,10 @@ namespace Jojatekok.MoneroAPI
     /// <summary>Provides properties used by the API, and methods for value conversion.</summary>
     public static class Utilities
     {
-        private const double CoinAtomicValueDivider = 1000000000000;
         private const int CoinDisplayValueDecimalPlaces = 12;
+        private const double CoinAtomicValueDivider = 10 ^ CoinDisplayValueDecimalPlaces;
+
+        public static readonly string StringFormatCoinDisplayValue = "0." + new string('0', CoinDisplayValueDecimalPlaces);
 
         public const string DefaultRpcUrlHost = "http://localhost";
         public const ushort DefaultRpcUrlPortDaemon = 18081;
@@ -30,6 +32,16 @@ namespace Jojatekok.MoneroAPI
         public static ulong CoinDisplayValueToAtomicValue(double displayValue)
         {
             return (ulong)Math.Round(displayValue * CoinAtomicValueDivider);
+        }
+
+        public static string CoinAtomicValueToString(ulong atomicValue)
+        {
+            return CoinDisplayValueToString(CoinAtomicValueToDisplayValue(atomicValue));
+        }
+
+        public static string CoinDisplayValueToString(double displayValue)
+        {
+            return displayValue.ToString(StringFormatCoinDisplayValue, InvariantCulture);
         }
 
         internal static DateTime UnixTimestampToDateTime(ulong unixTimeStamp)

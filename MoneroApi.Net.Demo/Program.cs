@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 
 // Include the namespace below in order to access process manager functionality
 using Jojatekok.MoneroAPI.Extensions;
@@ -18,14 +17,12 @@ namespace Jojatekok.MoneroAPI.Demo
 
         static void Main()
         {
+            Console.WriteLine("Press any key to exit safely!");
             StartDemo();
 
-            // Wait infinitely in order to keep the application running
-            while (true) {
-                using (var manualResetEvent = new ManualResetEvent(false)) {
-                    manualResetEvent.WaitOne();
-                }
-            }
+            Console.ReadKey(true);
+            if (MoneroRpcManager != null) MoneroRpcManager.Dispose();
+            if (MoneroProcessManager != null) MoneroProcessManager.Dispose();
         }
 
         static void StartDemo()
@@ -115,11 +112,11 @@ namespace Jojatekok.MoneroAPI.Demo
             var transaction = e.Transaction;
             Console.WriteLine(
                 "New transaction: {0}" + Environment.NewLine +
-                "    Spendable: {1} atomic units" + Environment.NewLine +
-                "    Unspendable: {2} atomic units",
+                "    Spendable: {1}" + Environment.NewLine +
+                "    Unspendable: {2}",
                 transaction.TransactionId,
-                transaction.AmountSpendable,
-                transaction.AmountUnspendable
+                Utilities.CoinAtomicValueToString(transaction.AmountSpendable),
+                Utilities.CoinAtomicValueToString(transaction.AmountUnspendable)
             );
         }
 
