@@ -32,9 +32,14 @@ namespace Jojatekok.MoneroAPI.RpcManagers
             return null;
         }
 
-        protected void HttpPostData(string command, JsonRpcRequest jsonRpcRequest = null)
+        protected bool HttpPostData(string command, JsonRpcRequest jsonRpcRequest = null)
         {
-            HttpPostData<HttpRpcResponse>(command, jsonRpcRequest);
+            var output = HttpPostData<HttpRpcResponse>(command, jsonRpcRequest);
+            if (output != null && output.Status == RpcResponseStatus.Ok) {
+                return true;
+            }
+
+            return false;
         }
 
         protected JsonRpcResponse<T> JsonPostData<T>(JsonRpcRequest jsonRpcRequest) where T : class
@@ -42,9 +47,10 @@ namespace Jojatekok.MoneroAPI.RpcManagers
             return RpcWebClient.JsonPostData<T>(RpcHost, RpcPort, jsonRpcRequest);
         }
 
-        protected void JsonPostData(JsonRpcRequest jsonRpcRequest)
+        protected bool JsonPostData(JsonRpcRequest jsonRpcRequest)
         {
-            JsonPostData<object>(jsonRpcRequest);
+            var output = JsonPostData<object>(jsonRpcRequest);
+            return output != null && output.Error == null;
         }
     }
 }

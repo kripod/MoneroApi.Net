@@ -104,7 +104,10 @@ namespace Jojatekok.MoneroAPI.RpcManagers
 
         private void QueryAddress()
         {
-            Address = JsonPostData<AddressValueContainer>(new QueryAddress()).Result.Value;
+            var addressContainer = JsonPostData<AddressValueContainer>(new QueryAddress());
+            if (addressContainer == null || addressContainer.Error != null) return;
+
+            Address = addressContainer.Result.Value;
             if (IsTransactionListInitialized) {
                 IsInitialized = true;
             }
@@ -112,24 +115,24 @@ namespace Jojatekok.MoneroAPI.RpcManagers
 
         public string QueryKey(AccountKeyType keyType)
         {
-            var key = JsonPostData<KeyValueContainer>(new QueryKey(keyType)).Result;
-            return key != null ? key.Value : null;
+            var keyContainer = JsonPostData<KeyValueContainer>(new QueryKey(keyType));
+            return keyContainer != null && keyContainer.Error == null ? keyContainer.Result.Value : null;
         }
 
         private void QueryBalance()
         {
-            var balance = JsonPostData<AccountBalance>(new QueryBalance()).Result;
-            if (balance != null) {
-                Balance = balance;
+            var balanceContainer = JsonPostData<AccountBalance>(new QueryBalance());
+            if (balanceContainer != null && balanceContainer.Error == null) {
+                Balance = balanceContainer.Result;
             }
         }
 
         private void QueryIncomingTransfers()
         {
-            var transactionOutputsContainer = JsonPostData<TransactionOutputListValueContainer>(new QueryIncomingTransfers()).Result;
-            if (transactionOutputsContainer == null) return;
+            var transactionOutputsContainer = JsonPostData<TransactionOutputListValueContainer>(new QueryIncomingTransfers());
+            if (transactionOutputsContainer == null || transactionOutputsContainer.Error != null) return;
 
-            var transactionOutputs = transactionOutputsContainer.Value;
+            var transactionOutputs = transactionOutputsContainer.Result.Value;
             var transactionOutputsCount = transactionOutputs.Count;
             
             TransactionOutputs = transactionOutputs;

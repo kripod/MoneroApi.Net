@@ -10,7 +10,7 @@ namespace Jojatekok.MoneroAPI
         [JsonProperty("unlocked_balance")]
         public ulong Spendable { get; private set; }
 
-        public ulong? Unconfirmed {
+        public ulong Unconfirmed {
             get { return Total - Spendable; }
         }
 

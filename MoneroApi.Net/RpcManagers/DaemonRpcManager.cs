@@ -91,32 +91,20 @@ namespace Jojatekok.MoneroAPI.RpcManagers
 
         public BlockHeader QueryBlockHeaderLast()
         {
-            var output = JsonPostData<BlockHeaderValueContainer>(new QueryBlockHeaderLast()).Result;
-            if (output != null) {
-                return output.Value;
-            }
-
-            return null;
+            var blockHeaderContainer = JsonPostData<BlockHeaderValueContainer>(new QueryBlockHeaderLast());
+            return blockHeaderContainer != null && blockHeaderContainer.Error == null ? blockHeaderContainer.Result.Value : null;
         }
 
         public BlockHeader QueryBlockHeaderByHeight(ulong height)
         {
-            var output = JsonPostData<BlockHeaderValueContainer>(new QueryBlockHeaderByHeight(height)).Result;
-            if (output != null) {
-                return output.Value;
-            }
-
-            return null;
+            var blockHeaderContainer = JsonPostData<BlockHeaderValueContainer>(new QueryBlockHeaderByHeight(height));
+            return blockHeaderContainer != null && blockHeaderContainer.Error == null ? blockHeaderContainer.Result.Value : null;
         }
 
         public BlockHeader QueryBlockHeaderByHash(string hash)
         {
-            var output = JsonPostData<BlockHeaderValueContainer>(new QueryBlockHeaderByHash(hash)).Result;
-            if (output != null) {
-                return output.Value;
-            }
-
-            return null;
+            var blockHeaderContainer = JsonPostData<BlockHeaderValueContainer>(new QueryBlockHeaderByHash(hash));
+            return blockHeaderContainer != null && blockHeaderContainer.Error == null ? blockHeaderContainer.Result.Value : null;
         }
 
         public MiningStatus QueryMiningStatus()
@@ -129,14 +117,14 @@ namespace Jojatekok.MoneroAPI.RpcManagers
             return null;
         }
 
-        public void RequestMiningStart(string accountAddress, ulong threadsCount)
+        public bool RequestMiningStart(string accountAddress, ulong threadsCount)
         {
-            HttpPostData(HttpRpcCommands.DaemonRequestMiningStart, new RequestMiningStart(accountAddress, threadsCount));
+            return HttpPostData(HttpRpcCommands.DaemonRequestMiningStart, new RequestMiningStart(accountAddress, threadsCount));
         }
 
-        public void RequestMiningStop()
+        public bool RequestMiningStop()
         {
-            HttpPostData(HttpRpcCommands.DaemonRequestMiningStop);
+            return HttpPostData(HttpRpcCommands.DaemonRequestMiningStop);
         }
 
         public void Dispose()

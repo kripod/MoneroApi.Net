@@ -21,5 +21,8 @@ namespace Jojatekok.MoneroAPI.RpcManagers
         BlockHeader QueryBlockHeaderByHash(string hash);
 
         MiningStatus QueryMiningStatus();
+
+        bool RequestMiningStart(string accountAddress, ulong threadsCount);
+        bool RequestMiningStop();
     }
 }
