@@ -7,7 +7,7 @@ namespace Jojatekok.MoneroAPI
     public static class Utilities
     {
         private const int CoinDisplayValueDecimalPlaces = 12;
-        private const double CoinAtomicValueDivider = 10 ^ CoinDisplayValueDecimalPlaces;
+        private static readonly double CoinAtomicValueDivider = Math.Pow(10, CoinDisplayValueDecimalPlaces);
 
         public static readonly string StringFormatCoinDisplayValue = "0." + new string('0', CoinDisplayValueDecimalPlaces);
 
