@@ -6,7 +6,7 @@ namespace Jojatekok.MoneroAPI
     /// <summary>Provides properties used by the API, and methods for value conversion.</summary>
     public static class Utilities
     {
-        private const int CoinDisplayValueDecimalPlaces = 12;
+        public const int CoinDisplayValueDecimalPlaces = 12;
         private static readonly double CoinAtomicValueDivider = Math.Pow(10, CoinDisplayValueDecimalPlaces);
 
         public static readonly string StringFormatCoinDisplayValue = "0." + new string('0', CoinDisplayValueDecimalPlaces);
@@ -42,6 +42,40 @@ namespace Jojatekok.MoneroAPI
         public static string CoinDisplayValueToString(double displayValue)
         {
             return displayValue.ToString(StringFormatCoinDisplayValue, InvariantCulture);
+        }
+
+        public static bool IsAddressValid(string address)
+        {
+            if (string.IsNullOrEmpty(address) || address.Length != 95 ||
+                address[0] != '4' ||
+                address[1] < '0' || address[1] > 'B'
+            ) {
+                return false;
+            }
+
+            for (var i = 2; i < address.Length; i++) {
+                var currentChar = address[i];
+                if (currentChar < '0' || currentChar > 'z') {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static bool IsPaymentIdValid(string paymentId)
+        {
+            if (string.IsNullOrEmpty(paymentId)) return true;
+            if (paymentId.Length != 64) return false;
+
+            for (var i = paymentId.Length - 1; i >= 0; i--) {
+                var currentChar = paymentId[i];
+                if (currentChar < '0' || char.ToUpper(currentChar, InvariantCulture) > 'F') {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         internal static DateTime UnixTimestampToDateTime(ulong unixTimeStamp)
