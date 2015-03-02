@@ -28,7 +28,7 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
             }
 
             ProcessArguments.Add("--" + testnetString + "rpc-bind-port " + rpcSettings.UrlPortDaemon);
-            ProcessArguments.Add("--" + testnetString + "data-dir \"" + processSettings.DirectoryDaemonData);
+            ProcessArguments.Add("--" + testnetString + "data-dir \"" + processSettings.DirectoryDaemonData + "\"");
         }
 
         public void Start()

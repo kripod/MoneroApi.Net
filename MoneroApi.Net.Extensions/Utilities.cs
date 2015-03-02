@@ -12,10 +12,10 @@ namespace Jojatekok.MoneroAPI.Extensions
         private static readonly string DefaultRelativePathDirectorySoftware = Path.Combine("Resources", "Software");
         private const string DefaultRelativePathDirectoryAccountData = "AccountData";
 
-        public static readonly string DefaultPathSoftwareDaemon = Path.Combine(DefaultRelativePathDirectorySoftware, "bitmonerod.exe");
+        public static readonly string DefaultPathSoftwareDaemon = Path.Combine(DefaultRelativePathDirectorySoftware, "bitmonerod" + FileExtensionExecutable);
         public static readonly string DefaultPathDirectoryDaemonData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "bitmonero");
 
-        public static readonly string DefaultPathSoftwareAccountManager = Path.Combine(DefaultRelativePathDirectorySoftware, "simplewallet.exe");
+        public static readonly string DefaultPathSoftwareAccountManager = Path.Combine(DefaultRelativePathDirectorySoftware, "simplewallet" + FileExtensionExecutable);
         public static readonly string DefaultPathDirectoryAccountBackups = Path.Combine(DefaultRelativePathDirectoryAccountData, "Backups");
         public static readonly string DefaultPathFileAccountData = Path.Combine(DefaultRelativePathDirectoryAccountData, "account.bin");
 
@@ -23,6 +23,8 @@ namespace Jojatekok.MoneroAPI.Extensions
         internal const int TimerSettingRpcCheckAvailabilityPeriod = 1000;
 
         internal static readonly CultureInfo InvariantCulture = CultureInfo.InvariantCulture;
+
+        private static readonly string FileExtensionExecutable = IsOsUnix() ? "" : ".exe";
 
         internal static string GetAbsolutePath(string input)
         {
@@ -55,6 +57,16 @@ namespace Jojatekok.MoneroAPI.Extensions
             }
 
             return false;
+        }
+
+        private static bool IsOsUnix()
+        {
+            var platform = (int)Environment.OSVersion.Platform;
+            if ((platform == 4) || (platform == 6) || (platform == 128)) {
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 }
