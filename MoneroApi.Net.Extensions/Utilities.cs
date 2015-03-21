@@ -9,6 +9,8 @@ namespace Jojatekok.MoneroAPI.Extensions
 {
     public static class Utilities
     {
+        private static readonly string FileExtensionExecutable = IsOsUnix() ? "" : ".exe";
+
         private static readonly string DefaultRelativePathDirectorySoftware = Path.Combine("Resources", "Software");
         private const string DefaultRelativePathDirectoryAccountData = "AccountData";
 
@@ -23,8 +25,6 @@ namespace Jojatekok.MoneroAPI.Extensions
         internal const int TimerSettingRpcCheckAvailabilityPeriod = 1000;
 
         internal static readonly CultureInfo InvariantCulture = CultureInfo.InvariantCulture;
-
-        private static readonly string FileExtensionExecutable = IsOsUnix() ? "" : ".exe";
 
         internal static string GetAbsolutePath(string input)
         {
@@ -62,11 +62,7 @@ namespace Jojatekok.MoneroAPI.Extensions
         private static bool IsOsUnix()
         {
             var platform = (int)Environment.OSVersion.Platform;
-            if ((platform == 4) || (platform == 6) || (platform == 128)) {
-                return true;
-            } else {
-                return false;
-            }
+            return platform == 4 || platform == 6 || platform == 128;
         }
     }
 }
