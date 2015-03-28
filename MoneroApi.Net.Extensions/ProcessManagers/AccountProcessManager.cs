@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
 {
-    public class AccountProcessManager : BaseRpcProcessManager
+    public class AccountProcessManager : BaseRpcProcessManager, IDisposable
     {
         public event EventHandler<PassphraseRequestedEventArgs> PassphraseRequested;
 
@@ -119,6 +119,10 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
                 OnLogMessage -= AccountManager_OnLogMessage;
                 Restart();
             }
+
+            if (messageText.Contains("saved")) {
+                Dispose();
+            }
         }
 
         private void OnDaemonInitialized(object sender, EventArgs e)
@@ -182,6 +186,26 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
                     // Invalid passphrase
                     RequestPassphrase(false);
                     break;
+            }
+        }
+
+        public void DisposeSafely()
+        {
+            // Save account data before disposing
+            OnLogMessage += AccountManager_OnLogMessage;
+            SendConsoleCommand("save");
+        }
+
+        public new void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing) {
+                base.Dispose();
             }
         }
     }
