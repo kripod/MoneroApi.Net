@@ -18,6 +18,8 @@ namespace Jojatekok.MoneroAPI
         /// <summary>Contains methods to interact with the account manager's RPC service.</summary>
         public IAccountRpcManager AccountManager { get; private set; }
 
+        private bool IsDisposeSafe { get; set; }
+
         /// <summary>Creates a new instance of Monero API .NET's RPC manager service.</summary>
         /// <param name="rpcSettings">IP-related settings to use when communicating through the Monero core assemblies' RPC protocol.</param>
         /// <param name="timerSettings">Timer settings which can be used to alter data fetching intervals.</param>
@@ -48,6 +50,13 @@ namespace Jojatekok.MoneroAPI
 
         }
 
+        /// <summary>Saves the account file, and then disposes the RPC manager services.</summary>
+        public void DisposeSafely()
+        {
+            IsDisposeSafe = true;
+            Dispose();
+        }
+
         public void Dispose()
         {
             Dispose(true);
@@ -57,12 +66,16 @@ namespace Jojatekok.MoneroAPI
         private void Dispose(bool disposing)
         {
             if (disposing) {
-                RpcWebClient.IsEnabled = false;
-
                 if (AccountManager != null) {
-                    AccountManager.Dispose();
+                    if (IsDisposeSafe) {
+                        AccountManager.DisposeSafely();
+                    } else {
+                        AccountManager.Dispose();
+                    }
                     AccountManager = null;
                 }
+
+                RpcWebClient.IsEnabled = false;
 
                 if (Daemon != null) {
                     Daemon.Dispose();

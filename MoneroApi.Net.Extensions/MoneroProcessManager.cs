@@ -74,11 +74,7 @@ namespace Jojatekok.MoneroAPI.Extensions
         {
             if (disposing) {
                 if (AccountManager != null) {
-                    if (IsDisposeSafe) {
-                        AccountManager.DisposeSafely();
-                    } else {
-                        AccountManager.Dispose();
-                    }
+                    AccountManager.Dispose();
                     AccountManager = null;
                 }
 

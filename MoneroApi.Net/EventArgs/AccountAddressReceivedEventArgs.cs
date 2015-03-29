@@ -8,7 +8,7 @@ namespace Jojatekok.MoneroAPI
 
         internal AccountAddressReceivedEventArgs(string accountAddress)
         {
-            AccountAddress = AccountAddress;
+            AccountAddress = accountAddress;
         }
     }
 }

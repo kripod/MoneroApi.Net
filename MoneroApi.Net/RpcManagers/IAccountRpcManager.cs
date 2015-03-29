@@ -26,5 +26,7 @@ namespace Jojatekok.MoneroAPI.RpcManagers
         bool SendTransaction(TransferRecipient recipient, string paymentId, ulong mixCount);
         bool SendTransaction(TransferRecipient recipient, string paymentId);
         bool SendTransaction(TransferRecipient recipient);
+
+        void DisposeSafely();
     }
 }

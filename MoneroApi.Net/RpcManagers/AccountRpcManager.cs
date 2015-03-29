@@ -130,7 +130,10 @@ namespace Jojatekok.MoneroAPI.RpcManagers
         private void QueryIncomingTransfers()
         {
             var transactionOutputsContainer = JsonPostData<TransactionOutputListValueContainer>(new QueryIncomingTransfers());
-            if (transactionOutputsContainer == null || transactionOutputsContainer.Error != null) return;
+            if (transactionOutputsContainer == null || transactionOutputsContainer.Error != null) {
+                IsTransactionListInitialized = true;
+                return;
+            }
 
             var transactionOutputs = transactionOutputsContainer.Result.Value;
             var transactionOutputsCount = transactionOutputs.Count;
@@ -252,6 +255,16 @@ namespace Jojatekok.MoneroAPI.RpcManagers
             return SendTransaction(new List<TransferRecipient> { recipient }, null, Utilities.DefaultTransactionMixCount);
         }
 
+        public void DisposeSafely()
+        {
+            // Save the account file before disposing
+            if (IsInitialized) {
+                RequestSaveAccount();
+            }
+
+            Dispose();
+        }
+
         public void Dispose()
         {
             Dispose(true);
@@ -261,10 +274,6 @@ namespace Jojatekok.MoneroAPI.RpcManagers
         private void Dispose(bool disposing)
         {
             if (disposing) {
-                if (IsInitialized) {
-                    RequestSaveAccount();
-                }
-
                 TimerRefresh.Dispose();
                 TimerRefresh = null;
             }

@@ -21,8 +21,8 @@ namespace Jojatekok.MoneroAPI.Demo
             StartDemo();
 
             Console.ReadKey(true);
-            if (MoneroRpcManager != null) MoneroRpcManager.Dispose();
-            if (MoneroProcessManager != null) MoneroProcessManager.Dispose();
+            if (MoneroRpcManager != null) MoneroRpcManager.DisposeSafely();
+            if (MoneroProcessManager != null) MoneroProcessManager.DisposeSafely();
         }
 
         static void StartDemo()
