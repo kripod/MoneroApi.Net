@@ -62,17 +62,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MoneroProcessManager.cs" />
-    <Compile Include="Utilities.cs" />
     <Compile Include="EventArgs\LogMessageReceivedEventArgs.cs" />
     <Compile Include="EventArgs\PassphraseRequestedEventArgs.cs" />
     <Compile Include="EventArgs\ProcessExitedEventArgs.cs" />
+    <Compile Include="MoneroProcessManager.cs" />
+    <Compile Include="Objects\EnvironmentPlatform.cs" />
+    <Compile Include="Objects\LogLevel.cs" />
     <Compile Include="Objects\LogMessage.cs" />
     <Compile Include="ProcessManagers\AccountProcessManager.cs" />
     <Compile Include="ProcessManagers\BaseProcessManager.cs" />
     <Compile Include="ProcessManagers\DaemonProcessManager.cs" />
-    <Compile Include="Objects\LogLevel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Settings\AccountManagerProcessSettings.cs" />
     <Compile Include="Settings\DaemonProcessSettings.cs" />
     <Compile Include="Settings\IAccountManagerProcessSettings.cs">
       <DependentUpon>AccountManagerProcessSettings.cs</DependentUpon>
@@ -80,7 +81,7 @@
     <Compile Include="Settings\IDaemonProcessSettings.cs">
       <DependentUpon>DaemonProcessSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Settings\AccountManagerProcessSettings.cs" />
+    <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -9,31 +9,72 @@ namespace Jojatekok.MoneroAPI.Extensions
 {
     public static class Utilities
     {
-        private static bool? _isEnvironmentPlatformUnix;
+        private static EnvironmentPlatform? _environmentPlatform;
+        private static string _environmentDocumentsDirectory;
 
-        private static readonly string FileExtensionExecutable = IsEnvironmentPlatformUnix ? "" : ".exe";
+        private static readonly string EnvironmentFileExtensionExecutable = EnvironmentPlatform == EnvironmentPlatform.Windows ? ".exe" : "";
 
         private static readonly string DefaultRelativePathDirectorySoftware = Path.Combine("Resources", "Software");
-        private const string DefaultRelativePathDirectoryAccountData = "AccountData";
 
-        public static readonly string DefaultPathSoftwareDaemon = Path.Combine(DefaultRelativePathDirectorySoftware, "bitmonerod" + FileExtensionExecutable);
-        public static readonly string DefaultPathDirectoryDaemonData = IsEnvironmentPlatformUnix ?
-            "~/.bitmonero" :
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "bitmonero");
+        public static readonly string DefaultPathSoftwareDaemon = Path.Combine(DefaultRelativePathDirectorySoftware, "bitmonerod" + EnvironmentFileExtensionExecutable);
+        public static readonly string DefaultPathDirectoryDaemonData = EnvironmentPlatform == EnvironmentPlatform.Windows ?
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "bitmonero") :
+            "~/.bitmonero";
 
-        public static readonly string DefaultPathSoftwareAccountManager = Path.Combine(DefaultRelativePathDirectorySoftware, "simplewallet" + FileExtensionExecutable);
-        public static readonly string DefaultPathDirectoryAccountBackups = Path.Combine(DefaultRelativePathDirectoryAccountData, "Backups");
-        public static readonly string DefaultPathFileAccountData = Path.Combine(DefaultRelativePathDirectoryAccountData, "account.bin");
+        public static readonly string DefaultPathSoftwareAccountManager = Path.Combine(DefaultRelativePathDirectorySoftware, "simplewallet" + EnvironmentFileExtensionExecutable);
+        public static readonly string DefaultPathDirectoryAccountData = Path.Combine(EnvironmentDocumentsDirectory, "Monero Accounts");
+        public static readonly string DefaultPathDirectoryAccountBackups = Path.Combine(DefaultPathDirectoryAccountData, "Backups");
+        public static readonly string DefaultPathFileAccountData = Path.Combine(DefaultPathDirectoryAccountData, "account.bin");
 
         internal const int TimerSettingRpcCheckAvailabilityDueTime = 3000;
         internal const int TimerSettingRpcCheckAvailabilityPeriod = 1000;
 
         internal static readonly CultureInfo InvariantCulture = CultureInfo.InvariantCulture;
 
-        private static bool IsEnvironmentPlatformUnix {
+        public static EnvironmentPlatform EnvironmentPlatform {
             get {
-                if (_isEnvironmentPlatformUnix == null) _isEnvironmentPlatformUnix = Environment.OSVersion.Platform != PlatformID.Win32NT;
-                return _isEnvironmentPlatformUnix.Value;
+                if (_environmentPlatform == null) {
+                    switch (Environment.OSVersion.Platform) {
+                        case PlatformID.Unix:
+                            if (Directory.Exists("/Applications") & Directory.Exists("/System") & Directory.Exists("/Users") & Directory.Exists("/Volumes")) {
+                                _environmentPlatform = EnvironmentPlatform.Mac;
+                            }
+                            _environmentPlatform = EnvironmentPlatform.Linux;
+                            break;
+
+                        case PlatformID.MacOSX:
+                            _environmentPlatform = EnvironmentPlatform.Mac;
+                            break;
+
+                        default:
+                            _environmentPlatform = EnvironmentPlatform.Windows;
+                            break;
+                    }
+                }
+
+                return _environmentPlatform.Value;
+            }
+        }
+
+        private static string EnvironmentDocumentsDirectory {
+            get {
+                if (_environmentDocumentsDirectory == null) {
+                    switch (EnvironmentPlatform) {
+                        case EnvironmentPlatform.Windows:
+                            _environmentDocumentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                            break;
+
+                        case EnvironmentPlatform.Mac:
+                            _environmentDocumentsDirectory = "~/Documents";
+                            break;
+
+                        default:
+                            _environmentDocumentsDirectory = "~";
+                            break;
+                    }
+                }
+
+                return _environmentDocumentsDirectory;
             }
         }
 
