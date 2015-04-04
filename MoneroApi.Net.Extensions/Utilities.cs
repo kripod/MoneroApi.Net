@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
 
 namespace Jojatekok.MoneroAPI.Extensions
 {
@@ -12,6 +13,8 @@ namespace Jojatekok.MoneroAPI.Extensions
         private static EnvironmentPlatform? _environmentPlatform;
         private static string _environmentDocumentsDirectory;
 
+        private static readonly string ApplicationBaseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+
         private static readonly string EnvironmentFileExtensionExecutable = EnvironmentPlatform == EnvironmentPlatform.Windows ? ".exe" : "";
 
         private static readonly string DefaultRelativePathDirectorySoftware = Path.Combine("Resources", "Software");
@@ -19,7 +22,7 @@ namespace Jojatekok.MoneroAPI.Extensions
         public static readonly string DefaultPathSoftwareDaemon = Path.Combine(DefaultRelativePathDirectorySoftware, "bitmonerod" + EnvironmentFileExtensionExecutable);
         public static readonly string DefaultPathDirectoryDaemonData = EnvironmentPlatform == EnvironmentPlatform.Windows ?
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "bitmonero") :
-            "~/.bitmonero";
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), ".bitmonero");
 
         public static readonly string DefaultPathSoftwareAccountManager = Path.Combine(DefaultRelativePathDirectorySoftware, "simplewallet" + EnvironmentFileExtensionExecutable);
         public static readonly string DefaultPathDirectoryAccountData = Path.Combine(EnvironmentDocumentsDirectory, "Monero Accounts");
@@ -38,8 +41,9 @@ namespace Jojatekok.MoneroAPI.Extensions
                         case PlatformID.Unix:
                             if (Directory.Exists("/Applications") & Directory.Exists("/System") & Directory.Exists("/Users") & Directory.Exists("/Volumes")) {
                                 _environmentPlatform = EnvironmentPlatform.Mac;
+                            } else {
+                                _environmentPlatform = EnvironmentPlatform.Linux;
                             }
-                            _environmentPlatform = EnvironmentPlatform.Linux;
                             break;
 
                         case PlatformID.MacOSX:
@@ -60,16 +64,12 @@ namespace Jojatekok.MoneroAPI.Extensions
             get {
                 if (_environmentDocumentsDirectory == null) {
                     switch (EnvironmentPlatform) {
-                        case EnvironmentPlatform.Windows:
-                            _environmentDocumentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                            break;
-
                         case EnvironmentPlatform.Mac:
-                            _environmentDocumentsDirectory = "~/Documents";
+                            _environmentDocumentsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Documents");
                             break;
 
                         default:
-                            _environmentDocumentsDirectory = "~";
+                            _environmentDocumentsDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                             break;
                     }
                 }
@@ -78,9 +78,9 @@ namespace Jojatekok.MoneroAPI.Extensions
             }
         }
 
-        internal static string GetAbsolutePath(string input)
+        internal static string GetAbsolutePath(string path)
         {
-            return new FileInfo(input).FullName;
+            return Path.IsPathRooted(path) ? path : Path.Combine(ApplicationBaseDirectory, path);
         }
 
         internal static bool IsHostLocal(string input)
@@ -90,7 +90,7 @@ namespace Jojatekok.MoneroAPI.Extensions
 
             try {
                 host = Dns.GetHostAddresses(uri.Host);
-            } catch (Exception) {
+            } catch {
                 return false;
             }
 
@@ -101,6 +101,23 @@ namespace Jojatekok.MoneroAPI.Extensions
 
         internal static bool IsPortInUse(int port)
         {
+            // Use platform-specific code for Mac
+            if (EnvironmentPlatform == EnvironmentPlatform.Mac) {
+                try {
+                    using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp)) {
+                        socket.Connect(Dns.GetHostAddresses("localhost")[0], port);
+                        if (socket.Connected) {
+                            return true;
+                        }
+                    }
+// ReSharper disable once EmptyGeneralCatchClause
+                } catch {
+
+                }
+
+                return false;
+            }
+
             var activeTcpListeners = IPGlobalProperties.GetIPGlobalProperties().GetActiveTcpListeners();
             for (var i = activeTcpListeners.Length - 1; i >= 0; i--) {
                 if (activeTcpListeners[i].Port == port) {

@@ -102,6 +102,7 @@ namespace Jojatekok.MoneroAPI.Extensions.ProcessManagers
                         Process.Kill();
                     }
                 }
+// ReSharper disable once EmptyGeneralCatchClause
             } catch {
                 
             }
