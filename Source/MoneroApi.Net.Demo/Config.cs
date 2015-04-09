@@ -7,7 +7,7 @@ namespace Jojatekok.MoneroAPI.Demo
     {
         // This file's changes should not be tracked by git.
         // In order to disable tracking, execute the following command in your shell:
-        // git update-index --assume-unchanged "MoneroApi.Net.Demo/Config.cs"
+        // git update-index --assume-unchanged "Source/MoneroApi.Net.Demo/Config.cs"
 
         public const bool IsDaemonProcessRemote = false;
         public const bool IsAccountManagerProcessRemote = false;
