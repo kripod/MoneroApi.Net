@@ -20,6 +20,11 @@ namespace Jojatekok.MoneroAPI.RpcManagers
 
         string QueryKey(AccountKeyType keyType);
 
+        IList<Payment> QueryPayments(IList<string> paymentIds, ulong minimumBlockHeight);
+        IList<Payment> QueryPayments(IList<string> paymentIds);
+        IList<Payment> QueryPayments(ulong minimumBlockHeight);
+        IList<Payment> QueryPayments();
+
         bool SendTransaction(IList<TransferRecipient> recipients, string paymentId, ulong mixCount);
         bool SendTransaction(IList<TransferRecipient> recipients, string paymentId);
         bool SendTransaction(IList<TransferRecipient> recipients);

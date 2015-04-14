@@ -102,6 +102,33 @@ namespace Jojatekok.MoneroAPI.RpcManagers
             QueryAddress();
         }
 
+        public string QueryKey(AccountKeyType keyType)
+        {
+            var keyContainer = JsonPostData<KeyValueContainer>(new QueryKey(keyType));
+            return keyContainer != null && keyContainer.Error == null ? keyContainer.Result.Value : null;
+        }
+
+        public IList<Payment> QueryPayments(IList<string> paymentIds, ulong minimumBlockHeight)
+        {
+            var paymentsContainer = JsonPostData<PaymentListValueContainer>(new QueryPayments(paymentIds, minimumBlockHeight));
+            return paymentsContainer != null && paymentsContainer.Error == null ? paymentsContainer.Result.Value : null;
+        }
+
+        public IList<Payment> QueryPayments(IList<string> paymentIds)
+        {
+            return QueryPayments(paymentIds, 0);
+        }
+
+        public IList<Payment> QueryPayments(ulong minimumBlockHeight)
+        {
+            return QueryPayments(null, minimumBlockHeight);
+        }
+
+        public IList<Payment> QueryPayments()
+        {
+            return QueryPayments(null, 0);
+        }
+
         private void QueryAddress()
         {
             var addressContainer = JsonPostData<AddressValueContainer>(new QueryAddress());
@@ -111,12 +138,6 @@ namespace Jojatekok.MoneroAPI.RpcManagers
             if (IsTransactionListInitialized) {
                 IsInitialized = true;
             }
-        }
-
-        public string QueryKey(AccountKeyType keyType)
-        {
-            var keyContainer = JsonPostData<KeyValueContainer>(new QueryKey(keyType));
-            return keyContainer != null && keyContainer.Error == null ? keyContainer.Result.Value : null;
         }
 
         private void QueryBalance()

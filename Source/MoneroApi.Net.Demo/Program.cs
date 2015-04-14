@@ -47,6 +47,7 @@ namespace Jojatekok.MoneroAPI.Demo
 
             // Optionally, declare event handlers for the account manager
             var accountManagerRpc = MoneroRpcManager.AccountManager;
+            accountManagerRpc.Initialized += OnAccountManagerRpcInitialized;
             accountManagerRpc.AddressReceived += OnAccountManagerAddressReceived;
             accountManagerRpc.TransactionReceived += OnAccountManagerTransactionReceived;
             accountManagerRpc.BalanceChanged += OnAccountManagerBalanceChanged;
@@ -98,6 +99,12 @@ namespace Jojatekok.MoneroAPI.Demo
         {
             // This event has to fire in order to allow sending transactions with the AccountManager correctly
             IsTransactionSendingEnabled = true;
+        }
+
+        static void OnAccountManagerRpcInitialized(object sender, EventArgs e)
+        {
+            // Execute account manager RPC calls freely after the RpcInitialized event executes
+            //var payments = MoneroRpcManager.AccountManager.QueryPayments();
         }
 
         static void OnAccountManagerAddressReceived(object sender, AccountAddressReceivedEventArgs e)
