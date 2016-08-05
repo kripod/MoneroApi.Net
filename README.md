@@ -1,7 +1,7 @@
 # Project Discontinued
 Please be aware that this project is not actively maintained anymore.
 
-# Monero API .NET [![Build Status](https://travis-ci.org/Jojatekok/MoneroApi.Net.svg)](https://travis-ci.org/Jojatekok/MoneroApi.Net)
+# Monero API .NET [![Build Status](https://travis-ci.org/kripod/MoneroApi.Net.svg)](https://travis-ci.org/kripod/MoneroApi.Net)
 This project makes your Microsoft .NET applications able to interact with the API _(Application Programming Interface)_ of [Monero][] core assemblies.
 The class library is written in [C#][]. A [NuGet package of the project][] is also available.
 
